@@ -23,7 +23,7 @@ public class WebSecurityConfig {
 			)
 			.formLogin((form) -> form
 				.loginPage("/ExamPlatform/Login")
-				.defaultSuccessUrl("/ExamPlatform/")
+				.defaultSuccessUrl("/ExamPlatform/Mypage")
 				.permitAll()
 			)
 			.logout((logout) -> logout.permitAll());
