@@ -1,0 +1,51 @@
+ label {
+	 font-size: 20px;
+ }
+ 
+ h1{
+	 font-size: 42px;
+	 border-bottom:3.5px  solid;
+     border-color:black;
+ }
+ 
+  main{
+	  margin: 5% 20% 5% 20%;
+	 position: relative;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 6px solid navy;
+    box-shadow: 7.5px 7.5px 0 navy;
+    color: black;
+ }
+ 
+ #login{
+	 font-size: 24px;
+	 cursor: pointer;
+	background-color: white;
+    border-radius: 5px;
+    border: 2.5px solid navy;
+    color: navy;
+    text-decoration: none;
+    transition: .5s;
+ }
+ 
+ #login:hover{
+	  background-color: navy;
+      color: yellow;
+ }
+
+ #Register{
+	  font-size: 24px;
+	 cursor: pointer;
+	background-color: white;
+    border-radius: 5px;
+    border: 2.5px solid navy;
+    color: navy;
+    text-decoration: none;
+    transition: .5s;
+ }
+ 
+ #Register:hober{
+	  background-color: navy;
+      color: yellow;
+ }
