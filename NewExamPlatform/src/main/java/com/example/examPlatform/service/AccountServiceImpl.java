@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.repository.AccountRepository;
 
+/** アカウント関連処理実装クラス　*/
 @Service
 @Transactional
 public class AccountServiceImpl implements AccountService{
@@ -16,7 +17,8 @@ public class AccountServiceImpl implements AccountService{
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
-
+	
+	/** ユーザDB登録処理 */
 	@Override
 	public void userRegister(Account registUser) {
 		registUser.setPassword(passwordEncoder.encode(registUser.getPassword()));

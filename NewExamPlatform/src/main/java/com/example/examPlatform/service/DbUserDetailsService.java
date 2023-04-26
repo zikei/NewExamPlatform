@@ -16,6 +16,8 @@ import com.example.examPlatform.repository.AccountRepository;
 
 @Service
 public class DbUserDetailsService implements UserDetailsService {
+	private Integer userId;
+	
 	/** Repository：Account */
 	@Autowired
 	AccountRepository accountRepo;
@@ -25,7 +27,13 @@ public class DbUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		Optional<Account> userOpt = Optional.ofNullable(accountRepo.findByUserName(userName));
         Account user = userOpt.orElseThrow(() -> new UsernameNotFoundException("NotFound UserName: " + userName));
+        
+        this.userId = user.getUserId();
 
         return new Login(user, AuthorityUtils.createAuthorityList("ROLE_USER"));
     }
+
+	public Integer getUserId() {
+		return userId;
+	}
 }
