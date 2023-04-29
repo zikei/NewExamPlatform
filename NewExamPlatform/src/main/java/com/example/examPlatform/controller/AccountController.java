@@ -47,7 +47,7 @@ public class AccountController {
 	/** ユーザ登録ページ　*/
 	@GetMapping("/Entry")
 	public String AccountRegisterView() {
-		return "accountEntry";
+		return "accountRegister";
 	}
 	
 	/** ユーザ登録処理　*/
