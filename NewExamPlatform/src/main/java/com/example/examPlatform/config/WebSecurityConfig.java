@@ -18,13 +18,13 @@ public class WebSecurityConfig {
     UserDetailsService userDetailsService;
 	
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(authz -> authz
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 			)
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/ExamPlatform/Home").permitAll()
+				.requestMatchers("/ExamPlatform/Home","/ExamPlatform/Entry").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) -> form
