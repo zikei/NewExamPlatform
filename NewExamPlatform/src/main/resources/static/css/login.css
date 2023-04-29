@@ -1,21 +1,33 @@
  label {
-	 font-size: 20px;
+	 font-size: 24px;
  }
  
  h1{
-	 font-size: 42px;
-	 border-bottom:3.5px  solid;
-     border-color:black;
+	padding: 0.5rem;
+    font-size: 52px;
+    text-align: center;
+    border-bottom: 2px solid #000;
+    font-weight: bold;
  }
  
   main{
-	  margin: 5% 20% 5% 20%;
-	 position: relative;
+	margin: 5% 20% 5% 20%;
+	position: relative;
     padding: 2rem;
     border-radius: 10px;
     border: 6px solid navy;
     box-shadow: 7.5px 7.5px 0 navy;
     color: black;
+    font-family: 'Noto Serif JP', serif;
+
+ }
+ 
+ span{
+	 position: relative;
+	 font-weight: bold;
+	 font-size: 24px;
+	 color: red;
+	 margin-right: 5%;
  }
  
  #login{
