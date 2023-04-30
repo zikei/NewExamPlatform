@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>NewExamPratForm - アカウント登録</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href = "/css/AccountRegister.css">
+</head>
+<body>
+	<main>
+		<div class = " col-12  w-100 h-100 row">
+			
+			<div class = "col-3"></div>
+			<div class = "main_box col-6">
+				<h1 class = "text-center mb-5">アカウント登録</h1>
+				<form th:action="@{/ExamPlatform/Account/Entry}" method="post" class = "main_form" th:object = "${accountEntry}">
+					<div class="form-group">
+						<label for="username" class = "font-weight-bold">ユーザー名</label>
+						<input type="text" class="form-control" th:field = "*{userName}">
+					</div>
+					 <div class="form-group">
+						 <label for="password" class = "font-weight-bold">パスワード</label>
+						 <input type="password" class="form-control" th:field = "*{password}">
+					</div>
+					
+					<div id = "botton_area" class = "d-flex justify-content-center">
+          
+                        <div class = "row justify-content-center mt-4 col-12">
+                        <div class = "col-auto mr-3">
+                        <a href = "#" class = "btn btn_deza">戻る</a>
+                        </div>
+                        <div class = "col-auto ml-3">
+                        <input type="submit" value = "登録" class = "btn btn_deza"></input>
+                        </div>
+                        
+                    </div>
+			    </form>
+			</div>
+			<div class = "col-3"></div>
+			
+	</main>
+</body>
+</html>

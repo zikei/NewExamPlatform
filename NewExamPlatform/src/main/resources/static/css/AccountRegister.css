@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+main{
+	margin-top: 5%;
+}
+
+.main_box{
+	padding: 2rem;
+    border-radius: 10px;
+    border: 6px solid navy;
+    box-shadow: 7.5px 7.5px 0 navy;
+    color: black;
+    font-family: 'Noto Serif JP', serif;
+}
+
+.main_form{
+	margin: 0 20%;
+}
+
+h1{
+	font-size: 42px;
+	font-weight:  bold;
+	border-bottom: 3px solid navy;
+	margin: 0 20%;
+}
+
+form label{
+	font-size: 24px;
+	color: black;
+}
+
+.btn_deza{
+	font-size: 24px;
+	cursor: pointer;
+	background-color: white;
+    border-radius: 5px;
+    border: 2.5px solid navy;
+    color: navy;
+    text-decoration: none;
+    transition: .5s;
+}
+
+.btn_deza:hover{
+	  background-color: navy;
+      color: yellow;
+ }
