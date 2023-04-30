@@ -14,13 +14,18 @@ main{
 }
 
 .main_form{
-	margin: 0 20%;
+	margin: 0 12.5%;
 }
 
 ul{
-	list-style-type: circle;
+	list-style-type: none;
 	color: red;
 	font-size: 20px;
+	font-weight: bold;
+}
+
+ul li {
+	text-align: center;
 }
 
 h1{

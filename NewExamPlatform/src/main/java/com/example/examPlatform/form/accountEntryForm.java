@@ -7,7 +7,7 @@ import lombok.Data;
 
 /** ユーザForm */
 @Data
-public class AccountEntryForm {
+public class accountEntryForm {
 	/** ユーザ名 半角英数字*/
 	@NotBlank
 	@Size(min=2, max=30)

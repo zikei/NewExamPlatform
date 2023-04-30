@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.example.examPlatform.form.AccountEntryForm;
+import com.example.examPlatform.form.accountEntryForm;
 import com.example.examPlatform.repository.AccountRepository;
 
 @Component
@@ -15,13 +15,13 @@ public class AccountEntryValidator implements Validator {
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return AccountEntryForm.class.isAssignableFrom(clazz);
+		return accountEntryForm.class.isAssignableFrom(clazz);
 	}
 	
 	/** ユーザ名がすでに登録されているかを検査する */
 	@Override
 	public void validate(Object target, Errors errors) {
-		AccountEntryForm form = (AccountEntryForm) target;
+		accountEntryForm form = (accountEntryForm) target;
 		String userName = form.getUserName();
 		
 		if(userName == null) return;
