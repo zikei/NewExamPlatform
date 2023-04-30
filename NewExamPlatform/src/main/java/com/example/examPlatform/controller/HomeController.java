@@ -10,6 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/ExamPlatform")
 public class HomeController {
+	/** ホーム画面 */
+	@GetMapping(value= { "/","Home"})
+	public String Home() {
+		
+		
+		return "home";
+	}
 	
 	/** ログインページ */
 	@GetMapping("Login")
