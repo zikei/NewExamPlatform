@@ -27,7 +27,7 @@ public class AccountEntryValidator implements Validator {
 		if(userName == null) return;
 		
 		if(accountRepo.findByUserName(userName) != null) {
-			errors.rejectValue(userName, "com.example.examPlatform.validator.AccountEntryValidator.message");
+			errors.rejectValue("userName", "com.example.examPlatform.validator.AccountEntryValidator.message");
 		}
 	}
 }
