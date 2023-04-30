@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.examPlatform.entity.Account;
-import com.example.examPlatform.form.accountEntryForm;
+import com.example.examPlatform.form.AccountEntryForm;
 import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.validator.AccountEntryValidator;
 
@@ -42,8 +42,8 @@ public class AccountController {
 	
 	/** ユーザ登録フォームの初期化 */
 	@ModelAttribute
-	public accountEntryForm setUpAccountEntryForm() {
-		return new accountEntryForm();
+	public AccountEntryForm setUpAccountEntryForm() {
+		return new AccountEntryForm();
 	}
 	
 	
@@ -56,7 +56,7 @@ public class AccountController {
 	
 	/** ユーザ登録処理　*/
 	@PostMapping("/Entry")
-	public String AccountRegister(@Validated accountEntryForm entryForm, BindingResult bindingResult, Model model,
+	public String AccountRegister(@Validated AccountEntryForm entryForm, BindingResult bindingResult, Model model,
 			HttpServletRequest request) {
 		
 		if(bindingResult.hasErrors()) {
