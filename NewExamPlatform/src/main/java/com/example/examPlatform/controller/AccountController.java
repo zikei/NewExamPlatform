@@ -55,6 +55,10 @@ public class AccountController {
 	public String AccountRegister(@Validated AccountEntryForm entryForm, BindingResult bindingResult, Model model,
 			HttpServletRequest request) {
 		
+		if(bindingResult.hasErrors()) {
+			return "accountRegister";
+		}
+		
 		Account entryUser = new Account(null, entryForm.getUserName(), entryForm.getPassword(), "", true);
 		Account user = accountService.userRegister(entryUser);
 		
