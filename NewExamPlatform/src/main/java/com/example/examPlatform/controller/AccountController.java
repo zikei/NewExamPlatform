@@ -31,7 +31,7 @@ public class AccountController {
 	AccountEntryValidator accountEntryValidator;
 	
 	/** チェック登録 */
-	@InitBinder("accountEntry")
+	@InitBinder("accountEntryForm")
 	public void initBinder(WebDataBinder webDataBinder) {
 		webDataBinder.addValidators(accountEntryValidator);
 	}
