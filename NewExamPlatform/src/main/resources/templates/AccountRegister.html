@@ -17,10 +17,16 @@
 				<h1 class = "text-center mb-5">アカウント登録</h1>
 				<form th:action="@{/ExamPlatform/Account/Entry}" method="post" class = "main_form" th:object = "${accountEntryForm}">
 					<div class="form-group">
+						<ul th:if="${#fields.hasErrors('userName')}">
+							<li th:each="err:${#fields.errors('userName')}" th:text="${err}">エラーメッセージ</li>
+						</ul>
 						<label for="username" class = "font-weight-bold">ユーザー名</label>
 						<input type="text" class="form-control" th:field = "*{userName}">
 					</div>
 					 <div class="form-group">
+						 <ul th:if="${#fields.hasErrors('password')}">
+							<li th:each="err:${#fields.errors('password')}" th:text="${err}">エラーメッセージ</li>
+						</ul>
 						 <label for="password" class = "font-weight-bold">パスワード</label>
 						 <input type="password" class="form-control" th:field = "*{password}">
 					</div>

@@ -17,6 +17,12 @@ main{
 	margin: 0 20%;
 }
 
+ul{
+	list-style-type: circle;
+	color: red;
+	font-size: 20px;
+}
+
 h1{
 	font-size: 42px;
 	font-weight:  bold;
