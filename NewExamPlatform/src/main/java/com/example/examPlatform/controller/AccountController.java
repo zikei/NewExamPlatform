@@ -56,12 +56,11 @@ public class AccountController {
 			HttpServletRequest request) {
 		
 		Account entryUser = new Account(null, entryForm.getUserName(), entryForm.getPassword(), "", true);
-		accountService.userRegister(entryUser);
+		Account user = accountService.userRegister(entryUser);
 		
 		try {
-			request.login(entryForm.getUserName(), entryForm.getPassword());
+			request.login(user.getUserName(), user.getPassword());
 		} catch (ServletException e) {
-			e.printStackTrace();
 			return "redirect:/ExamPlatform/Login";
 		}
 		

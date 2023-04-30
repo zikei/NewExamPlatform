@@ -20,9 +20,10 @@ public class AccountServiceImpl implements AccountService{
 	
 	/** ユーザDB登録処理 */
 	@Override
-	public void userRegister(Account registUser) {
+	public Account userRegister(Account registUser) {
 		registUser.setPassword(passwordEncoder.encode(registUser.getPassword()));
 		registUser = accountRepo.save(registUser);
+		return registUser;
 	}
 	
 }
