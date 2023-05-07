@@ -3,6 +3,7 @@ package com.example.examPlatform.service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.examPlatform.entity.BookmarkCount;
 import com.example.examPlatform.entity.Exam;
+import com.example.examPlatform.entity.ReportCount;
 import com.example.examPlatform.repository.BookmarkRepository;
+import com.example.examPlatform.repository.ReportRepository;
 
 /** ホーム関連処理実装クラス　*/
 @Service
@@ -24,6 +27,9 @@ public class HomeServiceImpl implements HomeService{
 	
 	@Autowired
 	BookmarkRepository bookmarkRepo;
+	
+	@Autowired
+	ReportRepository reportRepo;
 	
 	/** 新着順試験リスト取得 */
 	@Override
@@ -41,8 +47,21 @@ public class HomeServiceImpl implements HomeService{
 	/** 月間受験数順試験リスト取得 */
 	@Override
 	public List<Exam> selectMonthlyExeTopExams() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		List<ReportCount> reportCntList = new ArrayList<ReportCount>();
+		reportRepo.findCountAll().forEach(reportCntList::add);
+		reportCntList.sort(Comparator.comparing(ReportCount::getReportCnt).reversed());
+		
+		if(reportCntList.size() > displayCnt) { 
+			reportCntList = reportCntList.subList(0, displayCnt);
+		}
+		
+		List<Exam> examList = new ArrayList<Exam>();
+		for(ReportCount reportCount : reportCntList) {
+			Optional<Exam> addExamOpt = examService.selectExamByExamId(reportCount.getExamId());
+			addExamOpt.ifPresent(examList::add);
+		}
+		
+		return examList;
 	}
 
 	/** ブックマーク数順試験リスト取得 */
@@ -58,8 +77,8 @@ public class HomeServiceImpl implements HomeService{
 		
 		List<Exam> examList = new ArrayList<Exam>();
 		for(BookmarkCount bookmarkCount : bookmarkCntList) {
-			Exam addExam = examService.selectExamByExamId(bookmarkCount.getExamId());
-			examList.add(addExam);
+			Optional<Exam> addExamOpt = examService.selectExamByExamId(bookmarkCount.getExamId());
+			addExamOpt.ifPresent(examList::add);
 		}
 		
 		return examList;

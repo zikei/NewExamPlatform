@@ -1,6 +1,7 @@
 package com.example.examPlatform.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.examPlatform.entity.Exam;
 
@@ -10,5 +11,5 @@ public interface ExamService {
 	List<Exam> selectAllExam();
 	
 	/** 試験取得 */
-	Exam selectExamByExamId(Integer examId);
+	Optional<Exam> selectExamByExamId(Integer examId);
 }

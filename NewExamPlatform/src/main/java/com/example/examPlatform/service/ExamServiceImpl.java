@@ -2,6 +2,7 @@ package com.example.examPlatform.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class ExamServiceImpl implements ExamService{
 	
 	/** 試験取得 */
 	@Override
-	public Exam selectExamByExamId(Integer examId) {
-		Exam exam = examRepo.findByExamId(examId);
-		return exam;
+	public Optional<Exam> selectExamByExamId(Integer examId) {
+		Optional<Exam> examOpt = examRepo.findById(examId);
+		return examOpt;
 	}
 }
