@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.examPlatform.data.ExamLinkView;
 import com.example.examPlatform.entity.BookmarkCount;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.ReportCount;
@@ -33,7 +34,7 @@ public class HomeServiceImpl implements HomeService{
 	
 	/** 新着順試験リスト取得 */
 	@Override
-	public List<Exam> selectNewArrivalsExams() {
+	public List<ExamLinkView> selectNewArrivalsExams() {
 		List<Exam> examList = examService.selectAllExam();
 		examList.sort(Comparator.comparing(Exam::getCreateDate).reversed());
 		
@@ -41,12 +42,12 @@ public class HomeServiceImpl implements HomeService{
 			examList = examList.subList(0, displayCnt);
 		}
 		
-		return examList;
+		return examService.makeExamLinkList(examList);
 	}
 
 	/** 月間受験数順試験リスト取得 */
 	@Override
-	public List<Exam> selectMonthlyExeTopExams() {
+	public List<ExamLinkView> selectMonthlyExeTopExams() {
 		List<ReportCount> reportCntList = new ArrayList<ReportCount>();
 		reportRepo.findCountAll().forEach(reportCntList::add);
 		reportCntList.sort(Comparator.comparing(ReportCount::getReportCnt).reversed());
@@ -61,12 +62,12 @@ public class HomeServiceImpl implements HomeService{
 			addExamOpt.ifPresent(examList::add);
 		}
 		
-		return examList;
+		return examService.makeExamLinkList(examList);
 	}
 
 	/** ブックマーク数順試験リスト取得 */
 	@Override
-	public List<Exam> selectBookmarkTopExams() {
+	public List<ExamLinkView> selectBookmarkTopExams() {
 		List<BookmarkCount> bookmarkCntList = new ArrayList<BookmarkCount>();
 		bookmarkRepo.findCountAll().forEach(bookmarkCntList::add);
 		bookmarkCntList.sort(Comparator.comparing(BookmarkCount::getBookmarkCnt).reversed());
@@ -81,6 +82,6 @@ public class HomeServiceImpl implements HomeService{
 			addExamOpt.ifPresent(examList::add);
 		}
 		
-		return examList;
+		return examService.makeExamLinkList(examList);
 	}
 }
