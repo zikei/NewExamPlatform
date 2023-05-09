@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.examPlatform.data.ExamLinkView;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.repository.ExamRepository;
 
@@ -32,5 +33,17 @@ public class ExamServiceImpl implements ExamService{
 	public Optional<Exam> selectExamByExamId(Integer examId) {
 		Optional<Exam> examOpt = examRepo.findById(examId);
 		return examOpt;
+	}
+
+	@Override
+	public List<ExamLinkView> makeExamLinkList(List<Exam> examList) {
+		List<ExamLinkView> examLinkList = new ArrayList<>();
+		for(Exam exam : examList) {
+			ExamLinkView addLink = new ExamLinkView();
+			addLink.makeExamLinkView(exam);
+			
+			examLinkList.add(addLink);
+		}
+		return examLinkList;
 	}
 }

@@ -3,6 +3,7 @@ package com.example.examPlatform.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.examPlatform.data.ExamLinkView;
 import com.example.examPlatform.entity.Exam;
 
 /** 試験関連処理 */
@@ -12,4 +13,7 @@ public interface ExamService {
 	
 	/** 試験取得 */
 	Optional<Exam> selectExamByExamId(Integer examId);
+	
+	/** 試験リストを試験リンクリスト形式に変換*/
+	List<ExamLinkView> makeExamLinkList(List<Exam> examList);
 }

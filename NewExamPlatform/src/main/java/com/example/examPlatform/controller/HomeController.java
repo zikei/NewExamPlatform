@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.examPlatform.entity.Exam;
+import com.example.examPlatform.data.ExamLinkView;
 import com.example.examPlatform.service.HomeService;
 
 /** ホームコントローラ */
@@ -23,9 +23,9 @@ public class HomeController {
 	/** ホーム画面 */
 	@GetMapping(value= { "/","Home"})
 	public String Home(Model model) {
-		List<Exam> newExamList = homeService.selectNewArrivalsExams();
-		List<Exam> ExeTopExamList = homeService.selectMonthlyExeTopExams();
-		List<Exam> BookmarkTopExamList = homeService.selectBookmarkTopExams();
+		List<ExamLinkView> newExamList = homeService.selectNewArrivalsExams();
+		List<ExamLinkView> ExeTopExamList = homeService.selectMonthlyExeTopExams();
+		List<ExamLinkView> BookmarkTopExamList = homeService.selectBookmarkTopExams();
 		
 		model.addAttribute("newExamList", newExamList);
 		model.addAttribute("exeTopExamList", ExeTopExamList);
