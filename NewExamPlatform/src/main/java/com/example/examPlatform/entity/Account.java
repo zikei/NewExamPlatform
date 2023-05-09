@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
-	/** ユーザID */
+	/** ユーザID:PK */
 	@Id
 	@Column(value="userid")
 	private Integer userId;
 	
-	/** ユーザ名(ユニーク) */
+	/** ユーザ名:unique */
 	@Column(value="username")
 	private String userName;
 	
