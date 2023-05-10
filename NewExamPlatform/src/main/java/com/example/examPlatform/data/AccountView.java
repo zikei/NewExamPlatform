@@ -10,18 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountView {
-	/** ユーザID*/
-	private Integer userId;
-	
-	/** ユーザ名*/
+public class AccountView {/** ユーザ名*/
 	private String userName;
 	
 	/** プロフィール */
 	private String profile;
 	
 	public void makeAccountView(Account account) {
-		this.userId = account.getUserId();
 		this.userName = account.getUserName();
 		this.profile = account.getProfile();
 	}

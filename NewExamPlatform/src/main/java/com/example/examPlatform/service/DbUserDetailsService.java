@@ -12,18 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.examPlatform.data.Login;
 import com.example.examPlatform.entity.Account;
-import com.example.examPlatform.repository.AccountRepository;
 
 @Service
 public class DbUserDetailsService implements UserDetailsService {
-	/** Repository：Account */
 	@Autowired
-	AccountRepository accountRepo;
+	AccountService accountService;
 	
 	@Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		Optional<Account> userOpt = Optional.ofNullable(accountRepo.findByUserName(userName));
+		Optional<Account> userOpt = accountService.selectAccountByUserName(userName);
         Account user = userOpt.orElseThrow(() -> new UsernameNotFoundException("NotFound UserName: " + userName));
 
         return new Login(user, AuthorityUtils.createAuthorityList("ROLE_USER"));

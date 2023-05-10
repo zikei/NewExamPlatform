@@ -34,6 +34,13 @@ public class ExamServiceImpl implements ExamService{
 		Optional<Exam> examOpt = examRepo.findById(examId);
 		return examOpt;
 	}
+	
+	@Override
+	public List<Exam> selectExamByUserID(Integer userId) {
+		List<Exam> examList = new ArrayList<>();
+		examRepo.findByUserId(userId).forEach(examList::add);
+		return examList;
+	}
 
 	@Override
 	public List<ExamLinkView> makeExamLinkList(List<Exam> examList) {
