@@ -56,7 +56,9 @@ public class MypageServiceImpl implements MypageService{
 		}else {
 			return createExamLinkList;
 		}
+		
 		List<Exam> createExamList = examService.selectExamByUserID(loginUser.getUserId());
+		if(createExamList.size() > displayCnt) createExamList = createExamList.subList(0, displayCnt);
 		createExamLinkList = examService.makeExamLinkList(createExamList);
 		
 		return createExamLinkList;
