@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** リンク表示用試験クラス */
+/** 試験リンク表示用試験クラス */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
