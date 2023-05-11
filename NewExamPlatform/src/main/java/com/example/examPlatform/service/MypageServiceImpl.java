@@ -13,7 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.examPlatform.data.ExamLinkView;
 import com.example.examPlatform.data.ReportLinkView;
 import com.example.examPlatform.entity.Account;
+import com.example.examPlatform.entity.Bookmark;
 import com.example.examPlatform.entity.Exam;
+import com.example.examPlatform.entity.Report;
+import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.repository.BookmarkRepository;
 import com.example.examPlatform.repository.ReportRepository;
 
@@ -37,23 +40,24 @@ public class MypageServiceImpl implements MypageService{
 	ReportRepository reportRepo;
 	
 	@Override
-	public Optional<Account> selectLoginUser() {
+	public Account selectLoginUser() throws NotFoundException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    String userName = auth.getName();
-	    Optional<Account> loginUser = accountService.selectAccountByUserName(userName);
+	    
+	    Optional<Account> loginUserOpt = accountService.selectAccountByUserName(userName);
+	    Account loginUser = loginUserOpt.orElseThrow(() -> new NotFoundException("NotFound UserName: " + userName));
 	    
 		return loginUser;
 	}
 
 	@Override
 	public List<ExamLinkView> selectCreateExams() {
+		// ログインユーザ情報取得
 		List<ExamLinkView> createExamLinkList = new ArrayList<ExamLinkView>();
-		Account loginUser = new Account();
-		
-		Optional<Account> loginUserOpt = selectLoginUser();
-		if(loginUserOpt.isPresent()) {
-			loginUser = loginUserOpt.get();
-		}else {
+		Account loginUser;
+		try {
+			loginUser = selectLoginUser();
+		} catch (NotFoundException e) {
 			return createExamLinkList;
 		}
 		
@@ -67,12 +71,48 @@ public class MypageServiceImpl implements MypageService{
 	@Override
 	public List<ExamLinkView> selectBookmarkExams() {
 		List<ExamLinkView> bookmarkExamLinkList = new ArrayList<ExamLinkView>();
-		return null;
+		Account loginUser;
+		try {
+			loginUser = selectLoginUser();
+		} catch (NotFoundException e) {
+			return bookmarkExamLinkList;
+		}
+		
+		List<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+		bookmarkRepo.findByUserId(loginUser.getUserId()).forEach(bookmarkList::add);
+		if(bookmarkList.size() > displayCnt) bookmarkList = bookmarkList.subList(0, displayCnt);
+		
+		List<Exam> bookmarkExamList = new ArrayList<Exam>();
+		for(Bookmark bookmark : bookmarkList) {
+			Optional<Exam> addExamOpt = examService.selectExamByExamId(bookmark.getExamId());
+			addExamOpt.ifPresent(bookmarkExamList::add);
+		}
+		
+		bookmarkExamLinkList = examService.makeExamLinkList(bookmarkExamList);
+		return bookmarkExamLinkList;
 	}
 
 	@Override
 	public List<ReportLinkView> selectReports() {
 		List<ReportLinkView> reportLinkList = new ArrayList<ReportLinkView>();
-		return null;
+		Account loginUser;
+		try {
+			loginUser = selectLoginUser();
+		} catch (NotFoundException e) {
+			return reportLinkList;
+		}
+		
+		List<Report> reportList = new ArrayList<Report>();
+		reportRepo.findByUserId(loginUser.getUserId()).forEach(reportList::add);
+		if(reportList.size() > displayCnt) reportList = reportList.subList(0, displayCnt);
+		
+		for(Report report : reportList) {
+			ReportLinkView addLink = new ReportLinkView();
+			addLink.makeExamLinkView(report);
+			
+			reportLinkList.add(addLink);
+		}
+		
+		return reportLinkList;
 	}
 }
