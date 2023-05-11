@@ -3,6 +3,8 @@ package com.example.examPlatform.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,28 +25,41 @@ public class MypageController {
 	@Autowired
 	MypageService mypageService;
 	
-	/** マイページを表示 */
+	/** マイページ・ユーザページを表示 */
 	@GetMapping
 	public String Mypage(@PathVariable String userName, Model model) {
-		Account loginUser;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String loginUserName = auth.getName();
+		Account user;
 		try {
-			loginUser = mypageService.selectLoginUser();
+			user = mypageService.selectLoginUser(userName);
 		} catch (NotFoundException e) {
-			// ログインしているユーザ情報が見つからない場合エラーページに遷移
+			// ユーザ情報が見つからない場合エラーページに遷移
 			return "error";
 		}
-		AccountView loginUserView = new AccountView();
-	    loginUserView.makeAccountView(loginUser);
+		AccountView userView = new AccountView();
+		userView.makeAccountView(user);
 		
-		List<ExamLinkView> createExamList = mypageService.selectCreateExams();
-		List<ExamLinkView> bookmarkExamList = mypageService.selectBookmarkExams();
-		List<ReportLinkView> reportList = mypageService.selectReports();
+		List<ExamLinkView> createExamList = mypageService.selectCreateExams(userName);
 		
-		model.addAttribute("loginUser", loginUserView);
+		model.addAttribute("user", userView);
 		model.addAttribute("createExamList", createExamList);
-		model.addAttribute("bookmarkExamList", bookmarkExamList);
-		model.addAttribute("reportList", reportList);
+		
+		if(userName.equals(loginUserName)) {
+			// ログインユーザ本人のマイページを表示する場合
+			List<ExamLinkView> bookmarkExamList = mypageService.selectBookmarkExams(loginUserName);
+			List<ReportLinkView> reportList = mypageService.selectReports(loginUserName);
+			model.addAttribute("bookmarkExamList", bookmarkExamList);
+			model.addAttribute("reportList", reportList);
+		}
 		
 		return "mypage";
+	}
+	
+	/** 作成試験一覧を表示 */
+	@GetMapping("Exam")
+	public String MyCreateExam(@PathVariable String userName, Model model) {
+		
+		return "myCreateExam";
 	}
 }

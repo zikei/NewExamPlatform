@@ -11,14 +11,18 @@ import com.example.examPlatform.exception.NotFoundException;
 public interface MypageService {
 	/** ログインユーザ情報取得 
 	 * @throws NotFoundException */
-	Account selectLoginUser() throws NotFoundException;
+	Account selectLoginUser(String userName) throws NotFoundException;
 	
-	/** 作成試験取得 */
-	List<ExamLinkView> selectCreateExams();
+	/** 
+	 * 作成試験取得 
+	 * ログインユーザ本人の場合は作成試験全件
+	 * ログインユーザ本人以外の場合は公開された作成試験
+	 */
+	List<ExamLinkView> selectCreateExams(String userName);
 	
 	/** ブックマーク試験取得 */
-	List<ExamLinkView> selectBookmarkExams();
+	List<ExamLinkView> selectBookmarkExams(String userName);
 	
 	/** レポート取得 */
-	List<ReportLinkView> selectReports();
+	List<ReportLinkView> selectReports(String userName);
 }

@@ -3,6 +3,7 @@ package com.example.examPlatform.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.examPlatform.data.ExamLinkView;
 import com.example.examPlatform.data.ReportLinkView;
+import com.example.examPlatform.data.constant.DisclosureRange;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.entity.Bookmark;
 import com.example.examPlatform.entity.Exam;
@@ -40,28 +42,35 @@ public class MypageServiceImpl implements MypageService{
 	ReportRepository reportRepo;
 	
 	@Override
-	public Account selectLoginUser() throws NotFoundException {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    String userName = auth.getName();
+	public Account selectLoginUser(String userName) throws NotFoundException {
+		Optional<Account> userOpt = accountService.selectAccountByUserName(userName);
+	    Account user = userOpt.orElseThrow(() -> new NotFoundException("NotFound UserName: " + userName));
 	    
-	    Optional<Account> loginUserOpt = accountService.selectAccountByUserName(userName);
-	    Account loginUser = loginUserOpt.orElseThrow(() -> new NotFoundException("NotFound UserName: " + userName));
-	    
-		return loginUser;
+		return user;
 	}
 
 	@Override
-	public List<ExamLinkView> selectCreateExams() {
-		// ログインユーザ情報取得
+	public List<ExamLinkView> selectCreateExams(String userName) {
 		List<ExamLinkView> createExamLinkList = new ArrayList<ExamLinkView>();
-		Account loginUser;
+		DisclosureRange dr = new DisclosureRange();
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String loginUserName = auth.getName();
+		Account user;
 		try {
-			loginUser = selectLoginUser();
+			user = selectLoginUser(userName);
 		} catch (NotFoundException e) {
 			return createExamLinkList;
 		}
 		
-		List<Exam> createExamList = examService.selectExamByUserID(loginUser.getUserId());
+		List<Exam> createExamList = examService.selectExamByUserID(user.getUserId());
+		
+		if(!userName.equals(loginUserName)) {
+			createExamList = 
+					createExamList.stream().filter(exam -> dr.isOpen(exam.getDisclosureRange()))
+					.collect(Collectors.toList());
+		}
+		
 		if(createExamList.size() > displayCnt) createExamList = createExamList.subList(0, displayCnt);
 		createExamLinkList = examService.makeExamLinkList(createExamList);
 		
@@ -69,17 +78,17 @@ public class MypageServiceImpl implements MypageService{
 	}
 
 	@Override
-	public List<ExamLinkView> selectBookmarkExams() {
+	public List<ExamLinkView> selectBookmarkExams(String userName) {
 		List<ExamLinkView> bookmarkExamLinkList = new ArrayList<ExamLinkView>();
-		Account loginUser;
+		Account user;
 		try {
-			loginUser = selectLoginUser();
+			user = selectLoginUser(userName);
 		} catch (NotFoundException e) {
 			return bookmarkExamLinkList;
 		}
 		
 		List<Bookmark> bookmarkList = new ArrayList<Bookmark>();
-		bookmarkRepo.findByUserId(loginUser.getUserId()).forEach(bookmarkList::add);
+		bookmarkRepo.findByUserId(user.getUserId()).forEach(bookmarkList::add);
 		if(bookmarkList.size() > displayCnt) bookmarkList = bookmarkList.subList(0, displayCnt);
 		
 		List<Exam> bookmarkExamList = new ArrayList<Exam>();
@@ -93,17 +102,17 @@ public class MypageServiceImpl implements MypageService{
 	}
 
 	@Override
-	public List<ReportLinkView> selectReports() {
+	public List<ReportLinkView> selectReports(String userName) {
 		List<ReportLinkView> reportLinkList = new ArrayList<ReportLinkView>();
-		Account loginUser;
+		Account user;
 		try {
-			loginUser = selectLoginUser();
+			user = selectLoginUser(userName);
 		} catch (NotFoundException e) {
 			return reportLinkList;
 		}
 		
 		List<Report> reportList = new ArrayList<Report>();
-		reportRepo.findByUserId(loginUser.getUserId()).forEach(reportList::add);
+		reportRepo.findByUserId(user.getUserId()).forEach(reportList::add);
 		if(reportList.size() > displayCnt) reportList = reportList.subList(0, displayCnt);
 		
 		for(Report report : reportList) {
