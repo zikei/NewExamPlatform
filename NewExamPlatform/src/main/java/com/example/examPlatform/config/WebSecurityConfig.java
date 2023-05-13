@@ -24,7 +24,7 @@ public class WebSecurityConfig {
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 			)
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/ExamPlatform/Home").permitAll()
+				.requestMatchers("/ExamPlatform/Home", "/ExamPlatform/").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) -> form
