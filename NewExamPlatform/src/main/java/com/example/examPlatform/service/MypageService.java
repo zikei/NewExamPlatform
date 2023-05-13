@@ -9,9 +9,9 @@ import com.example.examPlatform.exception.NotFoundException;
 
 /** マイページ関連処理 */
 public interface MypageService {
-	/** ログインユーザ情報取得 
+	/** ユーザ情報取得 
 	 * @throws NotFoundException */
-	Account selectLoginUser(String userName) throws NotFoundException;
+	Account selectUser(String userName) throws NotFoundException;
 	
 	/** 
 	 * 作成試験取得 

@@ -26,9 +26,6 @@ import com.example.examPlatform.repository.ReportRepository;
 @Service
 @Transactional
 public class MypageServiceImpl implements MypageService{
-	/** マイページ上での表示件数 */
-	private final int displayCnt = 20;
-	
 	@Autowired
 	ExamService examService;
 	
@@ -42,7 +39,7 @@ public class MypageServiceImpl implements MypageService{
 	ReportRepository reportRepo;
 	
 	@Override
-	public Account selectLoginUser(String userName) throws NotFoundException {
+	public Account selectUser(String userName) throws NotFoundException {
 		Optional<Account> userOpt = accountService.selectAccountByUserName(userName);
 	    Account user = userOpt.orElseThrow(() -> new NotFoundException("NotFound UserName: " + userName));
 	    
@@ -58,7 +55,7 @@ public class MypageServiceImpl implements MypageService{
 	    String loginUserName = auth.getName();
 		Account user;
 		try {
-			user = selectLoginUser(userName);
+			user = selectUser(userName);
 		} catch (NotFoundException e) {
 			return createExamLinkList;
 		}
@@ -71,7 +68,6 @@ public class MypageServiceImpl implements MypageService{
 					.collect(Collectors.toList());
 		}
 		
-		if(createExamList.size() > displayCnt) createExamList = createExamList.subList(0, displayCnt);
 		createExamLinkList = examService.makeExamLinkList(createExamList);
 		
 		return createExamLinkList;
@@ -82,14 +78,13 @@ public class MypageServiceImpl implements MypageService{
 		List<ExamLinkView> bookmarkExamLinkList = new ArrayList<ExamLinkView>();
 		Account user;
 		try {
-			user = selectLoginUser(userName);
+			user = selectUser(userName);
 		} catch (NotFoundException e) {
 			return bookmarkExamLinkList;
 		}
 		
 		List<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		bookmarkRepo.findByUserId(user.getUserId()).forEach(bookmarkList::add);
-		if(bookmarkList.size() > displayCnt) bookmarkList = bookmarkList.subList(0, displayCnt);
 		
 		List<Exam> bookmarkExamList = new ArrayList<Exam>();
 		for(Bookmark bookmark : bookmarkList) {
@@ -106,14 +101,13 @@ public class MypageServiceImpl implements MypageService{
 		List<ReportLinkView> reportLinkList = new ArrayList<ReportLinkView>();
 		Account user;
 		try {
-			user = selectLoginUser(userName);
+			user = selectUser(userName);
 		} catch (NotFoundException e) {
 			return reportLinkList;
 		}
 		
 		List<Report> reportList = new ArrayList<Report>();
 		reportRepo.findByUserId(user.getUserId()).forEach(reportList::add);
-		if(reportList.size() > displayCnt) reportList = reportList.subList(0, displayCnt);
 		
 		for(Report report : reportList) {
 			ReportLinkView addLink = new ReportLinkView();

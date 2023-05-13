@@ -22,6 +22,9 @@ import com.example.examPlatform.service.MypageService;
 @Controller
 @RequestMapping("/ExamPlatform/{userName}")
 public class MypageController {
+	/** マイページ上での表示件数 */
+	private final int displayCnt = 20;
+	
 	@Autowired
 	MypageService mypageService;
 	
@@ -32,7 +35,7 @@ public class MypageController {
 	    String loginUserName = auth.getName();
 		Account user;
 		try {
-			user = mypageService.selectLoginUser(userName);
+			user = mypageService.selectUser(userName);
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
 			return "error";
@@ -41,6 +44,7 @@ public class MypageController {
 		userView.makeAccountView(user);
 		
 		List<ExamLinkView> createExamList = mypageService.selectCreateExams(userName);
+		if(createExamList.size() > displayCnt) createExamList = createExamList.subList(0, displayCnt);
 		
 		model.addAttribute("user", userView);
 		model.addAttribute("createExamList", createExamList);
@@ -49,6 +53,10 @@ public class MypageController {
 			// ログインユーザ本人のマイページを表示する場合
 			List<ExamLinkView> bookmarkExamList = mypageService.selectBookmarkExams(loginUserName);
 			List<ReportLinkView> reportList = mypageService.selectReports(loginUserName);
+			
+			if(bookmarkExamList.size() > displayCnt) bookmarkExamList = bookmarkExamList.subList(0, displayCnt);
+			if(reportList.size() > displayCnt) reportList = reportList.subList(0, displayCnt);
+			
 			model.addAttribute("bookmarkExamList", bookmarkExamList);
 			model.addAttribute("reportList", reportList);
 		}

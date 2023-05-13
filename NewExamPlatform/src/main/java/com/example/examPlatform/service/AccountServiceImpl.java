@@ -21,6 +21,11 @@ public class AccountServiceImpl implements AccountService{
 		Optional<Account> accountOpt = accountRepo.findById(userId);
 		return accountOpt;
 	}
+	
+	@Override
+	public Optional<Account> selectLoginAccount() {
+		return Optional.empty();
+	}
 
 	@Override
 	public Optional<Account> selectAccountByUserName(String userName) {
