@@ -18,7 +18,7 @@ public class WebSecurityConfig {
     UserDetailsService userDetailsService;
 	
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(authz -> authz
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
@@ -32,7 +32,10 @@ public class WebSecurityConfig {
 				.defaultSuccessUrl("/ExamPlatform/Mypage")
 				.permitAll()
 			)
-			.logout((logout) -> logout.permitAll());
+			.logout((logout) -> logout
+				.logoutUrl("/ExamPlatform/Logout")
+				.logoutSuccessUrl("/ExamPlatform/Home")
+				.permitAll());
 
 		return http.build();
 	}
