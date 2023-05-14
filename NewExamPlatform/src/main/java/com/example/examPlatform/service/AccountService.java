@@ -1,17 +1,16 @@
 package com.example.examPlatform.service;
 
-import java.util.Optional;
-
 import com.example.examPlatform.entity.Account;
+import com.example.examPlatform.exception.NotFoundException;
 
 /** アカウント関連処理 */
 public interface AccountService {
 	/** アカウント取得 */
-	Optional<Account> selectAccountByUserId(Integer userId);
+	Account selectAccountByUserId(Integer userId) throws NotFoundException ;
 	
 	/** ログインユーザ情報取得 */
-	Optional<Account> selectLoginAccount();
+	String selectLoginUserName();
 	
 	/** ユーザ名によるアカウント取得 */
-	Optional<Account> selectAccountByUserName(String userName);
+	Account selectAccountByUserName(String userName) throws NotFoundException ;
 }

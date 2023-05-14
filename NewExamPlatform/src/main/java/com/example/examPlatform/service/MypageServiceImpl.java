@@ -40,12 +40,14 @@ public class MypageServiceImpl implements MypageService{
 	
 	@Override
 	public Account selectUser(String userName) throws NotFoundException {
-		Optional<Account> userOpt = accountService.selectAccountByUserName(userName);
-	    Account user = userOpt.orElseThrow(() -> new NotFoundException("NotFound UserName: " + userName));
-	    
-		return user;
+		return accountService.selectAccountByUserName(userName);
 	}
 
+	@Override
+	public String loginName() {
+		return accountService.selectLoginUserName();
+	}
+	
 	@Override
 	public List<ExamLinkView> selectCreateExams(String userName) {
 		List<ExamLinkView> createExamLinkList = new ArrayList<ExamLinkView>();

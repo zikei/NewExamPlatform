@@ -3,16 +3,16 @@ package com.example.examPlatform.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.examPlatform.data.AccountView;
 import com.example.examPlatform.data.ExamLinkView;
+import com.example.examPlatform.data.PageView;
 import com.example.examPlatform.data.ReportLinkView;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.exception.NotFoundException;
@@ -28,16 +28,17 @@ public class MypageController {
 	@Autowired
 	MypageService mypageService;
 	
-	/** マイページ・ユーザページを表示 */
+	/** マイページ・ユーザページを表示 
+	 * @throws NotFoundException */
 	@GetMapping
 	public String Mypage(@PathVariable String userName, Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    String loginUserName = auth.getName();
+	    String loginUserName = mypageService.loginName();
 		Account user;
 		try {
 			user = mypageService.selectUser(userName);
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
+			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
 			return "error";
 		}
 		AccountView userView = new AccountView();
@@ -66,7 +67,65 @@ public class MypageController {
 	
 	/** 作成試験一覧を表示 */
 	@GetMapping("Exam")
-	public String MyCreateExam(@PathVariable String userName, Model model) {
+	public String createExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
+		List<ExamLinkView> createExamList = mypageService.selectCreateExams(userName);
+		
+		PageView<ExamLinkView> createExamPage;
+		if(page == null) {
+			createExamPage = new PageView<ExamLinkView>(createExamList);
+		}else {
+			createExamPage = new PageView<ExamLinkView>(createExamList, page);
+		}
+		
+		model.addAttribute("CreateExamList", createExamPage.getPageList());
+		model.addAttribute("Page", createExamPage);
+		
+		return "myCreateExam";
+	}
+	
+	/** ブックマーク試験一覧を表示 */
+	@GetMapping("Bookamrk")
+	public String bookmarkExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
+		if(userName.equals(mypageService.loginName())) {
+			// ログインユーザ以外のアクセスの場合エラーページに遷移
+			model.addAttribute("errorMsg", "このページは表示できません");
+			return "error";
+		}
+		
+		List<ExamLinkView> bookmarkExamList = mypageService.selectBookmarkExams(userName);
+		
+		PageView<ExamLinkView> bookmarkExamLPage;
+		if(page == null) {
+			bookmarkExamLPage = new PageView<ExamLinkView>(bookmarkExamList);
+		}else {
+			bookmarkExamLPage = new PageView<ExamLinkView>(bookmarkExamList, page);
+		}
+		
+		model.addAttribute("BookmarkExamLPage", bookmarkExamLPage.getPageList());
+		model.addAttribute("Page", bookmarkExamLPage);
+		
+		return "myCreateExam";
+	}
+	
+	/** レポート一覧を表示 */
+	@GetMapping("Report")
+	public String MyCreateExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
+		if(userName.equals(mypageService.loginName())) {
+			// ログインユーザ以外のアクセスの場合エラーページに遷移
+			model.addAttribute("errorMsg", "このページは表示できません");
+			return "error";
+		}
+		List<ReportLinkView> reportList = mypageService.selectReports(userName);
+		
+		PageView<ReportLinkView> reportPage;
+		if(page == null) {
+			reportPage = new PageView<ReportLinkView>(reportList);
+		}else {
+			reportPage = new PageView<ReportLinkView>(reportList, page);
+		}
+		
+		model.addAttribute("ReportList", reportPage.getPageList());
+		model.addAttribute("Page", reportPage);
 		
 		return "myCreateExam";
 	}

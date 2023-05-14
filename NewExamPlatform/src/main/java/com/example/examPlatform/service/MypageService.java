@@ -13,6 +13,8 @@ public interface MypageService {
 	 * @throws NotFoundException */
 	Account selectUser(String userName) throws NotFoundException;
 	
+	String loginName();
+	
 	/** 
 	 * 作成試験取得 
 	 * ログインユーザ本人の場合は作成試験全件
