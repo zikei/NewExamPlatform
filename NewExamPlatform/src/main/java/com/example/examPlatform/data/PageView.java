@@ -2,6 +2,8 @@ package com.example.examPlatform.data;
 
 import java.util.List;
 
+import com.example.examPlatform.exception.NotFoundException;
+
 /** ページング用クラス */
 public class PageView<T> {
 	/** 表示件数 */
@@ -23,13 +25,14 @@ public class PageView<T> {
 		this.pageNum = 1;
 	}
 	
-	/** コントラスタ：ページ番号を指定する(最大ページ数より大きい場合最大ページ数を設定) */
-	public PageView(List<T> list, int pageNum) {
+	/** コントラスタ：ページ番号を指定する 
+	 * @throws NotFoundException */
+	public PageView(List<T> list, int pageNum) throws NotFoundException {
 		this.list = list;
 		this.totalPages = (int) Math.ceil(list.size() / (double)PAGE_SIZE);
 		this.totalElements = list.size();
 		
-		if(pageNum > totalPages) pageNum = totalPages;
+		if(pageNum > totalPages) throw new NotFoundException("Page NotFound");
 		this.pageNum = pageNum;
 	}
 	
@@ -42,8 +45,8 @@ public class PageView<T> {
 		return pageNum;
 	}
 	
-	public void setPageNum(int pageNum) {
-		if(pageNum > totalPages) pageNum = totalPages;
+	public void setPageNum(int pageNum) throws NotFoundException {
+		if(pageNum > totalPages) throw new NotFoundException("Page NotFound");
 		this.pageNum = pageNum;
 	}
 	

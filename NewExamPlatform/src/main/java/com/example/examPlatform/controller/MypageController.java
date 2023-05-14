@@ -74,7 +74,13 @@ public class MypageController {
 		if(page == null) {
 			createExamPage = new PageView<ExamLinkView>(createExamList);
 		}else {
-			createExamPage = new PageView<ExamLinkView>(createExamList, page);
+			try {
+				createExamPage = new PageView<ExamLinkView>(createExamList, page);
+			} catch (NotFoundException e) {
+				// 指定されたページが見つからないの場合エラーページに遷移
+				model.addAttribute("errorMsg", "ページが見つかりません");
+				return "error";
+			}
 		}
 		
 		model.addAttribute("CreateExamList", createExamPage.getPageList());
@@ -98,7 +104,13 @@ public class MypageController {
 		if(page == null) {
 			bookmarkExamLPage = new PageView<ExamLinkView>(bookmarkExamList);
 		}else {
-			bookmarkExamLPage = new PageView<ExamLinkView>(bookmarkExamList, page);
+			try {
+				bookmarkExamLPage = new PageView<ExamLinkView>(bookmarkExamList, page);
+			} catch (NotFoundException e) {
+				// 指定されたページが見つからないの場合エラーページに遷移
+				model.addAttribute("errorMsg", "ページが見つかりません");
+				return "error";
+			}
 		}
 		
 		model.addAttribute("BookmarkExamLPage", bookmarkExamLPage.getPageList());
@@ -121,7 +133,13 @@ public class MypageController {
 		if(page == null) {
 			reportPage = new PageView<ReportLinkView>(reportList);
 		}else {
-			reportPage = new PageView<ReportLinkView>(reportList, page);
+			try {
+				reportPage = new PageView<ReportLinkView>(reportList, page);
+			} catch (NotFoundException e) {
+				// 指定されたページが見つからないの場合エラーページに遷移
+				model.addAttribute("errorMsg", "ページが見つかりません");
+				return "error";
+			}
 		}
 		
 		model.addAttribute("ReportList", reportPage.getPageList());
