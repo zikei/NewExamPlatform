@@ -8,6 +8,9 @@ public interface AccountService {
 	/** ユーザ登録 */
 	void userRegister(Account registUser);
 	
+	/** ユーザ退会　*/
+	boolean userWithdrow(Integer userId, String password) throws NotFoundException ;
+	
 	/** アカウント取得 */
 	Account selectAccountByUserId(Integer userId) throws NotFoundException ;
 	

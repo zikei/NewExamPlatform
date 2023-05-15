@@ -28,6 +28,16 @@ public class AccountServiceImpl implements AccountService{
 		registUser.setPassword(passwordEncoder.encode(registUser.getPassword()));
 		accountRepo.save(registUser);
 	}
+	
+	@Override
+	public boolean userWithdrow(Integer userId, String password) throws NotFoundException {
+		//パスワードチェック
+		String dbPassword = selectAccountByUserId(userId).getPassword();
+		if(!passwordEncoder.matches(password, dbPassword)) return false;
+		
+		accountRepo.deleteById(userId);
+		return true;
+	}
 
 	@Override
 	public Account selectAccountByUserId(Integer userId) throws NotFoundException {
