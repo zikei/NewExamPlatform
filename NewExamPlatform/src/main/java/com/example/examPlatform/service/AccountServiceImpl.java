@@ -38,7 +38,7 @@ public class AccountServiceImpl implements AccountService{
 	}
 	
 	@Override
-	public void userInfoUpdate(Account user) throws NotFoundException {
+	public void userInfoUpd(Account user) throws NotFoundException {
 		String pass = selectAccountByUserId(user.getUserId()).getPassword();
 		user.setPassword(pass);
 		accountRepo.save(user);
