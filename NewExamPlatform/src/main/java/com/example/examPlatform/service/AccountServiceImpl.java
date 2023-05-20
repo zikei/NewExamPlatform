@@ -31,11 +31,26 @@ public class AccountServiceImpl implements AccountService{
 	
 	@Override
 	public boolean userWithdrow(Integer userId, String password) throws NotFoundException {
-		//パスワードチェック
-		String dbPassword = selectAccountByUserId(userId).getPassword();
-		if(!passwordEncoder.matches(password, dbPassword)) return false;
+		if(!checkPass(userId, password)) return false;
 		
 		accountRepo.deleteById(userId);
+		return true;
+	}
+	
+	@Override
+	public void userInfoUpdate(Account user) throws NotFoundException {
+		String pass = selectAccountByUserId(user.getUserId()).getPassword();
+		user.setPassword(pass);
+		accountRepo.save(user);
+	}
+
+	@Override
+	public boolean userPassUpd(Integer userId, String newPass, String oldPass) throws NotFoundException {
+		if(!checkPass(userId, oldPass)) return false;
+		
+		Account user = selectAccountByUserId(userId);
+		user.setPassword(passwordEncoder.encode(newPass));
+		accountRepo.save(user);
 		return true;
 	}
 
@@ -57,5 +72,11 @@ public class AccountServiceImpl implements AccountService{
 		Optional<Account> accountOpt = accountRepo.findByUserName(userName);
 		Account user = accountOpt.orElseThrow(() -> new NotFoundException("NotFound UserName: " + userName));
 		return user;
+	}
+	
+	private boolean checkPass(Integer userId, String pass) throws NotFoundException {
+		String dbPassword = selectAccountByUserId(userId).getPassword();
+		if(!passwordEncoder.matches(pass, dbPassword)) return false;
+		return true;
 	}
 }
