@@ -1,30 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>NewExamPlatForm - ホーム</title>
+<title>ExamPlatform - ホーム</title>
 <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/home.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 </head>
 <body>
 	<header>
-		<div class = "d-flex  col-12 w-100 h-100">
-			<div class = "col-4">
-				<h1 class = "">NewExamPlatForm</h1>
+		<div class = "header_box container-fluid ">
+			<div class = "col-12 row align-items-center ">
+				<div class = "col-8">
+						<h1 class = "title ml-5">ExamPlatform</h1>
+				</div>
+				<div class = "col-4 text-right ">
+				<a class="btn btn-primary mr-5" href="#" role="button">ログイン</a>
+				</div>
 			</div>
-			
-			<div class = " col-8 ">
+			<div class = "container col-12 mt-3">
 				<nav>
-					<ul class = "main_nav  justify-content-end">
-        					<li><a href="#">ホーム</a></li>
-        					<li><a href="#">検索</a></li>
+					<ul class = "nav main_nav justify-content-center text-nowrap">
+        					<li><a href="#">　ホーム　</a></li>
+        					<li><a href="#">　検索　</a></li>
         					<li><a href="#">マイページ</a></li>
         			</ul>
         		</nav>
 			</div>
-			
 		</div>
 	</header>
+	<main>
+		
+<h2 class = "text-center mt-5 mb-5">掲示板</h2>
+
+<div id ="main_box"class ="container">
+<div class = "sort d-flex justify-content-around mt-5">
+
+<div><input type = "radio" name = "root" id = "sin" value = "select_1"  onclick="" checked><label id = "sin">新着順</label></div>
+<div><input type = "radio" name = "root" id = "book" value = "select_2" onclick="" ><label id = "book">ブクマ順</label></div>
+<div><input type = "radio" name = "root" id = "acs" value = "select_3"  onclick="" ><label id = "acs">月間実行回数順</label></div>
+</div>
+<br>
+
+<div  id = "root" class = "container-fluid">
+<div id = "box1" class = "col-12 d-flex row ">
+<!--
+<c:forEach var = "v" items = "${sinList}" varStatus = "st" begin = "0" end = "9"  step = "1">
+<div class = "d-flex row">-->
+<p class = "Record col-6">ユーザー１</p><!--ユーザーID -->
+<p class = "Record col-6"><a href = "#">Exam１</a></p><!--試験名-->
+</div>
+<!--</c:forEach>-->
+</div>
+<!--
+<div id = "box2">
+<c:forEach var = "v" items = "${bookList}" varStatus = "st" begin = "0" end = "9" step = "1">
+<div class = "d-flex row">
+<p class = "Record col-4"><fmt:formatDate value="${v.createDate}" pattern="${pattern}"/></p>
+<p class = "Record col-4"><c:out value = "${v.userID}"/></p>
+<p class = "Record col-4"><a href = "/ExamPlatform/ExaminationServlet?examID=<c:out value = "${v.examID}"/>" id = "exam"><c:out value = "${v.examName}"/></a></p>
+</div>
+</c:forEach>
+</div>
+
+<div id = "box3">
+<c:forEach var = "v" items = "${acsList}" varStatus = "st" begin = "0" end = "9"  step = "1">
+<div class = "d-flex row">
+<p class = "Record col-4"><fmt:formatDate value="${v.createDate}" pattern="${pattern}"/></p>
+<p class = "Record col-4"><c:out value = "${v.userID}"/></p>
+<p class = "Record col-4"><a href = "/ExamPlatform/ExaminationServlet?examID=<c:out value = "${v.examID}"/>" id = "exam"><c:out value = "${v.examName}"/></a></p>
+</div>
+</c:forEach>
+</div>
+
+-->
+
+</div>
+</div>
+		
+		
+		
+	</main>
 </body>
 </html>
