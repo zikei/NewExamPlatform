@@ -16,7 +16,7 @@ public class AccountView {/** ユーザ名*/
 	/** プロフィール */
 	private String profile;
 	
-	public void makeAccountView(Account account) {
+	public AccountView(Account account) {
 		this.userName = account.getUserName();
 		this.profile = account.getProfile();
 	}

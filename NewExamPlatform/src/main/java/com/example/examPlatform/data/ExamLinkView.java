@@ -17,7 +17,7 @@ public class ExamLinkView {
 	/** 試験名 */
 	private String examName;
 	
-	public void makeExamLinkView(Exam exam) {
+	public ExamLinkView(Exam exam) {
 		this.examId = exam.getExamId();
 		this.examName = exam.getExamName();
 	}

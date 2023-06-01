@@ -41,8 +41,7 @@ public class MypageController {
 			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
 			return "error";
 		}
-		AccountView userView = new AccountView();
-		userView.makeAccountView(user);
+		AccountView userView = new AccountView(user);
 		
 		List<ExamLinkView> createExamList = mypageService.selectCreateExams(userName);
 		if(createExamList.size() > displayCnt) createExamList = createExamList.subList(0, displayCnt);

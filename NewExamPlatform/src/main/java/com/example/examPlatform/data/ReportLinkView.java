@@ -29,7 +29,7 @@ public class ReportLinkView {
 	/** 試験名 */
 	private Date examDate;
 	
-	public void makeExamLinkView(Report report) {
+	public ReportLinkView(Report report) {
 		Exam exam = examService.selectExamByExamId(report.getExamId()).get();
 		
 		this.examId = report.getExamId();

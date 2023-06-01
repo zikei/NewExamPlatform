@@ -46,8 +46,7 @@ public class ExamServiceImpl implements ExamService{
 	public List<ExamLinkView> makeExamLinkList(List<Exam> examList) {
 		List<ExamLinkView> examLinkList = new ArrayList<>();
 		for(Exam exam : examList) {
-			ExamLinkView addLink = new ExamLinkView();
-			addLink.makeExamLinkView(exam);
+			ExamLinkView addLink = new ExamLinkView(exam);
 			
 			examLinkList.add(addLink);
 		}
