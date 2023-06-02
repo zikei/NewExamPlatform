@@ -112,8 +112,7 @@ public class MypageServiceImpl implements MypageService{
 		reportRepo.findByUserId(user.getUserId()).forEach(reportList::add);
 		
 		for(Report report : reportList) {
-			ReportLinkView addLink = new ReportLinkView();
-			addLink.makeExamLinkView(report);
+			ReportLinkView addLink = new ReportLinkView(report);
 			
 			reportLinkList.add(addLink);
 		}
