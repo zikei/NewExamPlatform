@@ -32,7 +32,7 @@
 	</header>
 	<main>
 		
-<h2 class = "text-center mt-5 mb-5">掲示板</h2>
+<h2 class = "text-center mt-5 mb-5 border-bottom border-dark">掲示板</h2>
 
 <div id ="main_box"class ="container">
 <div class = "sort d-flex justify-content-around mt-5">
@@ -44,12 +44,13 @@
 <br>
 
 <div  id = "root" class = "container-fluid">
-<div id = "box1" class = "col-12 d-flex row ">
+<div id = "box1" class = "col-12 d-flex row" th:each="i : ${#numbers.sequence(1, 10)}">
 <!--
 <c:forEach var = "v" items = "${sinList}" varStatus = "st" begin = "0" end = "9"  step = "1">
 <div class = "d-flex row">-->
-<p class = "Record col-6">ユーザー１</p><!--ユーザーID -->
-<p class = "Record col-6"><a href = "#">Exam１</a></p><!--試験名-->
+<p class = "Record col-6 mt-2">ユーザー[[${i}]]</p><!--ユーザーID -->
+<p class = "Record col-6 mt-2"><a href = "#">Exam[[${i}]]</a></p><!--試験名-->
+<span class = "col-12 border-bottom border-primary"></span>
 </div>
 <!--</c:forEach>-->
 </div>
