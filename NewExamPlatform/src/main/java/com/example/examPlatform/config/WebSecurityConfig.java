@@ -18,7 +18,7 @@ public class WebSecurityConfig {
     UserDetailsService userDetailsService;
 	
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(authz -> authz
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
@@ -27,7 +27,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/img/**").permitAll()
 				)
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/ExamPlatform/Home", "/ExamPlatform/").permitAll()
+				.requestMatchers("/ExamPlatform/Home","/ExamPlatform/Account/Entry").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) -> form
