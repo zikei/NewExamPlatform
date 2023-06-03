@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.examPlatform.data.AccountView;
-import com.example.examPlatform.data.ExamLinkView;
 import com.example.examPlatform.data.PageView;
-import com.example.examPlatform.data.ReportLinkView;
+import com.example.examPlatform.data.link.ExamLinkView;
+import com.example.examPlatform.data.link.ReportLinkView;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.service.MypageService;

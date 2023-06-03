@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.examPlatform.data.ExamLinkView;
+import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.service.HomeService;
 
 /** ホームコントローラ */
