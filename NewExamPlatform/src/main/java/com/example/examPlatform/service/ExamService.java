@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.examPlatform.data.link.ExamLinkView;
+import com.example.examPlatform.data.question.BigQuestionData;
 import com.example.examPlatform.entity.Exam;
 
 /** 試験関連処理 */
@@ -16,6 +17,9 @@ public interface ExamService {
 	
 	/** ユーザIDで試験取得 */
 	List<Exam> selectExamByUserID(Integer userId);
+	
+	/** 試験登録 */
+	void examRegister(Exam exam, List<BigQuestionData> questionData);
 	
 	/** 試験リストを試験リンクリスト形式に変換*/
 	List<ExamLinkView> makeExamLinkList(List<Exam> examList);
