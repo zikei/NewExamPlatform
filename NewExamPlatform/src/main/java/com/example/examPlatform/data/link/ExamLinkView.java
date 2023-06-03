@@ -1,4 +1,4 @@
-package com.example.examPlatform.data;
+package com.example.examPlatform.data.link;
 
 import com.example.examPlatform.entity.Exam;
 

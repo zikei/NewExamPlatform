@@ -2,7 +2,7 @@ package com.example.examPlatform.service;
 
 import java.util.List;
 
-import com.example.examPlatform.data.ExamLinkView;
+import com.example.examPlatform.data.link.ExamLinkView;
 
 /** ホーム関連処理 */
 public interface HomeService {

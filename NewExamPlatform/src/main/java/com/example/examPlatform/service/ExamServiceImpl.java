@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.examPlatform.data.ExamLinkView;
+import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.repository.ExamRepository;
 

@@ -3,7 +3,7 @@ package com.example.examPlatform.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.examPlatform.data.ExamLinkView;
+import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.entity.Exam;
 
 /** 試験関連処理 */

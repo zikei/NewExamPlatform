@@ -2,8 +2,8 @@ package com.example.examPlatform.service;
 
 import java.util.List;
 
-import com.example.examPlatform.data.ExamLinkView;
-import com.example.examPlatform.data.ReportLinkView;
+import com.example.examPlatform.data.link.ExamLinkView;
+import com.example.examPlatform.data.link.ReportLinkView;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.exception.NotFoundException;
 

@@ -11,9 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.examPlatform.data.ExamLinkView;
-import com.example.examPlatform.data.ReportLinkView;
 import com.example.examPlatform.data.constant.DisclosureRange;
+import com.example.examPlatform.data.link.ExamLinkView;
+import com.example.examPlatform.data.link.ReportLinkView;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.entity.Bookmark;
 import com.example.examPlatform.entity.Exam;
