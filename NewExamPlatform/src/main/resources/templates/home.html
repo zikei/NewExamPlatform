@@ -46,22 +46,22 @@
 <div  id = "root" class = "container-fluid">
 <!--新着順-->
 <div id = "box1">
-<div  class = "col-12 d-flex row" th:each="i : ${#numbers.sequence(1, 20)}">
-<p class = "Record col-12 mt-2"><a href = "#">Exam[[${i}]]</a></p><!--試験名-->
+<div  class = "col-12 d-flex row" th:each="exam : ${newExamList}">
+<p class = "Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}" th:text="${exam.examName}">Exam[[${i}]]</a></p><!--試験名-->
 <span class = "col-12 border-bottom border-primary"></span>
 </div>
 </div>
 <!--ブクマ順-->
 <div id = "box2">
-<div  class = "col-12 d-flex row" th:each="i : ${#numbers.sequence(1, 20)}">
-<p class = "Record col-12 mt-2"><a href = "#">b_Exam[[${i}]]</a></p><!--試験名-->
+<div  class = "col-12 d-flex row" th:each="exam : ${bookmarkTopExamList}">
+<p class = "Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}"  th:text="${exam.examName}">b_Exam[[${i}]]</a></p><!--試験名-->
 <span class = "col-12 border-bottom border-primary"></span>
 </div>
 </div>
 <!--月間実行回数順-->
 <div id = "box3">
-<div class = "col-12 d-flex row" th:each="i : ${#numbers.sequence(1, 20)}">
-<p class = "Record col-12 mt-2"><a href = "#">z_Exam[[${i}]]</a></p><!--試験名-->
+<div class = "col-12 d-flex row" th:each="exam : ${exeTopExamList}">
+<p class = "Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}"  th:text="${exam.examName}">z_Exam[[${i}]]</a></p><!--試験名-->
 <span class = "col-12 border-bottom border-primary"></span>
 </div>
 </div>
