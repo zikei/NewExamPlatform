@@ -78,7 +78,7 @@
 	
 	<div class="exam_box design_box col-12 d-flex mt-4"> 
 		<div class = "exam col-12">
-			<div class="col-12 row mt-4" th:each="exam : ${createExamList}">
+			<div class="col-12 row mt-4" th:each="exam : ${bookmarkExamList}">
 			<img src="/img/exam.png" height="40" width="40" alt="bookmark exam file">
 			<div class="createexamName"><a href = "#"><span th:text="${exam.examName}"></span></a></div>
 			</div>
