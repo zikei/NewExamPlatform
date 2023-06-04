@@ -20,7 +20,7 @@ public interface AccountService {
 	/** アカウント取得 */
 	Account selectAccountByUserId(Integer userId) throws NotFoundException ;
 	
-	/** ログインユーザ情報取得 */
+	/** ログインユーザ名取得 */
 	String selectLoginUserName();
 	
 	/** ユーザ名によるアカウント取得 */

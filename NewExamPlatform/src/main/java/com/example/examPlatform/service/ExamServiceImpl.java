@@ -1,6 +1,7 @@
 package com.example.examPlatform.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import com.example.examPlatform.entity.BigQuestion;
 import com.example.examPlatform.entity.Choices;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Question;
+import com.example.examPlatform.form.ExamCreateForm;
 import com.example.examPlatform.repository.BigQuestionRepository;
 import com.example.examPlatform.repository.ChoicesRepository;
 import com.example.examPlatform.repository.ExamRepository;
@@ -64,6 +66,25 @@ public class ExamServiceImpl implements ExamService{
 		Exam registExam = insertExam(exam);
 		Integer examId = registExam.getExamId();
 		insertBigQuestionData(examId, questionData);
+	}
+	
+	@Override
+	public Exam makeExam(ExamCreateForm form, Integer userId) {
+		
+		Exam exam = new Exam();
+		
+		exam.setGenreId(form.getGenreId());
+		exam.setExamName(form.getExamName());
+		exam.setPassingScore(form.getPassingScore());
+		exam.setExamTimeMinutes(form.getExamTimeMinutes());
+		exam.setExamExplanation(form.getExamExplanation());
+		exam.setDisclosureRange(form.getDisclosureRange());
+		exam.setLimitedPassword(form.getLimitedPassword());
+		exam.setQuestionFormat(form.getQuestionFormat());
+		
+		exam.setUserId(userId);
+		exam.setCreateDate(new Date());
+		return exam;
 	}
 
 	@Override
