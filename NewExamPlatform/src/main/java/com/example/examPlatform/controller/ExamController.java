@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.examPlatform.data.constant.QuestionFormat;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.exception.NotFoundException;
@@ -56,6 +57,12 @@ public class ExamController {
 		return "examCreate";
 	}
 	
+	/** 試験概要登録ページセッションタイムを延長　*/
+	@PostMapping("/Create/s")
+	public String ExamCreateUpdSession(ExamCreateForm examform) {
+		return "examCreate";
+	}
+	
 	/** 試験概要登録処理　*/
 	@PostMapping("/Create")
 	public String ExamCreate(@Validated ExamCreateForm examform, BindingResult bindingResult, Model model,
@@ -75,12 +82,23 @@ public class ExamController {
 		
 		Exam exam = examService.makeExam(examform, loginUser.getUserId());
 		session.setAttribute("exam", exam);
-		return QuestionCreateView();
+		return QuestionCreateView(session);
 	}
 	
 	/** 試験問題登録ページ　*/
 	@GetMapping("/Create/Question")
-	public String QuestionCreateView() {
-		return "questionCreate";
+	public String QuestionCreateView(HttpSession session) {
+		Exam exam = (Exam) session.getAttribute("exam");
+		QuestionFormat qf = new QuestionFormat();
+		
+		//試験概要情報が見つからない場合試験概要登録ページに遷移
+		if(exam == null || exam.getQuestionFormat() == null) return ExamCreateView();
+		
+		//小問形式なら小問問題登録、大問形式なら大問問題登録へ遷移
+		if(qf.isBigQuestionFormat(0)) {
+			return "bigQuestionCreate";
+		}else {
+			return "questionCreate";
+		}
 	}
 }
