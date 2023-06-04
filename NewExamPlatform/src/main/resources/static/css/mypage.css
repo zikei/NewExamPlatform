@@ -133,16 +133,16 @@ h2{
     color: rgb(0, 0, 0);
 }
 
-.exam_box{
+.design_box{
     position: relative;
     padding: 1rem;
-    border-top: 28px dotted rgb(0, 255, 255);
+    border-top: 20px dashed rgb(0, 255, 255);
     background-image: linear-gradient(-45deg, transparent 10px, #efefef 10px);
     color: #212121;
     overflow: hidden;
 }
 
-.exam_box::before {
+.design_box:before {
     position: absolute;
     content: '';
     right: 0px;
@@ -153,7 +153,7 @@ h2{
     box-shadow: 0 0 5px #000;
 }
 
-.exam_box p {
+.design_box p {
     color: #333;
     line-height: 1.5;
 }
