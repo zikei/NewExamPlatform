@@ -135,7 +135,17 @@ public class AccountController {
 	
 	/** アカウント更新画面表示 */
 	@GetMapping("/UpdAccount")
-	public String AccountUpdView() {
+	public String AccountUpdView(AccountUpdForm updForm, Model model) {
+		String userName = accountService.selectLoginUserName();
+		
+		try {
+			updForm = makeUpdFromByAccount(userName, updForm);
+		} catch (NotFoundException e) {
+			// ユーザ情報が見つからない場合エラーページに遷移
+			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
+			return "error";
+		}
+		
 		return "accountUpd";
 	}
 	
@@ -155,7 +165,7 @@ public class AccountController {
 		}
 		
 		model.addAttribute("msg", "アカウントを更新しました");
-		return AccountUpdView();
+		return AccountUpdView(updForm , model);
 	}
 	
 	private Account makeAccountByUpdFrom(String userName, AccountUpdForm updForm) throws NotFoundException {
@@ -164,6 +174,14 @@ public class AccountController {
 		user.setProfile(updForm.getProfile());
 		user.setUseInfoDefault(updForm.getUseInfoDefault());
 		return user;
+	}
+	
+	private AccountUpdForm makeUpdFromByAccount(String userName, AccountUpdForm updForm) throws NotFoundException {
+		Account user = accountService.selectAccountByUserName(userName);
+		updForm.setUserName(user.getUserName());
+		updForm.setProfile(user.getProfile());
+		updForm.setUseInfoDefault(user.getUseInfoDefault());
+		return updForm;
 	}
 	
 	/** パスワード更新画面表示 */
