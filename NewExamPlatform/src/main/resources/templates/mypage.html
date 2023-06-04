@@ -94,10 +94,10 @@
 	
 	<div class="exam_box design_box col-12 d-flex mt-4"> 
 		<div class = "exam col-12">
-			<div class="col-12 row mt-4" th:each="exam : ${reportList}">
+			<div class="col-12 row mt-4" th:each="report : ${reportList}">
 			<span  th:text="${report.examDate}">　　　　</span>
 			<img src="/img/exam.png" height="40" width="40" alt="report exam file">
-			<div class="createexamName"><a href = "#"><span th:text="${exam.examName}"></span></a></div>
+			<div class="createexamName"><a href = "#"><span th:text="${report.examName}"></span></a></div>
 			</div>
 	</div>
 	<div class="col-12 d-flex justify-content-end mt-3 link"><a href = "#" class="text-end">詳細</a></div>
