@@ -44,25 +44,32 @@ public class MypageController {
 		AccountView userView = new AccountView();
 		userView.makeAccountView(user);
 		
-		List<ExamLinkView> createExamList = mypageService.selectCreateExams(userName);
-		if(createExamList.size() > displayCnt) createExamList = createExamList.subList(0, displayCnt);
+		List<ExamLinkView> createExamList = formatList(mypageService.selectCreateExams(userName));
+		
 		
 		model.addAttribute("user", userView);
 		model.addAttribute("createExamList", createExamList);
 		
 		if(userName.equals(loginUserName)) {
 			// ログインユーザ本人のマイページを表示する場合
-			List<ExamLinkView> bookmarkExamList = mypageService.selectBookmarkExams(loginUserName);
-			List<ReportLinkView> reportList = mypageService.selectReports(loginUserName);
-			
-			if(bookmarkExamList.size() > displayCnt) bookmarkExamList = bookmarkExamList.subList(0, displayCnt);
-			if(reportList.size() > displayCnt) reportList = reportList.subList(0, displayCnt);
+			List<ExamLinkView> bookmarkExamList = formatList(mypageService.selectBookmarkExams(loginUserName));
+			List<ReportLinkView> reportList = formatList(mypageService.selectReports(loginUserName));
 			
 			model.addAttribute("bookmarkExamList", bookmarkExamList);
 			model.addAttribute("reportList", reportList);
+			
+			return "mypage";
+			
+		}else {
+			//ログインユーザ本人以外の場合そのユーザのユーザページを表示
+			return "userPage";
 		}
-		
-		return "mypage";
+	}
+	
+	/** リストのサイズを表示サイズに整形する */
+	private <E> List<E> formatList(List<E> list) {
+		if(list.size() > displayCnt) list = list.subList(0, displayCnt);
+		return list;
 	}
 	
 	/** 作成試験一覧を表示 */
