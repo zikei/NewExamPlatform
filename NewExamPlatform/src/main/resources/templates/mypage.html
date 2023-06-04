@@ -31,7 +31,12 @@
 		</div>
 	</header>
 <body>
-	<h2 class="text-center mt-5">マイページ</h1>
+	<div class= "container col-12 d-flex row">
+		<div class="col-4"></div>
+		<div class="col-4 text-center"><h2 class=" mt-5 mx-5">マイページ</h1></div>
+		<div class="col-4"></div>
+	</div>
+	
 	<div id = "main_box"class="container-field">
 	<div class = "root_1  container d-flex w-auto h-auto">
 			<div class="r1_item_1 col-4 mt-5">
@@ -41,12 +46,35 @@
 			</div>
 			<div class="r1_item_2 col-4 mt-5">
 				<p>ユーザID : <span class="user" th:text="${user.userName}"></span></p>
-				<br/><a class = "UpdAccount" href = "#" >アカウント設定</a>
+				<br/><a class = "UpdAccount link" href = "#" >アカウント設定</a>
 			</div>
 			<div class="r1_item_3 col-4 mt-5">
 				<p><span class="user" th:text="${user.profile}"></span></p>
 			</div>
 	</div>
+	
+	<div class = "Create_box　d-flex row col-12 w-auto mt-5">
+		<div class="col-4"></div>
+		<div class="col-4 align-self-end"><h2 class="mi_2 text-center">試験一覧</h2></div>
+		<div class="col-4  text-center align-self-end"><a class="btn btn-primary" href = "#" >試験問題を作成</a></div>
+	</div>
+	
+	<div class="exam_box col-12 d-flex mt-4"> 
+		<div class = "exam col-1">
+			<img src="/img/exam.png" height="70" width="70" alt="Create exam file">
+			<div class="text-center createexamName text-nowrap bd-highlight text-truncate"><a href = "#"><span>基本情報技術者試験午前問題</span></a></div>
+		</div>
+		<div class = "exam col-1">
+			<img src="/img/exam.png" height="70" width="70" alt="Create exam file">
+			<div class="text-center createexamName text-nowrap bd-highligh text-truncatet"><a href = "#"><span>基本情報技術者試験午前問題</span></a></div>
+		</div>
+	</div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a href = "#" class="text-end">もっとみる</a></div>
+	
+	
+	
+	
+	
 	</div>
 
 </body>

@@ -24,6 +24,10 @@ header{
 	height: 240px;	
 }
 
+body{
+	font-family: 'Zen Antique', serif;
+}
+
 h1{
 	font-family: 'Merriweather', serif;
 	font-size: 74px;
@@ -39,6 +43,17 @@ h1{
 h2{
 	font-family: 'Zen Antique', serif;
 	font-size: 48px;
+	border-bottom: #000 solid 3px;
+}
+
+.link{
+	font-family: 'Zen Antique', serif;
+	font-size: 24px;
+}
+
+.r1_item_2{
+	font-family: 'Zen Antique', serif;
+	font-size: 24px;
 }
 
 .btn {
@@ -116,4 +131,33 @@ h2{
     border: 3px solid rgb(192, 192, 192);
     box-shadow: 5px 5px 0 rgb(192, 192, 192);
     color: rgb(0, 0, 0);
+}
+
+.exam_box{
+    position: relative;
+    padding: 1rem;
+    border-top: 28px dotted rgb(0, 255, 255);
+    background-image: linear-gradient(-45deg, transparent 10px, #efefef 10px);
+    color: #212121;
+    overflow: hidden;
+}
+
+.exam_box::before {
+    position: absolute;
+    content: '';
+    right: 0px;
+    bottom: 0px;
+    border-width: 0px 0px 40px 50px;
+    border-style: solid;
+    border-color: transparent transparent transparent rgb(0, 255, 255);
+    box-shadow: 0 0 5px #000;
+}
+
+.exam_box p {
+    color: #333;
+    line-height: 1.5;
+}
+
+.createexamName{
+	font-size: 24px;
 }
