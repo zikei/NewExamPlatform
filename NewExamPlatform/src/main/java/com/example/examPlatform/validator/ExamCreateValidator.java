@@ -1,6 +1,5 @@
 package com.example.examPlatform.validator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -10,9 +9,6 @@ import com.example.examPlatform.form.ExamCreateForm;
 
 @Component
 public class ExamCreateValidator implements Validator {
-	@Autowired
-	DisclosureRange dr;
-	
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return ExamCreateForm.class.isAssignableFrom(clazz);
@@ -22,7 +18,7 @@ public class ExamCreateValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ExamCreateForm form = (ExamCreateForm) target;
-		
+		DisclosureRange dr = new DisclosureRange();
 		if(!dr.isLimited(form.getDisclosureRange())) return;
 		
 		if(form.getLimitedPassword() == null) {
