@@ -59,10 +59,10 @@
 		<div class="col-4  text-center align-self-end"><a class="btn btn-primary" href = "#" >試験問題を作成</a></div>
 	</div>
 	
-	<div class="exam_box design_box col-12 d-flex mt-4" th:each="exam : ${createExamList}"> 
-		<div class = "exam col-1">
-			<img src="/img/exam.png" height="70" width="70" alt="Create exam file">
-			<div class="text-center createexamName text-nowrap bd-highlight text-truncate"><a href = "#"><span th:text="${exam.examName}"></span></a></div>
+	<div class="exam_box design_box col-12 d-flex mt-4"> 
+		<div class = "exam col-12 row"  th:each="exam : ${createExamList}">
+			<img class = "col-6"src="/img/exam.png" height="40" width="40" alt="Create exam file">
+			<div class="col-6 text-center createexamName text-nowrap bd-highlight text-truncate"><a href = "#"><span th:text="${exam.examName}"></span></a></div>
 		</div>
 	</div>
 	<div class="col-12 d-flex justify-content-end mt-3 link"><a href = "#" class="text-end">もっとみる</a></div>
@@ -73,8 +73,8 @@
 		<div class="col-4"></div>
 	</div>
 	
-	<div class="exam_box design_box col-12 d-flex mt-4"  th:each="exam : ${bookmarkExamList}"> 
-		<div class = "exam col-1">
+	<div class="exam_box design_box col-12 d-flex mt-4"> 
+		<div class = "exam col-12 row"   th:each="exam : ${bookmarkExamList}" >
 			<img src="/img/exam.png" height="70" width="70" alt="Create exam file">
 			<div class="text-center createexamName text-nowrap bd-highlight text-truncate"><a href = "#"><span  th:text="${exam.examName}"></span></a></div>
 		</div>
@@ -87,8 +87,8 @@
 		<div class="col-4"></div>
 	</div>
 	
-	<div class="exam_box design_box col-12 d-flex mt-4" th:each="exam : ${reportList}"> 
-		<div class = "exam col-1">
+	<div class="exam_box design_box col-12 d-flex mt-4"> 
+		<div class = "exam col-12 row" th:each="exam : ${reportList}">
 			<img src="/img/exam.png" height="70" width="70" alt="Create exam file">
 			<div class="text-center createexamName text-nowrap bd-highlight text-truncate"><a href = "#"><span　 th:text="${exam.examName}"></span></a></div>
 		</div>
