@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html　xmlns:th = "http://www.thymeleaf.org">
 <head>
 <title>ExamPlatform - ホーム</title>
 <meta charset="utf-8">
@@ -22,9 +22,9 @@
 			<div class = "container col-12 mt-3">
 				<nav>
 					<ul class = "nav main_nav justify-content-center text-nowrap">
-        					<li><a href="#">　ホーム　</a></li>
+        					<li><a href="/ExamPlatform/Home">　ホーム　</a></li>
         					<li><a href="#">　検索　</a></li>
-        					<li><a href="#">マイページ</a></li>
+        					<li><a th:href="@{/ExamPlatform/{userName}(userName=${entryForm.userName})}">マイページ</a></li>
         			</ul>
         		</nav>
 			</div>
