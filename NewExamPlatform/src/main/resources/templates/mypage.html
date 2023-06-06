@@ -24,7 +24,7 @@
 					<ul class = "nav main_nav justify-content-center text-nowrap">
         					<li><a href="/ExamPlatform/Home">　ホーム　</a></li>
         					<li><a href="#">　検索　</a></li>
-        					<li><a href="#">マイページ</a></li>
+        					<li><a th:href="@{/ExamPlatform/{userName}(userName=${entryForm.userName})}">マイページ</a></li>
         			</ul>
         		</nav>
 			</div>
@@ -56,19 +56,19 @@
 	<div class = "Create_box　d-flex row col-12 w-auto mt-5">
 		<div class="col-4"></div>
 		<div class="col-4 align-self-end"><h2 class="mi_2 text-center">試験一覧</h2></div>
-		<div class="col-4  text-center align-self-end"><a class="btn btn-primary" href = "#" >試験問題を作成</a></div>
+		<div class="col-4  text-center align-self-end"><a class="btn btn-primary" href = "/ExamPlatform/Exam/Create" >試験問題を作成</a></div>
 	</div>
 	
 	<div class="exam_box design_box col-12 d-flex mt-4"> 
 		<div class = "exam col-12">
 			<div class="col-12 row mt-4" th:each="exam : ${createExamList}">
 			<img src="/img/exam.png" height="40" width="40" alt="Create exam file">
-			<div class="createexamName"><a href = "#"><span th:text="${exam.examName}"></span></a></div>
+			<div class="createexamName"><a th:href="@{/ExamPlatform/{examId}(examId=${examexamId})}"><span th:text="${exam.examName}"></span></a></div>
 		    </div>
 	    </div>
 	</div>
 	
-	<div class="col-12 d-flex justify-content-end mt-3 link"><a href = "#" class="text-end">もっとみる</a></div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{/ExamPlatform/{userName}(userName=${entryForm.userName})}/exam" class="text-end">もっとみる</a></div>
 	
 	<div class ="bookmark_box d-flex row col-12 w-auto mt-5">
 		<div class="col-4"></div>
@@ -80,11 +80,11 @@
 		<div class = "exam col-12">
 			<div class="col-12 row mt-4" th:each="exam : ${bookmarkExamList}">
 			<img src="/img/exam.png" height="40" width="40" alt="bookmark exam file">
-			<div class="createexamName"><a href = "#"><span th:text="${exam.examName}"></span></a></div>
+			<div class="createexamName"><a th:href="@{/ExamPlatform/{examId}(examId=${examexamId})}"><span th:text="${exam.examName}"></span></a></div>
 			</div>
 		</div>
 	</div>
-	<div class="col-12 d-flex justify-content-end mt-3 link"><a href = "#" class="text-end">もっとみる</a></div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{/ExamPlatform/{userName}(userName=${entryForm.userName})}/Bookmark" class="text-end">もっとみる</a></div>
 	
 	<div class ="report_box d-flex row col-12 w-auto mt-5">
 		<div class="col-4"></div>
@@ -97,11 +97,11 @@
 			<div class="col-12 row mt-4" th:each="report : ${reportList}">
 			<span  th:text="${#dates.format(report.examDate, 'yyyy/MM/dd')}"></span>
 			<img src="/img/exam.png" height="40" width="40" alt="report exam file">
-			<div class="createexamName"><a href = "#"><span th:text="${report.examName}"></span></a></div>
+			<div class="createexamName"><a th:href="@{/ExamPlatform/{examId}(examId=${examexamId})}"><span th:text="${report.examName}"></span></a></div>
 			</div>
 	　　</div>
 	</div>
-	<div class="col-12 d-flex justify-content-end mt-3 link"><a href = "#" class="text-end">詳細</a></div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{/ExamPlatform/{userName}(userName=${entryForm.userName})}/Report" class="text-end">詳細</a></div>
 	
 	</div>
 
