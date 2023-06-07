@@ -1,5 +1,7 @@
 package com.example.examPlatform.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.examPlatform.data.constant.QuestionFormat;
 import com.example.examPlatform.entity.Account;
+import com.example.examPlatform.entity.Choices;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.exception.NotFoundException;
+import com.example.examPlatform.form.ChoicesCreateForm;
 import com.example.examPlatform.form.ExamCreateForm;
 import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.ExamService;
@@ -49,6 +53,10 @@ public class ExamController {
 		return new ExamCreateForm();
 	}
 
+	/** 選択肢登録フォームの初期化 */
+	public ChoicesCreateForm setUpChoicesCreateForm() {
+		return new ChoicesCreateForm();
+	}
 /* ======================================================================= */
 	
 	/** 試験概要登録ページ　*/
@@ -58,7 +66,7 @@ public class ExamController {
 	}
 	
 	/** 試験概要登録ページセッションタイムを延長　*/
-	@PostMapping("/Create/s")
+	@PostMapping(value="/Create", params="s")
 	public String ExamCreateUpdSession(ExamCreateForm examform) {
 		return "examCreate";
 	}
@@ -80,7 +88,7 @@ public class ExamController {
 			return "redirect:/ExamPlatform/Login";
 		}
 		
-		Exam exam = examService.makeExam(examform, loginUser.getUserId());
+		Exam exam = makeExam(examform, loginUser.getUserId());
 		session.setAttribute("exam", exam);
 		return QuestionCreateView(session);
 	}
@@ -101,4 +109,33 @@ public class ExamController {
 			return "questionCreate";
 		}
 	}
+	
+	
+	/** formをExam形式に変換 */
+	private Exam makeExam(ExamCreateForm eForm, Integer userId) {
+		
+		Exam exam = new Exam();
+		
+		exam.setGenreId(eForm.getGenreId());
+		exam.setExamName(eForm.getExamName());
+		exam.setPassingScore(eForm.getPassingScore());
+		exam.setExamTimeMinutes(eForm.getExamTimeMinutes());
+		exam.setExamExplanation(eForm.getExamExplanation());
+		exam.setDisclosureRange(eForm.getDisclosureRange());
+		exam.setLimitedPassword(eForm.getLimitedPassword());
+		exam.setQuestionFormat(eForm.getQuestionFormat());
+		
+		exam.setUserId(userId);
+		exam.setCreateDate(new Date());
+		return exam;
+	}
+	
+	/** 選択肢エンティティを返す */
+	private Choices makeChoicesEntity(ChoicesCreateForm cForm) {
+		Choices c = new Choices();
+		c.setChoicesNum(cForm.getChoicesNum());
+		c.setChoices(cForm.getChoices());
+		return c;
+	}
+	
 }

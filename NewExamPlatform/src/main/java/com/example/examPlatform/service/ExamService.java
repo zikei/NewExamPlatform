@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.data.question.BigQuestionData;
 import com.example.examPlatform.entity.Exam;
-import com.example.examPlatform.form.ExamCreateForm;
 
 /** 試験関連処理 */
 public interface ExamService {
@@ -21,9 +20,6 @@ public interface ExamService {
 	
 	/** 試験登録 */
 	void examRegister(Exam exam, List<BigQuestionData> questionData);
-	
-	/** formをExam形式に変換 */
-	Exam makeExam(ExamCreateForm form, Integer userId);
 	
 	/** 試験リストを試験リンクリスト形式に変換*/
 	List<ExamLinkView> makeExamLinkList(List<Exam> examList);
