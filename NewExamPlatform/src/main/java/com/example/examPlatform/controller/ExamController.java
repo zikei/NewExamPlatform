@@ -1,6 +1,8 @@
 package com.example.examPlatform.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +17,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.examPlatform.data.constant.QuestionFormat;
+import com.example.examPlatform.data.question.BigQuestionData;
+import com.example.examPlatform.data.question.QuestionData;
 import com.example.examPlatform.entity.Account;
+import com.example.examPlatform.entity.BigQuestion;
 import com.example.examPlatform.entity.Choices;
 import com.example.examPlatform.entity.Exam;
+import com.example.examPlatform.entity.Question;
 import com.example.examPlatform.exception.NotFoundException;
+import com.example.examPlatform.form.BigQuestionCreateForm;
 import com.example.examPlatform.form.ChoicesCreateForm;
 import com.example.examPlatform.form.ExamCreateForm;
+import com.example.examPlatform.form.ExamQuestionCreateForm;
+import com.example.examPlatform.form.QuestionCreateForm;
 import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.ExamService;
 import com.example.examPlatform.validator.ExamCreateValidator;
@@ -56,6 +65,21 @@ public class ExamController {
 	/** 選択肢登録フォームの初期化 */
 	public ChoicesCreateForm setUpChoicesCreateForm() {
 		return new ChoicesCreateForm();
+	}
+
+	/** 小問登録フォーム初期化 */
+	public QuestionCreateForm setUpQuestionCreateForm() {
+		return new QuestionCreateForm();
+	}
+	
+	/** 大問登録フォーム初期化 */
+	public BigQuestionCreateForm setUpBigQuestionCreateForm() {
+		return new BigQuestionCreateForm();
+	}
+	
+	/** 試験問題登録フォーム初期化 */
+	public ExamQuestionCreateForm setUpExamQuestionCreateForm() {
+		return new ExamQuestionCreateForm();
 	}
 /* ======================================================================= */
 	
@@ -130,12 +154,71 @@ public class ExamController {
 		return exam;
 	}
 	
-	/** 選択肢エンティティを返す */
-	private Choices makeChoicesEntity(ChoicesCreateForm cForm) {
+	/** BigQuestionDataリストに変換 */
+	private List<BigQuestionData> makeBigQuestionDataList(ExamQuestionCreateForm form){
+		List<BigQuestionCreateForm> bqFormList = form.getBigQuestionCreateForm();
+		List<BigQuestionData> bqDataList = new ArrayList<BigQuestionData>();
+		
+		for(BigQuestionCreateForm bqForm : bqFormList) {
+			bqDataList.add(makeBigQuestionData(bqForm));
+		}
+		return bqDataList;
+	}
+	
+	/** BigQuestionDataに変換 */
+	private BigQuestionData makeBigQuestionData(BigQuestionCreateForm form){
+		BigQuestion bqEntity = makeBigQuestionEntity(form);
+		
+		List<QuestionCreateForm> qFormList = form.getQuestionCreateForm();
+		List<QuestionData> qDataList = new ArrayList<QuestionData>();
+			
+		for(QuestionCreateForm qForm : qFormList) {
+			qDataList.add(makeQuestionData(qForm));
+		}
+		
+		return new BigQuestionData(bqEntity, qDataList);
+	}
+	
+	/** QuestionDataに変換 */
+	private QuestionData makeQuestionData(QuestionCreateForm form){
+		Question qEntity = makeQuestionEntity(form);
+		
+		List<ChoicesCreateForm> cFormList = form.getChoicesFormList();
+		List<Choices> cList = new ArrayList<Choices>();
+		
+		for(ChoicesCreateForm cForm : cFormList) {
+			cList.add(makeChoicesEntity(cForm));
+		}
+		
+		return new QuestionData(qEntity, cList);
+	}
+	
+	/** 選択肢エンティティに変換 */
+ 	private Choices makeChoicesEntity(ChoicesCreateForm cForm) {
 		Choices c = new Choices();
 		c.setChoicesNum(cForm.getChoicesNum());
 		c.setChoices(cForm.getChoices());
 		return c;
 	}
+	
+	/** 小問エンティティに変換 */
+	private Question makeQuestionEntity(QuestionCreateForm qForm) {
+		Question q = new Question();
+		q.setQuestionNum(qForm.getQuestionNum());
+		q.setQuestionSentence(qForm.getQuestionSentence());
+		q.setQuestionAns(qForm.getQuestionAns());
+		q.setQuestionExplanation(qForm.getQuestionExplanation());
+		q.setPoint(q.getPoint());
+		return q;
+	}
+	
+	/** 大問エンティティに変換 */
+	private BigQuestion makeBigQuestionEntity(BigQuestionCreateForm bqForm) {
+		BigQuestion bq = new BigQuestion();
+		bq.setBigQuestionNum(bqForm.getBigQuestionNum());
+		bq.setBigQuestionSentence(bqForm.getBigQuestionSentence());
+		return bq;
+	}
+
 	
 }
