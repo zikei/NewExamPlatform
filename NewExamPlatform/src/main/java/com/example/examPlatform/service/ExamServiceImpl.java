@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.data.question.BigQuestionData;
+import com.example.examPlatform.data.question.ExamQuestion;
 import com.example.examPlatform.data.question.QuestionData;
 import com.example.examPlatform.entity.BigQuestion;
 import com.example.examPlatform.entity.Choices;
@@ -60,10 +61,11 @@ public class ExamServiceImpl implements ExamService{
 	}
 	
 	@Override
-	public void examRegister(Exam exam, List<BigQuestionData> questionData) {
+	public void examRegister(Exam exam, ExamQuestion examQuestion) {
 		Exam registExam = insertExam(exam);
+		
 		Integer examId = registExam.getExamId();
-		insertBigQuestionData(examId, questionData);
+		insertBigQuestionData(examId, examQuestion);
 	}
 
 	@Override
@@ -84,7 +86,8 @@ public class ExamServiceImpl implements ExamService{
 	}
 	
 	/** DBに大問、小問、選択肢を保存 */
-	private void insertBigQuestionData(Integer examId, List<BigQuestionData> bqDataList) {
+	private void insertBigQuestionData(Integer examId, ExamQuestion examQuestion) {
+		List<BigQuestionData> bqDataList = examQuestion.getBigQuestionList();
 		for(BigQuestionData bqData : bqDataList) {
 			BigQuestion registBq = insertBigQuestion(examId, bqData.getBigQuestion());
 			Integer bqId = registBq.getBigQuestionId();

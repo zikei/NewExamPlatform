@@ -30,7 +30,7 @@ public class QuestionCreateForm {
 	
 	/** 配点 */
 	@NotNull
-	private Integer point;
+	private Integer point = 1;
 	
 	/** 選択肢フォームリスト */
 	@Valid

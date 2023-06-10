@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.examPlatform.data.constant.QuestionFormat;
 import com.example.examPlatform.data.question.BigQuestionData;
+import com.example.examPlatform.data.question.ExamQuestion;
 import com.example.examPlatform.data.question.QuestionData;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.entity.BigQuestion;
@@ -69,17 +70,29 @@ public class ExamController {
 
 	/** 小問登録フォーム初期化 */
 	public QuestionCreateForm setUpQuestionCreateForm() {
-		return new QuestionCreateForm();
+		QuestionCreateForm qForm = new QuestionCreateForm();
+		List<ChoicesCreateForm> cFormList = new ArrayList<ChoicesCreateForm>();
+		cFormList.add(setUpChoicesCreateForm());
+		qForm.setChoicesFormList(cFormList);
+		return qForm;
 	}
 	
 	/** 大問登録フォーム初期化 */
 	public BigQuestionCreateForm setUpBigQuestionCreateForm() {
-		return new BigQuestionCreateForm();
+		BigQuestionCreateForm bqForm =  new BigQuestionCreateForm();
+		List<QuestionCreateForm> qFormList = new ArrayList<QuestionCreateForm>();
+		qFormList.add(setUpQuestionCreateForm());
+		bqForm.setQuestionCreateForm(qFormList);
+		return bqForm;
 	}
 	
 	/** 試験問題登録フォーム初期化 */
 	public ExamQuestionCreateForm setUpExamQuestionCreateForm() {
-		return new ExamQuestionCreateForm();
+		ExamQuestionCreateForm examQuestionForm = new ExamQuestionCreateForm();
+		List<BigQuestionCreateForm> bqFormList = new ArrayList<BigQuestionCreateForm>();
+		bqFormList.add(setUpBigQuestionCreateForm());
+		examQuestionForm.setBigQuestionCreateForm(bqFormList);
+		return examQuestionForm;
 	}
 /* ======================================================================= */
 	
@@ -92,10 +105,10 @@ public class ExamController {
 	/** 試験概要登録ページセッションタイムを延長　*/
 	@PostMapping(value="/Create", params="s")
 	public String ExamCreateUpdSession(ExamCreateForm examform) {
-		return "examCreate";
+		return ExamCreateView();
 	}
 	
-	/** 試験概要登録処理　*/
+	/** 試験概要処理　*/
 	@PostMapping("/Create")
 	public String ExamCreate(@Validated ExamCreateForm examform, BindingResult bindingResult, Model model,
 			HttpSession session, HttpServletRequest request) {
@@ -134,6 +147,64 @@ public class ExamController {
 		}
 	}
 	
+	/** 試験問題登録ページセッションタイムを延長　*/
+	@PostMapping(value="/Create/Question", params="s")
+	public String QuestionCreateUpdSession(ExamQuestionCreateForm questionForm, HttpSession session) {
+		return QuestionCreateView(session);
+	}
+	
+	/** 試験問題処理　*/
+	@PostMapping("/Create/Question")
+	public String QuestionCreate(@Validated ExamQuestionCreateForm questionForm, BindingResult bindingResult,
+			Model model, HttpSession session, HttpServletRequest request) {
+		
+		if(bindingResult.hasErrors()) {
+			return QuestionCreateView(session);
+		}
+		
+		ExamQuestion examQuestion = makeExamQuestion(questionForm);
+		session.setAttribute("examQuestion", examQuestion);
+		return QuestionCreateView(session);
+	}
+	
+	/** 試験登録確認ページ　*/
+	@GetMapping("/Create/Confirm")
+	public String CreateConfirmView(HttpSession session, Model model) {
+		Exam exam = (Exam) session.getAttribute("exam");
+		ExamQuestion examQuestion = (ExamQuestion) session.getAttribute("examQuestion");
+		
+		//試験概要情報が見つからない場合試験概要登録ページに遷移
+		if(exam == null) return ExamCreateView();
+		//試験問題情報が見つからない場合試験問題登録ページに遷移
+		if(examQuestion == null) return QuestionCreateView(session);
+		
+		int fullScore = examQuestion.fullScore();
+		model.addAttribute("fullScore", fullScore);
+		return "examCreateConfirm";
+	}
+
+	/** 試験登録処理　*/
+	@PostMapping("/Create/Confirm")
+	public String CreateConfirm(HttpSession session, Model model) {
+		Exam exam = (Exam) session.getAttribute("exam");
+		ExamQuestion examQuestion = (ExamQuestion) session.getAttribute("examQuestion");
+		
+		//試験概要情報が見つからない場合試験概要登録ページに遷移
+		if(exam == null) return ExamCreateView();
+		//試験問題情報が見つからない場合試験問題登録ページに遷移
+		if(examQuestion == null) return QuestionCreateView(session);
+		
+		//合格点が満点より大きい場合確認ページに戻る
+		if(examQuestion.fullScore() < exam.getPassingScore()) {
+			model.addAttribute("errorMsg", "合格点が満点より大きく設定されています");
+			return CreateConfirmView(session, model);
+		}
+		
+		examService.examRegister(exam, examQuestion);
+		return "redirect:/ExamPlatform/Mypage";
+	}
+	
+	
 	
 	/** formをExam形式に変換 */
 	private Exam makeExam(ExamCreateForm eForm, Integer userId) {
@@ -154,15 +225,15 @@ public class ExamController {
 		return exam;
 	}
 	
-	/** BigQuestionDataリストに変換 */
-	private List<BigQuestionData> makeBigQuestionDataList(ExamQuestionCreateForm form){
+	/** ExamQuestionに変換 */
+	private ExamQuestion makeExamQuestion(ExamQuestionCreateForm form){
 		List<BigQuestionCreateForm> bqFormList = form.getBigQuestionCreateForm();
 		List<BigQuestionData> bqDataList = new ArrayList<BigQuestionData>();
 		
 		for(BigQuestionCreateForm bqForm : bqFormList) {
 			bqDataList.add(makeBigQuestionData(bqForm));
 		}
-		return bqDataList;
+		return new ExamQuestion(bqDataList);
 	}
 	
 	/** BigQuestionDataに変換 */

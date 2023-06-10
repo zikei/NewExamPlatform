@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class QuestionData {
 	/** 小問エンティティ */
-	Question question;
+	private Question question;
 	/** 選択肢リスト */
-	List<Choices> choicesList;
+	private List<Choices> choicesList;
 }

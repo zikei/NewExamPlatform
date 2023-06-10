@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BigQuestionData {
 	/** 大問エンティティ */
-	BigQuestion bigQuestion;
+	private BigQuestion bigQuestion;
 	/** 小問リスト */
-	List<QuestionData> questionList;
+	private List<QuestionData> questionList;
 }
