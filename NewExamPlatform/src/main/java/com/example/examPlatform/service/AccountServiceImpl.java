@@ -22,6 +22,22 @@ public class AccountServiceImpl implements AccountService{
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
+	@Override
+	public boolean isLoginUser(String userName) {
+		return userName.equals(selectLoginUserName());
+	}
+
+	@Override
+	public boolean isLoginUser(Integer userId) {
+		String userName;
+		try {
+			userName = selectAccountByUserId(userId).getUserName();
+		} catch (NotFoundException e) {
+			return false;
+		}
+		return isLoginUser(userName);
+	}
+	
 	/** ユーザDB登録処理 */
 	@Override
 	public void userRegister(Account registUser) {

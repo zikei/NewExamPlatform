@@ -39,16 +39,6 @@ public class MypageServiceImpl implements MypageService{
 	ReportRepository reportRepo;
 	
 	@Override
-	public Account selectUser(String userName) throws NotFoundException {
-		return accountService.selectAccountByUserName(userName);
-	}
-
-	@Override
-	public String loginName() {
-		return accountService.selectLoginUserName();
-	}
-	
-	@Override
 	public List<ExamLinkView> selectCreateExams(String userName) {
 		List<ExamLinkView> createExamLinkList = new ArrayList<ExamLinkView>();
 		DisclosureRange dr = new DisclosureRange();
@@ -57,7 +47,7 @@ public class MypageServiceImpl implements MypageService{
 	    String loginUserName = auth.getName();
 		Account user;
 		try {
-			user = selectUser(userName);
+			user = accountService.selectAccountByUserName(userName);
 		} catch (NotFoundException e) {
 			return createExamLinkList;
 		}
@@ -80,7 +70,7 @@ public class MypageServiceImpl implements MypageService{
 		List<ExamLinkView> bookmarkExamLinkList = new ArrayList<ExamLinkView>();
 		Account user;
 		try {
-			user = selectUser(userName);
+			user = accountService.selectAccountByUserName(userName);
 		} catch (NotFoundException e) {
 			return bookmarkExamLinkList;
 		}
@@ -103,7 +93,7 @@ public class MypageServiceImpl implements MypageService{
 		List<ReportLinkView> reportLinkList = new ArrayList<ReportLinkView>();
 		Account user;
 		try {
-			user = selectUser(userName);
+			user = accountService.selectAccountByUserName(userName);
 		} catch (NotFoundException e) {
 			return reportLinkList;
 		}

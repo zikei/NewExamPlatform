@@ -16,6 +16,7 @@ import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.data.link.ReportLinkView;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.exception.NotFoundException;
+import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.MypageService;
 
 /** マイページコントローラ */
@@ -28,14 +29,16 @@ public class MypageController {
 	@Autowired
 	MypageService mypageService;
 	
+	@Autowired
+	AccountService accountService;
+	
 	/** マイページ・ユーザページを表示 
 	 * @throws NotFoundException */
 	@GetMapping
 	public String Mypage(@PathVariable String userName, Model model) {
-	    String loginUserName = mypageService.loginName();
 		Account user;
 		try {
-			user = mypageService.selectUser(userName);
+			user = accountService.selectAccountByUserName(userName);
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
 			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
@@ -49,10 +52,10 @@ public class MypageController {
 		model.addAttribute("user", userView);
 		model.addAttribute("createExamList", createExamList);
 		
-		if(userName.equals(loginUserName)) {
+		if(accountService.isLoginUser(userName)) {
 			// ログインユーザ本人のマイページを表示する場合
-			List<ExamLinkView> bookmarkExamList = mypageService.selectBookmarkExams(loginUserName);
-			List<ReportLinkView> reportList = mypageService.selectReports(loginUserName);
+			List<ExamLinkView> bookmarkExamList = mypageService.selectBookmarkExams(userName);
+			List<ReportLinkView> reportList = mypageService.selectReports(userName);
 			
 			if(bookmarkExamList.size() > displayCnt) bookmarkExamList = bookmarkExamList.subList(0, displayCnt);
 			if(reportList.size() > displayCnt) reportList = reportList.subList(0, displayCnt);
@@ -91,7 +94,7 @@ public class MypageController {
 	/** ブックマーク試験一覧を表示 */
 	@GetMapping("Bookamrk")
 	public String bookmarkExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
-		if(userName.equals(mypageService.loginName())) {
+		if(accountService.isLoginUser(userName)) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移
 			model.addAttribute("errorMsg", "このページは表示できません");
 			return "error";
@@ -121,7 +124,7 @@ public class MypageController {
 	/** レポート一覧を表示 */
 	@GetMapping("Report")
 	public String MyCreateExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
-		if(userName.equals(mypageService.loginName())) {
+		if(accountService.isLoginUser(userName)) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移
 			model.addAttribute("errorMsg", "このページは表示できません");
 			return "error";

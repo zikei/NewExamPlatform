@@ -4,17 +4,9 @@ import java.util.List;
 
 import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.data.link.ReportLinkView;
-import com.example.examPlatform.entity.Account;
-import com.example.examPlatform.exception.NotFoundException;
 
 /** マイページ関連処理 */
 public interface MypageService {
-	/** ユーザ情報取得 
-	 * @throws NotFoundException */
-	Account selectUser(String userName) throws NotFoundException;
-	
-	String loginName();
-	
 	/** 
 	 * 作成試験取得 
 	 * ログインユーザ本人の場合は作成試験全件

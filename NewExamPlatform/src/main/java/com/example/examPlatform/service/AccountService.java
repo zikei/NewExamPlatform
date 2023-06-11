@@ -5,6 +5,12 @@ import com.example.examPlatform.exception.NotFoundException;
 
 /** アカウント関連処理 */
 public interface AccountService {
+	/** ログインユーザか判定 */
+	boolean isLoginUser(String userName);
+	
+	/** ログインユーザか判定 */
+	boolean isLoginUser(Integer userId);
+	
 	/** ユーザ登録 */
 	void userRegister(Account registUser);
 	
