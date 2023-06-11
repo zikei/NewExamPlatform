@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org" >
+<head>
+<title>ExamPlatform - ブックマーク一覧</title>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+	<header>
+		<div class = "header_box container-fluid ">
+			<div class = "col-12 row align-items-center ">
+				<div class = "col-8">
+						<h1 class = "title ml-5">ExamPlatform</h1>
+				</div>
+				<div class = "col-4 text-right ">
+					<form th:action="@{/ExamPlatform/Logout}" method="post">
+						<input type ="submit"  class="btn btn-primary mr-5" value="ログアウト">
+					</form>
+				</div>
+			</div>
+			<div class = "container col-12 mt-3">
+				<nav>
+					<ul class = "nav main_nav justify-content-center text-nowrap">
+        					<li><a href="/ExamPlatform/Home">　ホーム　</a></li>
+        					<li><a href="#">　検索　</a></li>
+        					<li><a th:href="@{'/ExamPlatform/' + ${user.userName}}">マイページ</a></li> 
+        			</ul>
+        		</nav>
+			</div>
+		</div>
+	</header>
+</body>
+</html>

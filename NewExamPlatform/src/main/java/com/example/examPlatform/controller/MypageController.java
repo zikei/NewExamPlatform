@@ -97,7 +97,7 @@ public class MypageController {
 	}
 	
 	/** ブックマーク試験一覧を表示 */
-	@GetMapping("Bookamrk")
+	@GetMapping("Bookmark")
 	public String bookmarkExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
 		if(userName.equals(mypageService.loginName())) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移
@@ -123,7 +123,7 @@ public class MypageController {
 		model.addAttribute("BookmarkExamLPage", bookmarkExamLPage.getPageList());
 		model.addAttribute("Page", bookmarkExamLPage);
 		
-		return "myCreateExam";
+		return "bookmark";
 	}
 	
 	/** レポート一覧を表示 */
