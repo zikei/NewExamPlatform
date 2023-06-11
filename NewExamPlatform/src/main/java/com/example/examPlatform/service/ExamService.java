@@ -23,6 +23,8 @@ public interface ExamService {
 	/** タグ重複なし全件取得 */
 	List<String> selectTag();
 	
+	List<String> selectTagByExamId(Integer examId);
+	
 	/** ジャンル全件取得 */
 	List<Ganre> selectAllGanre();
 	

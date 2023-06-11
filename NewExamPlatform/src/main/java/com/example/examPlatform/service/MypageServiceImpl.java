@@ -102,9 +102,13 @@ public class MypageServiceImpl implements MypageService{
 		reportRepo.findByUserId(user.getUserId()).forEach(reportList::add);
 		
 		for(Report report : reportList) {
-			ReportLinkView addLink = new ReportLinkView(report);
-			
-			reportLinkList.add(addLink);
+			ReportLinkView addLink;
+			try {
+				addLink = new ReportLinkView(report);
+				reportLinkList.add(addLink);
+			} catch (NotFoundException e) {
+				//例外が発生した場合そのレポートリンクは追加しない
+			}
 		}
 		
 		return reportLinkList;

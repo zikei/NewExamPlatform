@@ -94,7 +94,7 @@ public class MypageController {
 	/** ブックマーク試験一覧を表示 */
 	@GetMapping("Bookamrk")
 	public String bookmarkExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
-		if(accountService.isLoginUser(userName)) {
+		if(!accountService.isLoginUser(userName)) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移
 			model.addAttribute("errorMsg", "このページは表示できません");
 			return "error";
@@ -124,7 +124,7 @@ public class MypageController {
 	/** レポート一覧を表示 */
 	@GetMapping("Report")
 	public String MyCreateExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
-		if(accountService.isLoginUser(userName)) {
+		if(!accountService.isLoginUser(userName)) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移
 			model.addAttribute("errorMsg", "このページは表示できません");
 			return "error";

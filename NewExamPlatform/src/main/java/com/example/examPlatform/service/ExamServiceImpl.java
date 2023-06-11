@@ -77,6 +77,13 @@ public class ExamServiceImpl implements ExamService{
 		tagRepo.findTag().forEach(tagList::add);
 		return tagList;
 	}
+	
+	@Override
+	public List<String> selectTagByExamId(Integer examId) {
+		List<String> tagList = new ArrayList<>();
+		tagRepo.findByExamId(examId).forEach(t -> tagList.add(t.getTag()));
+		return tagList;
+	}
 
 	@Override
 	public List<Ganre> selectAllGanre() {

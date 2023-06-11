@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Report;
+import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.service.ExamService;
 
 import lombok.AllArgsConstructor;
@@ -29,8 +30,8 @@ public class ReportLinkView {
 	/** 試験名 */
 	private Date examDate;
 	
-	public ReportLinkView(Report report) {
-		Exam exam = examService.selectExamByExamId(report.getExamId()).get();
+	public ReportLinkView(Report report) throws NotFoundException {
+		Exam exam = examService.selectExamByExamId(report.getExamId()).orElseThrow(() -> new NotFoundException("Exam NotFound"));
 		
 		this.examId = report.getExamId();
 		this.examName = exam.getExamName();

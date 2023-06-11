@@ -13,6 +13,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -117,10 +118,7 @@ public class ExamController {
 	/** 試験概要登録ページ　*/
 	@GetMapping("/Create")
 	public String ExamCreateView(Model model) {
-		List<String> tagList = examService.selectTag();
-		List<Ganre> ganreList = examService.selectAllGanre();
-		model.addAttribute("tagList", tagList);
-		model.addAttribute("ganreList", ganreList);
+		setTagGanreToModel(model);
 		return "examCreate";
 	}
 	
@@ -227,7 +225,56 @@ public class ExamController {
 		return "redirect:/ExamPlatform/Mypage";
 	}
 	
+	/** 試験概要更新ページ　*/
+	@GetMapping("/Upd/{examId}")
+	public String UpdExamView(@PathVariable Integer examId, ExamCreateForm eForm, Model model) {
+		Exam exam;
+		try {
+			exam = examService.selectExamByExamId(examId).orElseThrow(() -> new NotFoundException("Exam NotFound"));
+		} catch (NotFoundException e) {
+			// 試験が見つからない場合エラーページに遷移
+			model.addAttribute("errorMsg", "試験が見つかりません");
+			return "error";
+		}
+		if(!accountService.isLoginUser(exam.getUserId())) {
+			// ログインユーザ以外のアクセスの場合エラーページに遷移
+			model.addAttribute("errorMsg", "このページは表示できません");
+			return "error";
+		}
+		
+		setTagGanreToModel(model);
+		eForm = makeExamCreateForm(exam);
+		return "updExam";
+	}
 	
+	
+	/** タグリストとジャンルリストをModelにセット */
+	private void setTagGanreToModel(Model model) {
+		List<String> tagList = examService.selectTag();
+		List<Ganre> ganreList = examService.selectAllGanre();
+		model.addAttribute("tagList", tagList);
+		model.addAttribute("ganreList", ganreList);
+	}
+	
+	/** Examエンティティをformに変換 */
+	private ExamCreateForm makeExamCreateForm(Exam exam) {
+		List<String> tagList = examService.selectTagByExamId(exam.getExamId());
+		List<TagCreateForm> tagFormList = new ArrayList<>();
+		tagList.forEach(s -> tagFormList.add(new TagCreateForm(s)));
+		
+		ExamCreateForm eForm = new ExamCreateForm();
+		eForm.setGenreId(exam.getGenreId());
+		eForm.setExamName(exam.getExamName());
+		eForm.setPassingScore(exam.getPassingScore());
+		eForm.setExamTimeMinutes(exam.getExamTimeMinutes());
+		eForm.setExamExplanation(exam.getExamExplanation());
+		eForm.setDisclosureRange(exam.getDisclosureRange());
+		eForm.setLimitedPassword(exam.getLimitedPassword());
+		eForm.setQuestionFormat(exam.getQuestionFormat());
+		eForm.setTagList(tagFormList);
+		
+		return eForm;
+	}
 	
 	/** formをExamData形式に変換 */
 	private ExamData makeExamData(ExamCreateForm eForm, Integer userId) {
