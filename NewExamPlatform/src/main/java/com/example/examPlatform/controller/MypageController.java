@@ -74,7 +74,7 @@ public class MypageController {
 	
 	/** 作成試験一覧を表示 */
 	@GetMapping("Exam")
-	public String createExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
+	public String createExam(@PathVariable String userName, @RequestParam(value="page", defaultValue="1") Integer page, Model model) {
 		List<ExamLinkView> createExamList = mypageService.selectCreateExams(userName);
 		
 		PageView<ExamLinkView> createExamPage;
@@ -99,7 +99,7 @@ public class MypageController {
 	
 	/** ブックマーク試験一覧を表示 */
 	@GetMapping("Bookmark")
-	public String bookmarkExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
+	public String bookmarkExam(@PathVariable String userName, @RequestParam(value="page", defaultValue="1") Integer page, Model model) {
 		if(userName.equals(mypageService.loginName())) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移
 			model.addAttribute("errorMsg", "このページは表示できません");
@@ -130,7 +130,7 @@ public class MypageController {
 	
 	/** レポート一覧を表示 */
 	@GetMapping("Report")
-	public String MyCreateExam(@PathVariable String userName, @RequestParam Integer page, Model model) {
+	public String MyCreateExam(@PathVariable String userName, @RequestParam(value="page", defaultValue="1") Integer page, Model model) {
 		if(userName.equals(mypageService.loginName())) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移
 			model.addAttribute("errorMsg", "このページは表示できません");
