@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.examPlatform.data.ExamData;
 import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.data.question.BigQuestionData;
 import com.example.examPlatform.data.question.ExamQuestion;
@@ -15,11 +16,14 @@ import com.example.examPlatform.data.question.QuestionData;
 import com.example.examPlatform.entity.BigQuestion;
 import com.example.examPlatform.entity.Choices;
 import com.example.examPlatform.entity.Exam;
+import com.example.examPlatform.entity.Ganre;
 import com.example.examPlatform.entity.Question;
 import com.example.examPlatform.repository.BigQuestionRepository;
 import com.example.examPlatform.repository.ChoicesRepository;
 import com.example.examPlatform.repository.ExamRepository;
+import com.example.examPlatform.repository.GanreRepository;
 import com.example.examPlatform.repository.QuestionRepository;
+import com.example.examPlatform.repository.TagRepository;
 
 /** 試験関連処理実装クラス　*/
 @Service
@@ -36,6 +40,12 @@ public class ExamServiceImpl implements ExamService{
 	
 	@Autowired
 	ChoicesRepository cRepo;
+	
+	@Autowired
+	TagRepository tagRepo;
+	
+	@Autowired
+	GanreRepository ganreRepo;
 	
 	/** 試験全件取得 */
 	@Override
@@ -61,8 +71,22 @@ public class ExamServiceImpl implements ExamService{
 	}
 	
 	@Override
-	public void examRegister(Exam exam, ExamQuestion examQuestion) {
-		Exam registExam = insertExam(exam);
+	public List<String> selectTag() {
+		List<String> tagList = new ArrayList<>();
+		tagRepo.findTag().forEach(tagList::add);
+		return tagList;
+	}
+
+	@Override
+	public List<Ganre> selectAllGanre() {
+		List<Ganre> ganreList = new ArrayList<>();
+		ganreRepo.findAll().forEach(ganreList::add);
+		return ganreList;
+	}
+	
+	@Override
+	public void examRegister(ExamData examData, ExamQuestion examQuestion) {
+		Exam registExam = insertExam(examData.getExam());
 		
 		Integer examId = registExam.getExamId();
 		insertBigQuestionData(examId, examQuestion);

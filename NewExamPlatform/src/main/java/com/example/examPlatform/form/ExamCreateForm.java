@@ -1,5 +1,8 @@
 package com.example.examPlatform.form;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -40,4 +43,8 @@ public class ExamCreateForm {
 	/** 問題形式 */
 	@NotNull
 	private Integer questionFormat;
+	
+	/** タグリスト */
+	@Valid
+	private List<TagCreateForm> tagList;
 }
