@@ -90,8 +90,9 @@ public class MypageController {
 			}
 		}
 		
-		model.addAttribute("CreateExamList", createExamPage.getPageList());
-		model.addAttribute("Page", createExamPage);
+		model.addAttribute("userName", userName);
+		model.addAttribute("createExamList", createExamPage.getPageList());
+		model.addAttribute("page", createExamPage);
 		
 		return "myCreateExam";
 	}
@@ -120,8 +121,9 @@ public class MypageController {
 			}
 		}
 		
-		model.addAttribute("BookmarkExamLPage", bookmarkExamLPage.getPageList());
-		model.addAttribute("Page", bookmarkExamLPage);
+		model.addAttribute("userName", userName);
+		model.addAttribute("bookmarkExamLPage", bookmarkExamLPage.getPageList());
+		model.addAttribute("page", bookmarkExamLPage);
 		
 		return "bookmark";
 	}
@@ -149,8 +151,9 @@ public class MypageController {
 			}
 		}
 		
-		model.addAttribute("ReportList", reportPage.getPageList());
-		model.addAttribute("Page", reportPage);
+		model.addAttribute("userName", userName);
+		model.addAttribute("reportList", reportPage.getPageList());
+		model.addAttribute("page", reportPage);
 		
 		return "myCreateExam";
 	}
