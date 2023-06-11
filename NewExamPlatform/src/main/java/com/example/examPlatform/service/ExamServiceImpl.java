@@ -18,6 +18,7 @@ import com.example.examPlatform.entity.Choices;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Ganre;
 import com.example.examPlatform.entity.Question;
+import com.example.examPlatform.entity.Tag;
 import com.example.examPlatform.repository.BigQuestionRepository;
 import com.example.examPlatform.repository.ChoicesRepository;
 import com.example.examPlatform.repository.ExamRepository;
@@ -89,6 +90,7 @@ public class ExamServiceImpl implements ExamService{
 		Exam registExam = insertExam(examData.getExam());
 		
 		Integer examId = registExam.getExamId();
+		insertTag(examId, examData.getTagList());
 		insertBigQuestionData(examId, examQuestion);
 	}
 
@@ -107,6 +109,13 @@ public class ExamServiceImpl implements ExamService{
 	private Exam insertExam(Exam exam) {
 		exam.setExamId(null);
 		return examRepo.save(exam);
+	}
+	
+	/** DBにタグを保存 */
+	private void insertTag(Integer examId, List<String> strTagList) {
+		List<Tag> tagList = new ArrayList<>();
+		strTagList.forEach(s -> tagList.add(new Tag(null, examId, s)));
+		tagList.forEach(t -> tagRepo.save(t));
 	}
 	
 	/** DBに大問、小問、選択肢を保存 */
