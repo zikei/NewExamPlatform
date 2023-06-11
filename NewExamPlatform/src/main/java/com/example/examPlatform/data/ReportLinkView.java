@@ -21,7 +21,7 @@ public class ReportLinkView {
 	ExamService examService;
 	
 	/** レポートID */
-	private Integer examId;
+	private Integer reportId;
 	
 	/** 試験名 */
 	private String examName;
@@ -32,7 +32,7 @@ public class ReportLinkView {
 	public void makeExamLinkView(Report report) {
 		Exam exam = examService.selectExamByExamId(report.getExamId()).get();
 		
-		this.examId = report.getExamId();
+		this.reportId = report.getReportId();
 		this.examName = exam.getExamName();
 		this.examDate = report.getExamDate();
 	}
