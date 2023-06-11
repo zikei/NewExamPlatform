@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org">
+<html xmlns:th = "http://www.thymeleaf.org" >
 <head>
 <title>ExamPlatform - ホーム</title>
 <meta charset="utf-8">
@@ -16,7 +16,9 @@
 						<h1 class = "title ml-5">ExamPlatform</h1>
 				</div>
 				<div class = "col-4 text-right ">
-				<a class="btn btn-primary mr-5" href="/ExamPlatform/Login" role="button">ログイン</a>
+					<form th:action="@{/ExamPlatform/Logout}" method="post">
+						<input type ="submit"  class="btn btn-primary mr-5" value="ログアウト">
+					</form>
 				</div>
 			</div>
 			<div class = "container col-12 mt-3">
