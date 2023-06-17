@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.examPlatform.data.ExamData;
 import com.example.examPlatform.data.constant.QuestionFormat;
@@ -125,8 +126,22 @@ public class ExamController {
 	}
 	
 	/** 試験概要登録ページセッションタイムを延長　*/
-	@PostMapping(value="/Create", params="s")
+	@PostMapping(value="/Create", params="save")
 	public String ExamCreateUpdSession(ExamCreateForm examform, Model model) {
+		return ExamCreateView(model);
+	}
+	
+	/** 試験概要登録ページタグ入力欄を追加　*/
+	@PostMapping(value="/Create", params="addTag")
+	public String ExamCreateAddTag(ExamCreateForm examform, Model model) {
+		examform.addTag();
+		return ExamCreateView(model);
+	}
+	
+	/** 試験概要登録ページタグ入力欄を削除　*/
+	@PostMapping(value="/Create", params="removeTag")
+	public String ExamCreateRemoveTag(@RequestParam Integer removeTag, ExamCreateForm examform, Model model) {
+		examform.removeTag(removeTag);
 		return ExamCreateView(model);
 	}
 	
@@ -171,7 +186,7 @@ public class ExamController {
 	}
 	
 	/** 試験問題登録ページセッションタイムを延長　*/
-	@PostMapping(value="/Create/Question", params="s")
+	@PostMapping(value="/Create/Question", params="save")
 	public String QuestionCreateUpdSession(ExamQuestionCreateForm questionForm, HttpSession session, Model model) {
 		return QuestionCreateView(session, model);
 	}

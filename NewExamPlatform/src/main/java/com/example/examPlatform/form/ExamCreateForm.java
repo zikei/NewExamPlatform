@@ -47,4 +47,15 @@ public class ExamCreateForm {
 	/** タグリスト */
 	@Valid
 	private List<TagCreateForm> tagList;
+	
+	public void addTag() {
+		tagList.add(new TagCreateForm());
+	}
+	
+	public void removeTag(int index) {
+		tagList.remove(index);
+		if(tagList.isEmpty()) {
+			addTag();
+		}
+	}
 }
