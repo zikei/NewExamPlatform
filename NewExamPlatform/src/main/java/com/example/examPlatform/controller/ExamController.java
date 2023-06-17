@@ -247,6 +247,27 @@ public class ExamController {
 		return "updExam";
 	}
 	
+	/** 試験概要更新ページセッションタイムを延長　*/
+	@PostMapping(value="/Upd/{examId}", params="s")
+	public String ExamCreateUpdSession(@PathVariable Integer examId, ExamCreateForm eForm, Model model) {
+		//返り値でUpdExamViewを呼び足した場合フォームがリセットされるためこちらで処理を行う
+		Exam exam;
+		try {
+			exam = examService.selectExamByExamId(examId).orElseThrow(() -> new NotFoundException("Exam NotFound"));
+		} catch (NotFoundException e) {
+			// 試験が見つからない場合エラーページに遷移
+			model.addAttribute("errorMsg", "試験が見つかりません");
+			return "error";
+		}
+		if(!accountService.isLoginUser(exam.getUserId())) {
+			// ログインユーザ以外のアクセスの場合エラーページに遷移
+			model.addAttribute("errorMsg", "このページは表示できません");
+			return "error";
+		}
+		setTagGanreToModel(model);
+		return "updExam";
+	}
+	
 	
 	/** タグリストとジャンルリストをModelにセット */
 	private void setTagGanreToModel(Model model) {
