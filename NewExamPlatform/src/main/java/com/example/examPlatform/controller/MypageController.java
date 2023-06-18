@@ -73,7 +73,7 @@ public class MypageController {
 	}
 	
 	/** 作成試験一覧を表示 */
-	@GetMapping("Exam")
+	@GetMapping("/Exam")
 	public String createExam(@PathVariable String userName, @RequestParam(value="page", defaultValue="1") Integer page, Model model) {
 		List<ExamLinkView> createExamList = mypageService.selectCreateExams(userName);
 		
@@ -94,11 +94,11 @@ public class MypageController {
 		model.addAttribute("createExamList", createExamPage.getPageList());
 		model.addAttribute("page", createExamPage);
 		
-		return "myCreateExam";
+		return "createExam";
 	}
 	
 	/** ブックマーク試験一覧を表示 */
-	@GetMapping("Bookmark")
+	@GetMapping("/Bookmark")
 	public String bookmarkExam(@PathVariable String userName, @RequestParam(value="page", defaultValue="1") Integer page, Model model) {
 		if(!userName.equals(mypageService.loginName())) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移
@@ -129,7 +129,7 @@ public class MypageController {
 	}
 	
 	/** レポート一覧を表示 */
-	@GetMapping("Report")
+	@GetMapping("/Report")
 	public String MyCreateExam(@PathVariable String userName, @RequestParam(value="page", defaultValue="1") Integer page, Model model) {
 		if(!userName.equals(mypageService.loginName())) {
 			// ログインユーザ以外のアクセスの場合エラーページに遷移

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ExamPlatform - 作成試験一覧</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/createExam.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+
+<body>
+    <header>
+        <div class="header_box container-fluid ">
+            <div class="col-12 row align-items-center ">
+                <div class="col-8">
+                    <h1 class="title ml-5">ExamPlatform</h1>
+                </div>
+                <div class="col-4 text-right ">
+                    <form th:action="@{/ExamPlatform/Logout}" method="post">
+                        <input type="submit" class="btn btn-primary mr-5" value="ログアウト">
+                    </form>
+                </div>
+            </div>
+            <div class="container col-12 mt-3">
+                <nav>
+                    <ul class="nav main_nav justify-content-center text-nowrap">
+                        <li><a href="/ExamPlatform/Home">　ホーム　</a></li>
+                        <li><a href="#">　検索　</a></li>
+                        <li><a th:href="@{'/ExamPlatform/' + ${userName}}">マイページ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h2 class="text-center">試験作成一覧</h2>
+        <div id="main_box" class="container">
+            <div class="d-flex col-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-info text-white">
+                            <th scope="col" class="col-4 pagenation_title">試験ID</th>
+                            <th scope="col" class="col-8 pagenation_title">試験名</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="exam : ${createExamList}">
+                            <td th:text="${exam.examId}" class="col-4"></td>
+                            <td th:text="${exam.examName}" class="col-8"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-12 d-flex justify-content-center mt-5">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

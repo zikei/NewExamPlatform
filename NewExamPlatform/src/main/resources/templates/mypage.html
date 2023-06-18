@@ -71,7 +71,7 @@
 	    </div>
 	</div>
 	
-	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{'/ExamPlatform/' + ${user.userName} + '/exam?pageNum=1'}" class="text-end">もっとみる</a></div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{'/ExamPlatform/' + ${userName} + '/Exam?page=' + 1}" class="text-end">もっとみる</a></div>
 	
 	<div class ="bookmark_box d-flex row col-12 w-auto mt-5">
 		<div class="col-4"></div>
@@ -87,7 +87,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{ '/ExamPlatform/' + ${user.userName} + '/Bookmark?page=1'}" class="text-end">もっとみる</a></div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{ '/ExamPlatform/' + ${userName} + '/Bookmark?page=' + 1}" class="text-end">もっとみる</a></div>
 	
 	<div class ="report_box d-flex row col-12 w-auto mt-5">
 		<div class="col-4"></div>
