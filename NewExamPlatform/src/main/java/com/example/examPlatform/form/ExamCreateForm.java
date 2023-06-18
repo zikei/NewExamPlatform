@@ -1,5 +1,6 @@
 package com.example.examPlatform.form;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.Valid;
@@ -47,4 +48,25 @@ public class ExamCreateForm {
 	/** タグリスト */
 	@Valid
 	private List<TagCreateForm> tagList;
+	
+	public ExamCreateForm() {
+		tagList = new ArrayList<>();
+		tagList.add(new TagCreateForm());
+	}
+	
+	public void addTag() {
+		tagList.add(new TagCreateForm());
+	}
+	
+	public void removeTag(Integer index) {
+		if(index == null) return;
+		if(index < 0)     return;
+		if(index >= tagList.size()) return;
+		
+		int idx = index;
+		tagList.remove(idx);
+		if(tagList.isEmpty()) {
+			addTag();
+		}
+	}
 }
