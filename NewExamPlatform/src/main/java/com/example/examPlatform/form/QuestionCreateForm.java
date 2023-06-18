@@ -1,5 +1,6 @@
 package com.example.examPlatform.form;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.Valid;
@@ -35,4 +36,27 @@ public class QuestionCreateForm {
 	/** 選択肢フォームリスト */
 	@Valid
 	private List<ChoicesCreateForm> choicesFormList;
+	
+	public QuestionCreateForm() {
+		choicesFormList = new ArrayList<>();
+		choicesFormList.add(new ChoicesCreateForm());
+	}
+	
+	public void addChoices() {
+		choicesFormList.add(new ChoicesCreateForm());
+	}
+	
+	public void removeChoices(Integer index) {
+		if(index == null) return;
+		if(index < 0)     return;
+		if(index >= choicesFormList.size()) return;
+		
+		int idx = index;
+		try {
+			choicesFormList.remove(idx);
+			if(choicesFormList.isEmpty()) {
+				addChoices();
+			}
+		}catch(IndexOutOfBoundsException e){}
+	}
 }

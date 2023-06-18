@@ -1,5 +1,6 @@
 package com.example.examPlatform.form;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.Valid;
@@ -23,4 +24,43 @@ public class BigQuestionCreateForm {
 	/** 小問フォームリスト */
 	@Valid
 	private List<QuestionCreateForm> questionCreateForm;
+	
+	public BigQuestionCreateForm() {
+		questionCreateForm = new ArrayList<>();
+		questionCreateForm.add(new QuestionCreateForm());
+	}
+	
+	public void addQ() {
+		questionCreateForm.add(new QuestionCreateForm());
+	}
+	
+	public void removeQ(Integer index) {
+		if(!checkIndex(index)) return;
+		
+		int idx = index;
+		try {
+			questionCreateForm.remove(idx);
+			if(questionCreateForm.isEmpty()) {
+				addQ();
+			}
+		}catch(IndexOutOfBoundsException e){}
+	}
+	
+	public void addChoices(Integer index) {
+		if(!checkIndex(index)) return;
+		questionCreateForm.get(index).addChoices();
+	}
+	
+	public void removeChoices(Integer Qidx, Integer Cidx) {
+		if(!checkIndex(Qidx)) return;
+		questionCreateForm.get(Qidx).removeChoices(Cidx);
+	}
+	
+	private boolean checkIndex(Integer index) {
+		if(index == null) return false;
+		if(index < 0)     return false;
+		if(index >= questionCreateForm.size()) return false;
+		
+		return true;
+	}
 }
