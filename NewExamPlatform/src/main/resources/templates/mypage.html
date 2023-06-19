@@ -83,11 +83,11 @@
 		<div class = "exam col-12">
 			<div class="col-12 row mt-4" th:each="exam : ${bookmarkExamList}">
 			<img src="/img/exam.png" height="40" width="40" alt="bookmark exam file">
-			<div class="createexamName"><a th:href="@{'/ExamPlatform/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></div>
+			<div class="createexamName"><a th:href="@{'/ExamPlatform/'+ 'Exam/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></div>
 			</div>
 		</div>
 	</div>
-	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{ '/ExamPlatform/'+ 'Exam/' + ${userName} + '/Bookmark?page=' + 1}" class="text-end">もっとみる</a></div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{ '/ExamPlatform/' + ${userName} + '/Bookmark?page=' + 1}" class="text-end">もっとみる</a></div>
 	
 	<div class ="report_box d-flex row col-12 w-auto mt-5">
 		<div class="col-4"></div>
