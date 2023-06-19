@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>ExamPlatform - ブックマーク一覧</title>
+    <title>ExamPlatform - レポート一覧</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/bookmark.css">
+    <link rel="stylesheet" href="/css/report.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 </head>
 
@@ -35,28 +35,31 @@
             </div>
         </div>
     </header>
+    
     <main>
-		<h2 class="text-center">ブックマーク一覧</h2>
+		<h2 class="text-center">レポート一覧</h2>
         <div id="main_box" class="container">
             <div class="d-flex col-12">
                 <table class="table table-hover">
                     <thead>
                         <tr class="bg-info text-white">
-                            <th scope="col" class="col-4 pagenation_title">試験ID</th>
-                            <th scope="col" class="col-8 pagenation_title">試験名</th>
+							<th scope="col" class="col-3 pagenation_title">受験日</th>
+                            <th scope="col" class="col-3 pagenation_title">試験ID</th>
+                            <th scope="col" class="col-6 pagenation_title">試験名</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="bmexam : ${bookmarkExamList}">
-                            <td th:text="${bmexam.examId}" class="col-4"></td>
-                            <td th:text="${bmexam.examName}" class="col-8"></td>
+                        <tr th:each="rpexam : ${reportList}">
+							<td th:text="${#dates.format(rpexam.examDate, 'yyyy/MM/dd')}" class="col-2">2023/01/01</td>
+                            <td th:text="${rpexam.examId}" class="col-2">8236418</td>
+                            <td th:text="${rpexam.examName}" class="col-8">高度情報安全確保支援士</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-  <div class="col-12 d-flex justify-content-center mt-5">
-     <nav aria-label="Page navigation example">
+<div class="col-12 d-flex justify-content-center mt-5">
+    <nav aria-label="Page navigation example">
         <ul class="pagination">
             <li class="page-item" th:each="pagenation-first : ${page}">
                 <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={pagenation-first .pageNum - 1}" aria-label="Previous">
@@ -76,7 +79,6 @@
         </ul>
     </nav>
 </div>
-    </main>
+</main>
 </body>
-
 </html>

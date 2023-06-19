@@ -155,6 +155,6 @@ public class MypageController {
 		model.addAttribute("reportList", reportPage.getPageList());
 		model.addAttribute("page", reportPage);
 		
-		return "myCreateExam";
+		return "report";
 	}
 }
