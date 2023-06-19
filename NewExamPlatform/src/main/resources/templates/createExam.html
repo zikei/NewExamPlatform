@@ -49,7 +49,7 @@
                     <tbody>
                         <tr th:each="exam : ${createExamList}">
                             <td th:text="${exam.examId}" class="col-4"></td>
-                            <td class="col-8"><a th:href="@{'/ExamPlatform/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></td>
+                            <td class="col-8"><a th:href="@{'/ExamPlatform/'+ 'Exam/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></td>
                         </tr>
                     </tbody>
                 </table>

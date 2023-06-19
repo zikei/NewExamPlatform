@@ -50,7 +50,7 @@
                     <tbody>
                         <tr th:each="rpexam : ${reportList}">
 							<td th:text="${#dates.format(rpexam.examDate, 'yyyy/MM/dd')}" class="col-4"></td>
-                            <td class="col-8"><a th:href="@{'/ExamPlatform/' + ${rpexam.reportId}}"><span th:text="${rpexam.examName}"></span></a></td>
+                            <td class="col-8"><a th:href="@{'/ExamPlatform/Exam/Report/' + ${rpexam.reportId}}"><span th:text="${rpexam.examName}"></span></a></td>
                         </tr>
                     </tbody>
                 </table>
