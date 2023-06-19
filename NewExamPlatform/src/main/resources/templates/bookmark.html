@@ -47,7 +47,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="bmexam : ${bookmarkExamList}">
+                        <tr th:each="bmexam : ${bookmarkExamLPage}">
                             <td th:text="${bmexam.examId}" class="col-4"></td>
                             <td th:text="${bmexam.examName}" class="col-8"></td>
                         </tr>
@@ -58,7 +58,7 @@
   <div class="col-12 d-flex justify-content-center mt-5">
      <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item" th:each="pagenation-first : ${page}">
+            <li class="page-item">
                 <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={pagenation-first .pageNum - 1}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     <span class="sr-only">Previous</span>
@@ -67,7 +67,7 @@
                 <li class="page-item" th:each="page : ${page}">
                     <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={page.pageNum}"><span th:text="${pageNum}"></span></a>
                 </li>
-            <li class="page-item" th:each="pagenation-last : ${page}">
+            <li class="page-item">
                 <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={pagenation-last .pageNum + 1}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">Next</span>

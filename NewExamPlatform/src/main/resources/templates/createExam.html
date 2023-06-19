@@ -29,7 +29,7 @@
                     <ul class="nav main_nav justify-content-center text-nowrap">
                         <li><a href="/ExamPlatform/Home">　ホーム　</a></li>
                         <li><a href="#">　検索　</a></li>
-                        <li><a th:href="@{'/ExamPlatform/' + ${userName}}">マイページ</a></li>
+                        <li><a th:href="@{'/ExamPlatform/' + 'Mypage'}">マイページ</a></li>
                     </ul>
                 </nav>
             </div>
@@ -49,7 +49,7 @@
                     <tbody>
                         <tr th:each="exam : ${createExamList}">
                             <td th:text="${exam.examId}" class="col-4"></td>
-                            <td th:text="${exam.examName}" class="col-8"></td>
+                            <td class="col-8"><a th:href="@{'/ExamPlatform/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -58,16 +58,16 @@
             <div class="col-12 d-flex justify-content-center mt-5">
                  <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item" th:each="pagenation-first : ${page}">
+            <li class="page-item">
                 <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={pagenation-first .pageNum}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     <span class="sr-only">Previous</span>
                 </a>
             </li>
-                <li class="page-item" th:each="page : ${page}">
+                <li class="page-item">
                     <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={page.pageNum}"><span th:text="${pageNum}"></span></a>
                 </li>
-            <li class="page-item" th:each="pagenation-last : ${page}">
+            <li class="page-item">
                 <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={pagenation-last .pageNum + 1}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">Next</span>
