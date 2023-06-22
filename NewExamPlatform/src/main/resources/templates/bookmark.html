@@ -13,8 +13,8 @@
 
 <body>
     <header>
-        <div class="header_box container-fluid ">
-            <div class="col-12 row align-items-center ">
+        <div class="header_box container-fluid">
+            <div class="col-12 row align-items-center">
                 <div class="col-8">
                     <h1 class="title ml-5">ExamPlatform</h1>
                 </div>
@@ -36,8 +36,8 @@
         </div>
     </header>
     <main>
-		<h2 class="text-center">ブックマーク一覧</h2>
-        <div id="main_box" class="container">
+        <h2 class="text-center">ブックマーク一覧</h2>
+        <div id="main_box" class="container mb-5">
             <div class="d-flex col-12">
                 <table class="table table-hover">
                     <thead>
@@ -49,33 +49,49 @@
                     <tbody>
                         <tr th:each="bmexam : ${bookmarkExamLPage}">
                             <td th:text="${bmexam.examId}" class="col-4"></td>
-                            <td class="col-8"><a th:href="@{'/ExamPlatform/'+ 'Exam/' + ${bmexam.examId}}"><span th:text="${bmexam.examName}"></span></a></td>
+                            <td class="col-8"><a th:href="@{'/ExamPlatform/'+ 'Exam/' + ${bmexam.examId}}"><span
+                                        th:text="${bmexam.examName}"></span></a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-  <div class="col-12 d-flex justify-content-center mt-5">
-     <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={pagenation-first .pageNum - 1}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-                <li class="page-item" th:each="page : ${page}">
-                    <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={page.pageNum}"><span th:text="${pageNum}"></span></a>
-                </li>
-            <li class="page-item">
-                <a class="page-link" href="/ExamPlatform/{userName}/Exam?page={pagenation-last .pageNum + 1}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
+            <div class="col-12 d-flex justify-content-center mt-5">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <!-- 前のページへのリンク -->
+                        <li class="page-item" th:class="${page.pageNum == 1} ? 'disabled'">
+                            <a class="page-link"
+                                th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' +${page.pageNum-1}}"
+                                aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">前へ</span>
+                            </a>
+                        </li>
+                        <!-- 中間のページリンク -->
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages-1)}">
+                            <a th:if="${i}==${page.pageNum-1}"
+                                th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' + ${i+1}}"
+                                class="page-link active">
+                                <span th:text="${i+1}"></span>
+                            </a>
+                            <a th:if="${i}!=${page.pageNum-1}"
+                                th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' + ${i+1}}" class="page-link">
+                                <span th:text="${i+1}"></span>
+                            </a>
+                        </li>
+                        <!-- 次のページへのリンク -->
+                        <li class="page-item">
+                            <a class="page-link"
+                                th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' + ${page.pageNum+1}}"
+                                aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">次へ</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
     </main>
 </body>
 

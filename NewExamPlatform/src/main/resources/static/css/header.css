@@ -97,7 +97,7 @@ h2{
     list-style: none;
     transition: 0.3s;
     transform: scale(1);
-    animation: fadeIn 6s cubic-bezier(0.33, 1, 0.68, 1) 1 forwards;
+    animation: fadeIn 6s cubic-bezier(0.33, 1, 0.68, 1) 1 forwards ease-in;
     margin-top: 3%
 }
 

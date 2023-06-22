@@ -65,7 +65,7 @@
 	<div class="exam_box design_box col-12 d-flex mt-4"> 
 		<div class = "exam col-12">
 			<div class="col-12 row mt-4" th:each="exam : ${createExamList}">
-			<img src="/img/exam.png" height="40" width="40" alt="Create exam file">
+			<img src="/img/exam.png" height="30" width="30" alt="Create exam file">
 			<div class="createexamName"><a th:href="@{'/ExamPlatform/'+ 'Exam/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></div>
 		    </div>
 	    </div>
@@ -82,7 +82,7 @@
 	<div class="exam_box design_box col-12 d-flex mt-4"> 
 		<div class = "exam col-12">
 			<div class="col-12 row mt-4" th:each="exam : ${bookmarkExamList}">
-			<img src="/img/exam.png" height="40" width="40" alt="bookmark exam file">
+			<img src="/img/exam.png" height="30" width="30" alt="bookmark exam file">
 			<div class="createexamName"><a th:href="@{'/ExamPlatform/'+ 'Exam/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></div>
 			</div>
 		</div>
@@ -98,9 +98,11 @@
 	<div class="exam_box design_box col-12 d-flex mt-4"> 
 		<div class = "exam col-12">
 			<div class="col-12 row mt-4" th:each="report : ${reportList}">
-			<span  th:text="${#dates.format(report.examDate, 'yyyy/MM/dd')}"></span>
-			<img src="/img/exam.png" height="40" width="40" alt="report exam file">
+			<div class="col-4"><span  th:text="${#dates.format(report.examDate, 'yyyy/MM/dd')}"></span></div>
+			<div class="col-auto row">
+			<img src="/img/exam.png" height="30" width="30" alt="report exam file">
 			<div class="createexamName"><a th:href="@{'/ExamPlatform/Exam/Report/' + ${report.reportId}}"><span th:text="${report.examName}"></span></a></div>
+			</div>
 			</div>
 	　　</div>
 	</div>
