@@ -40,12 +40,6 @@ h1{
     -webkit-box-reflect: below -10px -webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,0) 10%,rgba(0, 0, 0, 0.6));
 }
 
-h2{
-	font-family: 'Zen Antique', serif;
-	font-size: 48px;
-	border-bottom: #000 solid 3px;
-}
-
 .link{
 	font-family: 'Zen Antique', serif;
 	font-size: 24px;
@@ -97,7 +91,7 @@ h2{
     list-style: none;
     transition: 0.3s;
     transform: scale(1);
-    animation: fadeIn 6s cubic-bezier(0.33, 1, 0.68, 1) 1 forwards;
+    animation: fadeIn 6s cubic-bezier(0.33, 1, 0.68, 1) 1 forwards ease-in;
     margin-top: 3%
 }
 
@@ -121,14 +115,4 @@ h2{
 .main_nav a:hover{
     color:#00ffff;
     border-bottom: #00ffff solid 15px;
-}
-
-#main_box{
-	position: relative;
-	margin: 5%;
-    padding: 2rem;
-    border-radius: 10px;
-    border: 3px solid rgb(192, 192, 192);
-    box-shadow: 5px 5px 0 rgb(192, 192, 192);
-    color: rgb(0, 0, 0);
 }

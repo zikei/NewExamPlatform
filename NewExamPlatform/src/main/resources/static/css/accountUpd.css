@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+h2{
+	font-family: 'Zen Antique', serif;
+	font-size: 48px;
+	border-bottom: #000 solid 3px;
+	margin: 0 35%;
+	margin-top: 3%;
+}
