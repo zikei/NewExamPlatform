@@ -1,5 +1,6 @@
 package com.example.examPlatform.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.example.examPlatform.data.PageView;
 import com.example.examPlatform.data.ReportLinkView;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.exception.NotFoundException;
+import com.example.examPlatform.service.ExamServiceImpl;
 import com.example.examPlatform.service.MypageService;
 
 /** マイページコントローラ */
@@ -46,6 +48,9 @@ public class MypageController {
 		
 		List<ExamLinkView> createExamList = formatList(mypageService.selectCreateExams(userName));
 		
+		for(int i=1;i<=20;i++) {
+			createExamList.add(new ExamLinkView(i, "exam"+i));
+		}
 		
 		model.addAttribute("user", userView);
 		model.addAttribute("createExamList", createExamList);
@@ -55,6 +60,10 @@ public class MypageController {
 			List<ExamLinkView> bookmarkExamList = formatList(mypageService.selectBookmarkExams(loginUserName));
 			List<ReportLinkView> reportList = formatList(mypageService.selectReports(loginUserName));
 			
+			for(int i=1;i<=20;i++) {
+				bookmarkExamList.add(new ExamLinkView(i, "book"+i));
+				reportList.add(new ReportLinkView(new ExamServiceImpl(), i, "repo"+i, new Date()));
+			}
 			model.addAttribute("bookmarkExamList", bookmarkExamList);
 			model.addAttribute("reportList", reportList);
 			
@@ -76,7 +85,9 @@ public class MypageController {
 	@GetMapping("/Exam")
 	public String createExam(@PathVariable String userName, @RequestParam(value="page", defaultValue="1") Integer page, Model model) {
 		List<ExamLinkView> createExamList = mypageService.selectCreateExams(userName);
-		
+		for(int i=1; i<100; i++) {
+			createExamList.add(new ExamLinkView(i, "exam"+i));
+		}
 		PageView<ExamLinkView> createExamPage;
 		if(page == null) {
 			createExamPage = new PageView<ExamLinkView>(createExamList);
@@ -107,7 +118,9 @@ public class MypageController {
 		}
 		
 		List<ExamLinkView> bookmarkExamList = mypageService.selectBookmarkExams(userName);
-		
+		for(int i=1; i<100; i++) {
+			bookmarkExamList.add(new ExamLinkView(i, "exam"+i));
+		}
 		PageView<ExamLinkView> bookmarkExamLPage;
 		if(page == null) {
 			bookmarkExamLPage = new PageView<ExamLinkView>(bookmarkExamList);
@@ -137,7 +150,9 @@ public class MypageController {
 			return "error";
 		}
 		List<ReportLinkView> reportList = mypageService.selectReports(userName);
-		
+		for(int i=1; i<100; i++) {
+			reportList.add(new ReportLinkView(new ExamServiceImpl(), i, "exam"+i, new Date()));
+		}
 		PageView<ReportLinkView> reportPage;
 		if(page == null) {
 			reportPage = new PageView<ReportLinkView>(reportList);
