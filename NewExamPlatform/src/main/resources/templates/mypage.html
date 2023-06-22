@@ -98,7 +98,7 @@
 	<div class="exam_box design_box col-12 d-flex mt-4"> 
 		<div class = "exam col-12">
 			<div class="col-12 row mt-4" th:each="report : ${reportList}">
-			<div class="col-4"><span  th:text="${#dates.format(report.examDate, 'yyyy/MM/dd')}"></span></div>
+			<div class="col-2"><span  th:text="${#dates.format(report.examDate, 'yyyy/MM/dd')}"></span></div>
 			<div class="col-auto row">
 			<img src="/img/exam.png" height="30" width="30" alt="report exam file">
 			<div class="createexamName"><a th:href="@{'/ExamPlatform/Exam/Report/' + ${report.reportId}}"><span th:text="${report.examName}"></span></a></div>

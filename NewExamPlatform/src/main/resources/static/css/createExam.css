@@ -24,3 +24,7 @@ h2{
 .pagenation_title{
 	font-size: 26px;
 }
+
+.pagenation_link{
+	font-weight: bold;
+}
