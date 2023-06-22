@@ -23,6 +23,7 @@ public interface ExamService {
 	/** タグ重複なし全件取得 */
 	List<String> selectTag();
 	
+	/** 指定された試験のタグを取得 */
 	List<String> selectTagByExamId(Integer examId);
 	
 	/** ジャンル全件取得 */
@@ -30,6 +31,9 @@ public interface ExamService {
 	
 	/** 試験登録 */
 	void examRegister(ExamData examData, ExamQuestion examQuestion);
+	
+	/** 試験概要更新 */
+	void examUpdate(ExamData examData);
 	
 	/** 試験リストを試験リンクリスト形式に変換*/
 	List<ExamLinkView> makeExamLinkList(List<Exam> examList);

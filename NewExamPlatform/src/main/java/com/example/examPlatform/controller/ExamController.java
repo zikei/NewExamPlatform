@@ -308,11 +308,40 @@ public class ExamController {
 	
 	/** 試験概要更新ページタグ入力欄を削除　*/
 	@PostMapping(value="/Upd/{examId}", params="removeTag")
-	public String ExamUpdateRemoveTag(@PathVariable Integer examId, @RequestParam Integer removeTag, ExamCreateForm examform, Model model) {
+	public String ExamUpdateRemoveTag(@PathVariable Integer examId, @RequestParam Integer removeTag,
+			ExamCreateForm examform, Model model) {
 		removeTag(examform, removeTag);
 		return ExamUpdateUpdSession(examId, examform, model);
 	}
 	
+	/** 試験概要更新処理 */
+	@PostMapping(value="/Upd/{examId}")
+	public String ExamUpdateRemoveTag(@Validated ExamCreateForm examform, BindingResult bindingResult, 
+			@PathVariable Integer examId,  Model model) {
+		if(bindingResult.hasErrors()) {
+			return ExamCreateView(model);
+		}
+		
+		Exam exam;
+		try {
+			exam = examService.selectExamByExamId(examId).orElseThrow(() -> new NotFoundException("Exam NotFound"));
+		} catch (NotFoundException e) {
+			// 試験が見つからない場合エラーページに遷移
+			model.addAttribute("errorMsg", "試験が見つかりません");
+			return "error";
+		}
+		if(!accountService.isLoginUser(exam.getUserId())) {
+			// ログインユーザ以外のアクセスの場合エラーページに遷移
+			model.addAttribute("errorMsg", "このページは表示できません");
+			return "error";
+		}
+		
+		ExamData examData = makeExamData(examform, exam.getUserId());
+		examService.examUpdate(examData);
+		
+		setTagGanreToModel(model);
+		return "updExam";
+	}
 	
 /* ================================================================================================================== */
 	

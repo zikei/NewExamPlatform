@@ -102,6 +102,16 @@ public class ExamServiceImpl implements ExamService{
 	}
 
 	@Override
+	public void examUpdate(ExamData examData) {
+		Exam exam = examData.getExam();
+		Integer examId = exam.getExamId();
+		
+		examRepo.save(exam);
+		tagRepo.deleteByExamId(examId);
+		insertTag(examId, examData.getTagList());
+	}
+	
+	@Override
 	public List<ExamLinkView> makeExamLinkList(List<Exam> examList) {
 		List<ExamLinkView> examLinkList = new ArrayList<>();
 		for(Exam exam : examList) {
