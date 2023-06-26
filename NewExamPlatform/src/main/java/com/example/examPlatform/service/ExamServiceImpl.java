@@ -1,6 +1,7 @@
 package com.example.examPlatform.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,59 @@ public class ExamServiceImpl implements ExamService{
 	public Optional<Exam> selectExamByExamId(Integer examId) {
 		Optional<Exam> examOpt = examRepo.findById(examId);
 		return examOpt;
+	}
+	
+	@Override
+	public ExamQuestion selectExamQuestionByExamId(Integer examId) {
+		List<BigQuestion> bqList = selectBQList(examId);
+		List<BigQuestionData> bqdList = selectBigQuestionData(bqList);
+		return new ExamQuestion(bqdList);
+	}
+	/** 大門エンティティリスト取得 */
+	private List<BigQuestion> selectBQList(Integer examId){
+		List<BigQuestion> bqList = new ArrayList<>();
+		bqRepo.findByExamId(examId).forEach(bq -> bqList.add(bq));
+		bqList.sort(Comparator.comparing(BigQuestion::getBigQuestionNum));
+		return bqList;
+	}
+	
+	/** 小門エンティティリスト取得 */
+	private List<Question> selectQList(Integer bqId){
+		List<Question> qList = new ArrayList<>();
+		qRepo.findByBigQuestionId(bqId).forEach(q -> qList.add(q));
+		qList.sort(Comparator.comparing(Question::getQuestionNum));
+		return qList;
+	}
+	
+	/** 選択肢エンティティリスト取得 */
+	private List<Choices> selectCList(Integer qId){
+		List<Choices> cList = new ArrayList<>();
+		cRepo.findByQuestionId(qId).forEach(c -> cList.add(c));
+		cList.sort(Comparator.comparing(Choices::getChoicesNum));
+		return cList;
+	}
+	
+	/** 大問Data取得 */
+	private List<BigQuestionData> selectBigQuestionData(List<BigQuestion> bqList){
+		List<BigQuestionData> bqdList = new ArrayList<>();
+		for(BigQuestion bq : bqList) {
+			Integer bqId = bq.getBigQuestionId();
+			List<Question> qList = selectQList(bqId);
+			List<QuestionData> qdList = selectQuestionData(qList);
+			bqdList.add(new BigQuestionData(bq, qdList));
+		}
+		return bqdList;
+	}
+	
+	/** 小問Data取得 */
+	private List<QuestionData> selectQuestionData(List<Question> qList){
+		List<QuestionData> qdList = new ArrayList<>();
+		for(Question q : qList) {
+			Integer qId = q.getQuestionId();
+			List<Choices> cList = selectCList(qId);
+			qdList.add(new QuestionData(q, cList));
+		}
+		return qdList;
 	}
 	
 	@Override

@@ -17,6 +17,9 @@ public interface ExamService {
 	/** 試験取得 */
 	Optional<Exam> selectExamByExamId(Integer examId);
 	
+	/** 試験問題取得 */
+	ExamQuestion selectExamQuestionByExamId(Integer examId);
+	
 	/** ユーザIDで試験取得 */
 	List<Exam> selectExamByUserID(Integer userId);
 	

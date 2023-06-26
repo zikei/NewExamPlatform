@@ -11,5 +11,5 @@ import com.example.examPlatform.entity.Choices;
 public interface ChoicesRepository extends CrudRepository<Choices, Integer> {
 	/** 小問IDで検索を行う */
 	@Query("SELECT * FROM Choices WHERE QuestionId = :questionId")
-	Iterable<Choices> findByBigQuestionId(Integer questionId);
+	Iterable<Choices> findByQuestionId(Integer questionId);
 }
