@@ -30,6 +30,7 @@ import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Ganre;
 import com.example.examPlatform.entity.Question;
 import com.example.examPlatform.exception.NotFoundException;
+import com.example.examPlatform.exception.ResourceAccessException;
 import com.example.examPlatform.form.BigQuestionCreateForm;
 import com.example.examPlatform.form.ChoicesCreateForm;
 import com.example.examPlatform.form.ExamCreateForm;
@@ -130,17 +131,12 @@ public class ExamController {
 	public String QuestionCreateView(HttpSession session, Model model) {
 		ExamData examData = (ExamData) session.getAttribute("exam");
 		Exam exam = examData.getExam();
-		QuestionFormat qf = new QuestionFormat();
 		
 		//試験概要情報が見つからない場合試験概要登録ページに遷移
 		if(exam == null || exam.getQuestionFormat() == null) return ExamCreateView(model);
 		
 		//小問形式なら小問問題登録、大問形式なら大問問題登録へ遷移
-		if(qf.isBigQuestionFormat(0)) {
-			return "bigQuestionCreate";
-		}else {
-			return "questionCreate";
-		}
+		return QuestionCreateViewName(exam);
 	}
 	
 	/** 試験問題登録ページセッションタイムを延長　*/
@@ -261,15 +257,9 @@ public class ExamController {
 	public String UpdExamView(@PathVariable Integer examId, ExamCreateForm eForm, Model model) {
 		Exam exam;
 		try {
-			exam = examService.selectExamByExamId(examId).orElseThrow(() -> new NotFoundException("Exam NotFound"));
-		} catch (NotFoundException e) {
-			// 試験が見つからない場合エラーページに遷移
-			model.addAttribute("errorMsg", "試験が見つかりません");
-			return "error";
-		}
-		if(!accountService.isLoginUser(exam.getUserId())) {
-			// ログインユーザ以外のアクセスの場合エラーページに遷移
-			model.addAttribute("errorMsg", "このページは表示できません");
+			exam = findCreateExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合エラーページに遷移
 			return "error";
 		}
 		
@@ -282,17 +272,10 @@ public class ExamController {
 	@PostMapping(value="/Upd/{examId}", params="s")
 	public String ExamUpdateUpdSession(@PathVariable Integer examId, ExamCreateForm eForm, Model model) {
 		// UpdExamViewを呼び足した場合フォームがリセットされるためこちらで処理を行う
-		Exam exam;
 		try {
-			exam = examService.selectExamByExamId(examId).orElseThrow(() -> new NotFoundException("Exam NotFound"));
-		} catch (NotFoundException e) {
-			// 試験が見つからない場合エラーページに遷移
-			model.addAttribute("errorMsg", "試験が見つかりません");
-			return "error";
-		}
-		if(!accountService.isLoginUser(exam.getUserId())) {
-			// ログインユーザ以外のアクセスの場合エラーページに遷移
-			model.addAttribute("errorMsg", "このページは表示できません");
+			findCreateExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合エラーページに遷移
 			return "error";
 		}
 		setTagGanreToModel(model);
@@ -315,7 +298,7 @@ public class ExamController {
 	}
 	
 	/** 試験概要更新処理 */
-	@PostMapping(value="/Upd/{examId}")
+	@PostMapping("/Upd/{examId}")
 	public String ExamUpdateRemoveTag(@Validated ExamCreateForm examform, BindingResult bindingResult, 
 			@PathVariable Integer examId,  Model model) {
 		if(bindingResult.hasErrors()) {
@@ -324,15 +307,9 @@ public class ExamController {
 		
 		Exam exam;
 		try {
-			exam = examService.selectExamByExamId(examId).orElseThrow(() -> new NotFoundException("Exam NotFound"));
-		} catch (NotFoundException e) {
-			// 試験が見つからない場合エラーページに遷移
-			model.addAttribute("errorMsg", "試験が見つかりません");
-			return "error";
-		}
-		if(!accountService.isLoginUser(exam.getUserId())) {
-			// ログインユーザ以外のアクセスの場合エラーページに遷移
-			model.addAttribute("errorMsg", "このページは表示できません");
+			exam = findCreateExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合エラーページに遷移
 			return "error";
 		}
 		
@@ -343,7 +320,64 @@ public class ExamController {
 		return "updExam";
 	}
 	
+	/** 試験問題更新ページ　*/
+	@GetMapping("/Upd/Q/{examId}")
+	public String QuestionUpdateView(@PathVariable Integer examId, ExamQuestionCreateForm eqForm, Model model) {
+		Exam exam;
+		try {
+			exam = findCreateExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合エラーページに遷移
+			return "error";
+		}
+		
+		ExamQuestion eq = examService.selectExamQuestionByExamId(examId);
+		eqForm = makeExamQuestionForm(eq);
+		//小問形式なら小問問題更新、大問形式なら大問問題更新へ遷移
+		return QuestionUpdateViewName(exam);
+	}
+	
 /* ================================================================================================================== */
+	
+	/** 試験問題更新ページのビュー名を返す */
+	private String QuestionCreateViewName(Exam exam) {
+		QuestionFormat qf = new QuestionFormat();
+		//小問形式なら小問問題登録、大問形式なら大問問題登録へ遷移
+		if(qf.isBigQuestionFormat(exam.getDisclosureRange())) {
+			return "bigQuestionCreate";
+		}else {
+			return "questionCreate";
+		}
+	}
+	
+	/** 試験問題更新ページのビュー名を返す */
+	private String QuestionUpdateViewName(Exam exam) {
+		QuestionFormat qf = new QuestionFormat();
+		//小問形式なら小問問題更新、大問形式なら大問問題更新へ遷移
+		if(qf.isBigQuestionFormat(exam.getDisclosureRange())) {
+			return "UpdBigQuestion";
+		}else {
+			return "UpdQuestion";
+		}
+	}
+	
+	/** 試験を取得する 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合modelにメッセージを格納し例外をスローする*/
+	private Exam findCreateExamById(Integer examId, Model model) throws ResourceAccessException{
+		Exam exam;
+		try {
+			exam = examService.selectExamByExamId(examId).orElseThrow(() -> new NotFoundException("Exam NotFound"));
+		} catch (NotFoundException e) {
+			// 試験が見つからない場合
+			model.addAttribute("errorMsg", "試験が見つかりません");
+			throw new ResourceAccessException("Exam NotFound");
+		}
+		if(!accountService.isLoginUser(exam.getUserId())) {
+			// ログインユーザ以外のアクセスの場合
+			model.addAttribute("errorMsg", "このページは表示できません");
+			throw new ResourceAccessException("Exam forbidden");
+		}
+		return exam;
+	}
 	
 	/** フォームに新規タグを追加 */
 	private void addTag(ExamCreateForm examform) {
