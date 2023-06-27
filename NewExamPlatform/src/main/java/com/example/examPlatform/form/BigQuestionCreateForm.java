@@ -3,6 +3,8 @@ package com.example.examPlatform.form;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.examPlatform.entity.BigQuestion;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,9 +27,16 @@ public class BigQuestionCreateForm {
 	@Valid
 	private List<QuestionCreateForm> questionCreateForm;
 	
+	
 	public BigQuestionCreateForm() {
 		questionCreateForm = new ArrayList<>();
 		questionCreateForm.add(new QuestionCreateForm());
+	}
+	
+	public BigQuestionCreateForm(BigQuestion bq, List<QuestionCreateForm> questionCreateForm) {
+		this.BigQuestionNum      = bq.getBigQuestionNum();
+		this.BigQuestionSentence = bq.getBigQuestionSentence();
+		this.questionCreateForm  = questionCreateForm;
 	}
 	
 	public void addQ() {

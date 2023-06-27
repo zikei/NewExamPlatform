@@ -13,9 +13,14 @@ public class ExamQuestionCreateForm {
 	@Valid
 	private List<BigQuestionCreateForm> bigQuestionCreateForm;
 	
+	
 	public ExamQuestionCreateForm() {
 		bigQuestionCreateForm = new ArrayList<>();
 		bigQuestionCreateForm.add(new BigQuestionCreateForm());
+	}
+	
+	public ExamQuestionCreateForm(List<BigQuestionCreateForm> bigQuestionCreateForm) {
+		this.bigQuestionCreateForm = bigQuestionCreateForm;
 	}
 	
 	public void addBQ() {

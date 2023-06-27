@@ -3,6 +3,8 @@ package com.example.examPlatform.form;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.examPlatform.entity.Question;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,9 +39,19 @@ public class QuestionCreateForm {
 	@Valid
 	private List<ChoicesCreateForm> choicesFormList;
 	
+	
 	public QuestionCreateForm() {
 		choicesFormList = new ArrayList<>();
 		choicesFormList.add(new ChoicesCreateForm());
+	}
+	
+	public QuestionCreateForm(Question q, List<ChoicesCreateForm> choicesFormList) {
+		this.questionNum         = q.getQuestionNum();
+		this.questionSentence    = q.getQuestionSentence();
+		this.questionAns         = q.getQuestionAns();
+		this.questionExplanation = q.getQuestionExplanation();
+		this.point               = q.getPoint();
+		this.choicesFormList     = choicesFormList;
 	}
 	
 	public void addChoices() {

@@ -429,6 +429,13 @@ public class ExamController {
 		return eForm;
 	}
 	
+	/** ExamQuestonをExamQuestionCreateFormに変換 */
+	private ExamQuestionCreateForm makeExamQuestionForm(ExamQuestion eq) {
+		List<BigQuestionData> bqdList = eq.getBigQuestionList();
+		List<BigQuestionCreateForm> bqfList = makeBigQuestionForm(bqdList);
+		return new ExamQuestionCreateForm(bqfList);
+	}
+	
 	/** 文字列をスペースで分割し分割した文字列をInteger型配列に変換する */
 	private Integer[] makeIntegerArray(String str) throws NumberFormatException{
 		String[] arrayStr = str.split(" ");
@@ -533,5 +540,40 @@ public class ExamController {
 		bq.setBigQuestionNum(bqForm.getBigQuestionNum());
 		bq.setBigQuestionSentence(bqForm.getBigQuestionSentence());
 		return bq;
+	}
+
+	/** BigQuestionDataListをBigQuestionCreateFormListに変換 */
+	private List<BigQuestionCreateForm> makeBigQuestionForm(List<BigQuestionData> bqdList) {
+		List<BigQuestionCreateForm> bqfList = new ArrayList<>();
+		for(BigQuestionData bqd : bqdList) {
+			List<QuestionData> qdList = bqd.getQuestionList();
+			BigQuestion bq =bqd.getBigQuestion();
+			
+			List<QuestionCreateForm> qfList = makeQuestionForm(qdList);
+			bqfList.add(new BigQuestionCreateForm(bq, qfList));
+		}
+		return bqfList;
+	}
+	
+	/** QuestionDataListをQuestionCreateFormListに変換 */
+	private List<QuestionCreateForm> makeQuestionForm(List<QuestionData> qdList) {
+		List<QuestionCreateForm> qfList = new ArrayList<>();
+		for(QuestionData qd : qdList) {
+			List<Choices> cList = qd.getChoicesList();
+			Question q =qd.getQuestion();
+			
+			List<ChoicesCreateForm> cfList = makeChoicesForm(cList);
+			qfList.add(new QuestionCreateForm(q, cfList));
+		}
+		return qfList;
+	}
+	
+	/** ChoicesListをChoicesCreateFormListに変換 */
+	private List<ChoicesCreateForm> makeChoicesForm(List<Choices> cList) {
+		List<ChoicesCreateForm> cfList = new ArrayList<>();
+		for(Choices c : cList) {
+			cfList.add(new ChoicesCreateForm(c));
+		}
+		return cfList;
 	}
 }
