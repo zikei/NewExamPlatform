@@ -60,11 +60,19 @@
             <div class="col-12 d-flex justify-content-center mt-5">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
+                        <!--最前のページへのリンク -->
+                        <li class="page-item">
+                            <a class="page-link" th:if="${page.pageNum > 1}"
+                                th:href="@{'/ExamPlatform/' + ${userName} + '/Exam?page=1'}" aria-label="First">
+                                <span aria-hidden="true" class="pagenation_link">&laquo;&laquo;</span>
+                                <span class="sr-only">最前のページへ</span>
+                            </a>
+                        </li>
+
                         <!-- 前のページへのリンク -->
-                        <li class="page-item" th:class="${page.pageNum == 1} ? 'disabled'">
-                            <a class="page-link"
-                                th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' +${page.pageNum-1}}"
-                                aria-label="Previous">
+                        <li class="page-item">
+                            <a class="page-link" th:if="${page.pageNum > 1}"
+                                th:href="@{'/ExamPlatform/' + ${userName} + '/Exam?page=1'}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                                 <span class="sr-only">前へ</span>
                             </a>
@@ -82,12 +90,26 @@
                             </a>
                         </li>
                         <!-- 次のページへのリンク -->
-                        <li class="page-item">
+                        <li class="page-item" th:if="${page.pageNum < page.totalPages}">
                             <a class="page-link"
                                 th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' + ${page.pageNum+1}}"
                                 aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                                 <span class="sr-only">次へ</span>
+                            </a>
+                        </li>
+                        <li class="page-item disabled" th:if="${page.pageNum >= page.totalPages}">
+                            <span class="page-link" aria-label="Next" style="visibility: hidden;">
+                                <span class="sr-only">次へ</span>
+                            </span>
+                        </li>
+                        <!--最後のページへのリンク -->
+                        <li class="page-item" th:classappend="${page.pageNum == page.totalPages} ? 'disabled'">
+                            <a class="page-link" th:if="${page.pageNum != page.totalPages}"
+                                th:href="@{'/ExamPlatform/' + ${userName} + '/Exam?page=' + ${page.totalPages}}"
+                                aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                                <span class="sr-only">最大のページへ</span>
                             </a>
                         </li>
                     </ul>

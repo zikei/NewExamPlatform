@@ -16,7 +16,12 @@
 						<h1 class = "title ml-5">ExamPlatform</h1>
 				</div>
 				<div class = "col-4 text-right ">
-				<a class="btn btn-primary mr-5" href="/ExamPlatform/Login" role="button">ログイン</a>
+				<a class="btn btn-primary mr-5" href="/ExamPlatform/Login" role="login" th:unless="${#authentication.isAuthenticated()}">ログイン</a>
+				<div class = "text-right" th:if="${#authentication.isAuthenticated()}">
+				<form action="/ExamPlatform/Logout" method="post">
+				<button class="btn btn-primary mr-5"  role="logout">ログアウト</button> 
+				</form>
+				</div>
 				</div>
 			</div>
 			<div class = "container col-12 mt-3">
