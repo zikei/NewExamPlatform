@@ -269,7 +269,7 @@ public class ExamController {
 	}
 	
 	/** 試験概要更新ページセッションタイムを延長　*/
-	@PostMapping(value="/Upd/{examId}", params="s")
+	@PostMapping(value="/Upd/{examId}", params="save")
 	public String ExamUpdateUpdSession(@PathVariable Integer examId, ExamCreateForm eForm, Model model) {
 		// UpdExamViewを呼び足した場合フォームがリセットされるためこちらで処理を行う
 		try {
@@ -340,7 +340,7 @@ public class ExamController {
 	}
 	
 	/** 試験問題更新ページセッションタイムを延長　*/
-	@PostMapping(value="/Upd/Q/{examId}", params="s")
+	@PostMapping(value="/Upd/Q/{examId}", params="save")
 	public String QuestionUpdateUpdSession(@PathVariable Integer examId, ExamQuestionCreateForm eqForm, Model model) {
 		// QuestionUpdateViewを呼び足した場合フォームがリセットされるためこちらで処理を行う
 		Exam exam;
