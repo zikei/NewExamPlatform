@@ -41,6 +41,9 @@ public interface ExamService {
 	/** 試験問題更新 */
 	void examQuestionUpdate(ExamQuestion examQuestion);
 	
+	/** 試験削除 */
+	void examDelete(Integer examId);
+	
 	/** 試験リストを試験リンクリスト形式に変換*/
 	List<ExamLinkView> makeExamLinkList(List<Exam> examList);
 }

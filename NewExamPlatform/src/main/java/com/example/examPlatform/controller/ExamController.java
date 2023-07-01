@@ -1,7 +1,6 @@
 package com.example.examPlatform.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -435,6 +434,35 @@ public class ExamController {
 		return QuestionUpdateViewName(exam);
 	}
 	
+	/** 試験削除ページ */
+	@GetMapping("/Delete/{examId}")
+	public String ExamDeleteView(@PathVariable Integer examId, Model model) {
+		Exam exam;
+		try {
+			exam = findCreateExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合エラーページに遷移
+			return "error";
+		}
+		model.addAttribute("exam", exam);
+		return "examDelete";
+	}
+	
+	/** 試験削除処理 */
+	@PostMapping("/Delete/{examId}")
+	public String ExamDelete(@PathVariable Integer examId, Model model) {
+		try {
+			findCreateExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合エラーページに遷移
+			return "error";
+		}
+		
+		examService.examDelete(examId);
+		
+		return "redirect:/ExamPlatform/Mypage";
+	}
+	
 /* ================================================================================================================== */
 	
 	/** 試験問題更新ページのビュー名を返す */
@@ -604,7 +632,6 @@ public class ExamController {
 		exam.setQuestionFormat(eForm.getQuestionFormat());
 		
 		exam.setUserId(userId);
-		exam.setCreateDate(new Date());
 		return exam;
 	}
 	

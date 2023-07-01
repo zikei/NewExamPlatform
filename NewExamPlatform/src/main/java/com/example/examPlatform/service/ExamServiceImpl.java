@@ -2,6 +2,7 @@ package com.example.examPlatform.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,7 +103,9 @@ public class ExamServiceImpl implements ExamService{
 	
 	@Override
 	public void examRegister(ExamData examData, ExamQuestion examQuestion) {
-		Exam registExam = insertExam(examData.getExam());
+		Exam exam = examData.getExam();
+		exam.setCreateDate(new Date());
+		Exam registExam = insertExam(exam);
 		
 		Integer examId = registExam.getExamId();
 		insertTag(examId, examData.getTagList());
@@ -113,6 +116,7 @@ public class ExamServiceImpl implements ExamService{
 	@Override
 	public void examUpdate(ExamData examData) {
 		Exam exam = examData.getExam();
+		exam.setUpdateDate(new Date());
 		Integer examId = exam.getExamId();
 		
 		examRepo.save(exam);
@@ -123,10 +127,20 @@ public class ExamServiceImpl implements ExamService{
 	@Override
 	public void examQuestionUpdate(ExamQuestion examQuestion) {
 		Integer examId = examQuestion.getExamId();
+		
+		Exam exam = selectExamByExamId(examId).get();
+		exam.setUpdateDate(new Date());
+		examRepo.save(exam);
+		
 		// 問題を削除し更新した試験問題を登録する
 		// 大問を削除するとその配下の小問・選択肢も制約により削除されるため大問を削除する
 		bqRepo.deleteByExamId(examId);
 		insertBigQuestionData(examQuestion);
+	}
+	
+	@Override
+	public void examDelete(Integer examId) {
+		examRepo.deleteById(examId);
 	}
 	
 	@Override
