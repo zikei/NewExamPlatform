@@ -23,6 +23,9 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(authz -> authz
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 			)
+			.authorizeHttpRequests(authz -> authz
+					.requestMatchers("/img/**").permitAll()
+				)
 			.authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/ExamPlatform/Home","/ExamPlatform/Account/Entry").permitAll()
 				.anyRequest().authenticated()
