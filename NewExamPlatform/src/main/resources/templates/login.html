@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th = "http://www.thymeleaf.org/"
+      xmlns:sec= "http://www.thymeleaf.org/extras/spring-security%22%3E">
 
 <head>
     <title>NewExamPratForm - ログイン</title>
@@ -13,20 +14,20 @@
 
 <body>
     <header>
-        <div class="header_box container-fluid ">
-            <div class="col-12 row align-items-center ">
+        <div class="header_box container-fluid">
+            <div class="col-12 row align-items-center">
                 <div class="col-8">
                     <h1 class="title ml-5">ExamPlatform</h1>
                 </div>
                 <div class="col-4 text-right">
                     <!--ユーザ認証済みなのであれば -->
-                    <th:block th:if="${#authentication.isAuthenticated()}">
+                    <th:block sec:authorize="isAuthenticated()">
                         <form method="post" th:action="@{/ExamPlatform/Logout}">
                             <button class="btn btn-primary mr-5" role="logout" type="submit">ログアウト</button>
                         </form>
                     </th:block>
                     <!--ユーザ認証済みではないのであれば -->
-                    <th:block th:unless="${#authentication.isAuthenticated()}">
+                    <th:block sec:authorize="isAnonymous()">
                         <a class="btn btn-primary mr-5" th:href="@{/ExamPlatform/Login}" role="login">ログイン</a>
                     </th:block>
                 </div>
