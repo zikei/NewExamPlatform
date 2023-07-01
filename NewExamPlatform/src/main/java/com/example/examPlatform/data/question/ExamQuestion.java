@@ -13,8 +13,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExamQuestion {
+	/** 試験Id */
+	private Integer examId;
+	
 	/** 大問リスト */
 	private List<BigQuestionData> bigQuestionList;
+	
+	public ExamQuestion(List<BigQuestionData> bigQuestionList) {
+		this.examId = null;
+		this.bigQuestionList = bigQuestionList;
+	}
 	
 	public int fullScore(){
 		int score = 0;

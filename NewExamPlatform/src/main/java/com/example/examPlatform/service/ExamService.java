@@ -38,6 +38,9 @@ public interface ExamService {
 	/** 試験概要更新 */
 	void examUpdate(ExamData examData);
 	
+	/** 試験問題更新 */
+	void examQuestionUpdate(ExamQuestion examQuestion);
+	
 	/** 試験リストを試験リンクリスト形式に変換*/
 	List<ExamLinkView> makeExamLinkList(List<Exam> examList);
 }

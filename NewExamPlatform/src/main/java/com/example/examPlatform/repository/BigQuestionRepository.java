@@ -12,4 +12,8 @@ public interface BigQuestionRepository extends CrudRepository<BigQuestion, Integ
 	/** 試験IDで検索を行う */
 	@Query("SELECT * FROM BigQuestion WHERE ExamId = :examId")
 	Iterable<BigQuestion> findByExamId(Integer examId);
+	
+	/** 指定された試験の問題を削除 */
+	@Query("DELETE FROM BigQuestion WHERE ExamId = :examId")
+	void deleteByExamId(Integer examId);
 }

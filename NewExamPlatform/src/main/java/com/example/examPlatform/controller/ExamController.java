@@ -299,10 +299,10 @@ public class ExamController {
 	
 	/** 試験概要更新処理 */
 	@PostMapping("/Upd/{examId}")
-	public String ExamUpdateRemoveTag(@Validated ExamCreateForm examform, BindingResult bindingResult, 
+	public String ExamUpdate(@Validated ExamCreateForm examform, BindingResult bindingResult, 
 			@PathVariable Integer examId,  Model model) {
 		if(bindingResult.hasErrors()) {
-			return ExamCreateView(model);
+			return ExamUpdateUpdSession(examId, examform, model);
 		}
 		
 		Exam exam;
@@ -314,9 +314,11 @@ public class ExamController {
 		}
 		
 		ExamData examData = makeExamData(examform, exam.getUserId());
+		examData.getExam().setExamId(examId);
 		examService.examUpdate(examData);
 		
 		setTagGanreToModel(model);
+		model.addAttribute("msg", "更新が完了しました");
 		return "updExam";
 	}
 	
@@ -333,6 +335,102 @@ public class ExamController {
 		
 		ExamQuestion eq = examService.selectExamQuestionByExamId(examId);
 		eqForm = makeExamQuestionForm(eq);
+		//小問形式なら小問問題更新、大問形式なら大問問題更新へ遷移
+		return QuestionUpdateViewName(exam);
+	}
+	
+	/** 試験問題更新ページセッションタイムを延長　*/
+	@PostMapping(value="/Upd/Q/{examId}", params="s")
+	public String QuestionUpdateUpdSession(@PathVariable Integer examId, ExamQuestionCreateForm eqForm, Model model) {
+		// QuestionUpdateViewを呼び足した場合フォームがリセットされるためこちらで処理を行う
+		Exam exam;
+		try {
+			exam = findCreateExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合エラーページに遷移
+			return "error";
+		}
+		//小問形式なら小問問題更新、大問形式なら大問問題更新へ遷移
+		return QuestionUpdateViewName(exam);
+	}
+	
+	/** 試験問題更新ページ大問入力欄を追加　*/
+	@PostMapping(value="/Upd/Q/{examId}", params="addBQ")
+	public String QuestionUpdateAddBQ(@PathVariable Integer examId, ExamQuestionCreateForm questionForm, Model model) {
+		addBQ(questionForm);
+		return QuestionUpdateUpdSession(examId, questionForm, model);
+	}
+	
+	/** 試験問題更新ページ大問入力欄を削除　*/
+	@PostMapping(value="/Upd/Q/{examId}", params="removeBQ")
+	public String QuestionUpdateRemoveBQ(@PathVariable Integer examId, @RequestParam Integer removeBQ, 
+			ExamQuestionCreateForm questionForm, Model model) {
+		removeBQ(questionForm, removeBQ);
+		return QuestionUpdateUpdSession(examId, questionForm, model);
+	}
+	
+	/** 試験問題更新ページ小問入力欄を追加　*/
+	@PostMapping(value="/Upd/Q/{examId}", params="addQ")
+	public String QuestionUpdateAddQ(@PathVariable Integer examId, @RequestParam Integer addQ,
+			ExamQuestionCreateForm questionForm, Model model) {
+		addQ(questionForm, addQ);
+		return QuestionUpdateUpdSession(examId, questionForm, model);
+	}
+	
+	/** 試験問題更新ページ小問入力欄を削除　*/
+	@PostMapping(value="/Upd/Q/{examId}", params="removeQ")
+	public String QuestionUpdateRemoveQ(@PathVariable Integer examId, @RequestParam String removeQ,
+			ExamQuestionCreateForm questionForm, Model model) {
+		try {
+			removeQ(questionForm, removeQ);
+		}catch(NumberFormatException e) {
+		}
+		return QuestionUpdateUpdSession(examId, questionForm, model);
+	}
+	
+	/** 試験問題更新ページ選択肢入力欄を追加　*/
+	@PostMapping(value="/Upd/Q/{examId}", params="addChoices")
+	public String QuestionUpdateAddChoices(@PathVariable Integer examId, @RequestParam String addChoices,
+			ExamQuestionCreateForm questionForm, Model model) {
+		try {
+			addC(questionForm, addChoices);
+		}catch(NumberFormatException e) {
+		}
+		return QuestionUpdateUpdSession(examId, questionForm, model);
+	}
+	
+	/** 試験問題更新ページ選択肢入力欄を削除　*/
+	@PostMapping(value="/Upd/Q/{examId}", params="removeChoices")
+	public String QuestionUpdateRemoveChoices(@PathVariable Integer examId, @RequestParam String removeChoices,
+			ExamQuestionCreateForm questionForm, Model model) {
+		try {
+			removeC(questionForm, removeChoices);
+		}catch(NumberFormatException e) {
+		}
+		return QuestionUpdateUpdSession(examId, questionForm, model);
+	}
+	
+	/** 試験問題更新処理 */
+	@PostMapping("/Upd/{examId}")
+	public String ExamQuestionUpdate(@Validated ExamQuestionCreateForm questionForm, BindingResult bindingResult, 
+			@PathVariable Integer examId,  Model model) {
+		if(bindingResult.hasErrors()) {
+			return QuestionUpdateUpdSession(examId, questionForm, model);
+		}
+		
+		Exam exam;
+		try {
+			exam = findCreateExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたは取得した試験がログインユーザの試験以外の場合エラーページに遷移
+			return "error";
+		}
+		
+		ExamQuestion examQuestion = makeExamQuestion(questionForm);
+		
+		examService.examQuestionUpdate(examQuestion);
+		
+		model.addAttribute("msg", "更新が完了しました");
 		//小問形式なら小問問題更新、大問形式なら大問問題更新へ遷移
 		return QuestionUpdateViewName(exam);
 	}

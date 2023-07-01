@@ -106,7 +106,8 @@ public class ExamServiceImpl implements ExamService{
 		
 		Integer examId = registExam.getExamId();
 		insertTag(examId, examData.getTagList());
-		insertBigQuestionData(examId, examQuestion);
+		examQuestion.setExamId(examId);
+		insertBigQuestionData(examQuestion);
 	}
 
 	@Override
@@ -117,6 +118,15 @@ public class ExamServiceImpl implements ExamService{
 		examRepo.save(exam);
 		tagRepo.deleteByExamId(examId);
 		insertTag(examId, examData.getTagList());
+	}
+	
+	@Override
+	public void examQuestionUpdate(ExamQuestion examQuestion) {
+		Integer examId = examQuestion.getExamId();
+		// 問題を削除し更新した試験問題を登録する
+		// 大問を削除するとその配下の小問・選択肢も制約により削除されるため大問を削除する
+		bqRepo.deleteByExamId(examId);
+		insertBigQuestionData(examQuestion);
 	}
 	
 	@Override
@@ -144,7 +154,8 @@ public class ExamServiceImpl implements ExamService{
 	}
 	
 	/** DBに大問、小問、選択肢を保存 */
-	private void insertBigQuestionData(Integer examId, ExamQuestion examQuestion) {
+	private void insertBigQuestionData(ExamQuestion examQuestion) {
+		Integer examId = examQuestion.getExamId();
 		List<BigQuestionData> bqDataList = examQuestion.getBigQuestionList();
 		for(BigQuestionData bqData : bqDataList) {
 			BigQuestion registBq = insertBigQuestion(examId, bqData.getBigQuestion());
