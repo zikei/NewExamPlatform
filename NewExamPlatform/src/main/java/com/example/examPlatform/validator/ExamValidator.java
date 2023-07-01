@@ -8,7 +8,7 @@ import com.example.examPlatform.data.constant.DisclosureRange;
 import com.example.examPlatform.form.ExamForm;
 
 @Component
-public class ExamCreateValidator implements Validator {
+public class ExamValidator implements Validator {
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return ExamForm.class.isAssignableFrom(clazz);
@@ -22,7 +22,7 @@ public class ExamCreateValidator implements Validator {
 		if(!dr.isLimited(form.getDisclosureRange())) return;
 		
 		if(form.getLimitedPassword() == null) {
-			errors.rejectValue("limitedPassword", "com.example.examPlatform.validator.ExamCreateValidator.message");
+			errors.rejectValue("limitedPassword", "com.example.examPlatform.validator.ExamValidator.message");
 		}
 	}
 }

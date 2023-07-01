@@ -38,7 +38,7 @@ import com.example.examPlatform.form.QuestionCreateForm;
 import com.example.examPlatform.form.TagForm;
 import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.ExamService;
-import com.example.examPlatform.validator.ExamCreateValidator;
+import com.example.examPlatform.validator.ExamValidator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -54,12 +54,12 @@ public class ExamController {
 	AccountService accountService;
 	
 	@Autowired
-	ExamCreateValidator examCreateValidator;
+	ExamValidator examValidator;
 	
 	/** チェック登録 */
-	@InitBinder("examCreateForm")
-	public void initExamCreateFormBinder(WebDataBinder webDataBinder) {
-		webDataBinder.addValidators(examCreateValidator);
+	@InitBinder("examForm")
+	public void initExamFormBinder(WebDataBinder webDataBinder) {
+		webDataBinder.addValidators(examValidator);
 	}
 	
 	/** 試験フォームの初期化 */
@@ -410,7 +410,7 @@ public class ExamController {
 	}
 	
 	/** 試験問題更新処理 */
-	@PostMapping("/Upd/{examId}")
+	@PostMapping("/Upd/Q/{examId}")
 	public String ExamQuestionUpdate(@Validated ExamQuestionForm questionForm, BindingResult bindingResult, 
 			@PathVariable Integer examId,  Model model) {
 		if(bindingResult.hasErrors()) {
