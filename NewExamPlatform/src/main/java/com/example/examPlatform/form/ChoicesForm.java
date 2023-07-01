@@ -9,7 +9,7 @@ import lombok.Data;
 
 /** 選択肢登録フォーム */
 @Data
-public class ChoicesCreateForm {
+public class ChoicesForm {
 	/** 選択肢番号 */
 	@NotNull
 	private Integer choicesNum;
@@ -20,10 +20,10 @@ public class ChoicesCreateForm {
 	private String choices;
 	
 	
-	public ChoicesCreateForm() {
+	public ChoicesForm() {
 	}
 	
-	public ChoicesCreateForm(Choices c) {
+	public ChoicesForm(Choices c) {
 		this.choicesNum = c.getChoicesNum();
 		this.choices    = c.getChoices();
 	}

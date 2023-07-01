@@ -30,12 +30,12 @@ import com.example.examPlatform.entity.Ganre;
 import com.example.examPlatform.entity.Question;
 import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.exception.ResourceAccessException;
-import com.example.examPlatform.form.BigQuestionCreateForm;
-import com.example.examPlatform.form.ChoicesCreateForm;
-import com.example.examPlatform.form.ExamCreateForm;
-import com.example.examPlatform.form.ExamQuestionCreateForm;
+import com.example.examPlatform.form.BigQuestionForm;
+import com.example.examPlatform.form.ChoicesForm;
+import com.example.examPlatform.form.ExamForm;
+import com.example.examPlatform.form.ExamQuestionForm;
 import com.example.examPlatform.form.QuestionCreateForm;
-import com.example.examPlatform.form.TagCreateForm;
+import com.example.examPlatform.form.TagForm;
 import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.ExamService;
 import com.example.examPlatform.validator.ExamCreateValidator;
@@ -62,16 +62,16 @@ public class ExamController {
 		webDataBinder.addValidators(examCreateValidator);
 	}
 	
-	/** 試験登録フォームの初期化 */
+	/** 試験フォームの初期化 */
 	@ModelAttribute
-	public ExamCreateForm setUpExamCreateForm() {
-		return new ExamCreateForm();
+	public ExamForm setUpExamCreateForm() {
+		return new ExamForm();
 	}
 	
-	/** 試験問題登録フォーム初期化 */
+	/** 試験問題フォーム初期化 */
 	@ModelAttribute
-	public ExamQuestionCreateForm setUpExamQuestionCreateForm() {
-		return new ExamQuestionCreateForm();
+	public ExamQuestionForm setUpExamQuestionCreateForm() {
+		return new ExamQuestionForm();
 	}
 
 /* ================================================================================================================== */
@@ -85,27 +85,27 @@ public class ExamController {
 	
 	/** 試験概要登録ページセッションタイムを延長　*/
 	@PostMapping(value="/Create", params="save")
-	public String ExamCreateUpdSession(ExamCreateForm examform, Model model) {
+	public String ExamCreateUpdSession(ExamForm examform, Model model) {
 		return ExamCreateView(model);
 	}
 	
 	/** 試験概要登録ページタグ入力欄を追加　*/
 	@PostMapping(value="/Create", params="addTag")
-	public String ExamCreateAddTag(ExamCreateForm examform, Model model) {
+	public String ExamCreateAddTag(ExamForm examform, Model model) {
 		addTag(examform);
 		return ExamCreateView(model);
 	}
 	
 	/** 試験概要登録ページタグ入力欄を削除　*/
 	@PostMapping(value="/Create", params="removeTag")
-	public String ExamCreateRemoveTag(@RequestParam Integer removeTag, ExamCreateForm examform, Model model) {
+	public String ExamCreateRemoveTag(@RequestParam Integer removeTag, ExamForm examform, Model model) {
 		removeTag(examform, removeTag);
 		return ExamCreateView(model);
 	}
 	
 	/** 試験概要処理　*/
 	@PostMapping("/Create")
-	public String ExamCreate(@Validated ExamCreateForm examform, BindingResult bindingResult, Model model,
+	public String ExamCreate(@Validated ExamForm examform, BindingResult bindingResult, Model model,
 			HttpSession session, HttpServletRequest request) {
 		
 		if(bindingResult.hasErrors()) {
@@ -140,20 +140,20 @@ public class ExamController {
 	
 	/** 試験問題登録ページセッションタイムを延長　*/
 	@PostMapping(value="/Create/Question", params="save")
-	public String QuestionCreateUpdSession(ExamQuestionCreateForm questionForm, HttpSession session, Model model) {
+	public String QuestionCreateUpdSession(ExamQuestionForm questionForm, HttpSession session, Model model) {
 		return QuestionCreateView(session, model);
 	}
 	
 	/** 試験問題登録ページ大問入力欄を追加　*/
 	@PostMapping(value="/Create/Question", params="addBQ")
-	public String ExamCreateAddBQ(ExamQuestionCreateForm questionForm, HttpSession session, Model model) {
+	public String ExamCreateAddBQ(ExamQuestionForm questionForm, HttpSession session, Model model) {
 		addBQ(questionForm);
 		return QuestionCreateView(session, model);
 	}
 	
 	/** 試験問題登録ページ大問入力欄を削除　*/
 	@PostMapping(value="/Create/Question", params="removeBQ")
-	public String ExamCreateRemoveBQ(@RequestParam Integer removeBQ, ExamQuestionCreateForm questionForm,
+	public String ExamCreateRemoveBQ(@RequestParam Integer removeBQ, ExamQuestionForm questionForm,
 			HttpSession session, Model model) {
 		removeBQ(questionForm, removeBQ);
 		return QuestionCreateView(session, model);
@@ -161,7 +161,7 @@ public class ExamController {
 	
 	/** 試験問題登録ページ小問入力欄を追加　*/
 	@PostMapping(value="/Create/Question", params="addQ")
-	public String ExamCreateAddQ(@RequestParam Integer addQ, ExamQuestionCreateForm questionForm, HttpSession session,
+	public String ExamCreateAddQ(@RequestParam Integer addQ, ExamQuestionForm questionForm, HttpSession session,
 			Model model) {
 		addQ(questionForm, addQ);
 		return QuestionCreateView(session, model);
@@ -169,7 +169,7 @@ public class ExamController {
 	
 	/** 試験問題登録ページ小問入力欄を削除　*/
 	@PostMapping(value="/Create/Question", params="removeQ")
-	public String ExamCreateRemoveQ(@RequestParam String removeQ, ExamQuestionCreateForm questionForm,
+	public String ExamCreateRemoveQ(@RequestParam String removeQ, ExamQuestionForm questionForm,
 			HttpSession session, Model model) {
 		try {
 			removeQ(questionForm, removeQ);
@@ -180,7 +180,7 @@ public class ExamController {
 	
 	/** 試験問題登録ページ選択肢入力欄を追加　*/
 	@PostMapping(value="/Create/Question", params="addChoices")
-	public String ExamCreateAddChoices(@RequestParam String addChoices, ExamQuestionCreateForm questionForm,
+	public String ExamCreateAddChoices(@RequestParam String addChoices, ExamQuestionForm questionForm,
 			HttpSession session, Model model) {
 		try {
 			addC(questionForm, addChoices);
@@ -191,7 +191,7 @@ public class ExamController {
 	
 	/** 試験問題登録ページ選択肢入力欄を削除　*/
 	@PostMapping(value="/Create/Question", params="removeChoices")
-	public String ExamCreateRemoveChoices(@RequestParam String removeChoices, ExamQuestionCreateForm questionForm,
+	public String ExamCreateRemoveChoices(@RequestParam String removeChoices, ExamQuestionForm questionForm,
 			HttpSession session, Model model) {
 		try {
 			removeC(questionForm, removeChoices);
@@ -202,7 +202,7 @@ public class ExamController {
 	
 	/** 試験問題処理　*/
 	@PostMapping("/Create/Question")
-	public String QuestionCreate(@Validated ExamQuestionCreateForm questionForm, BindingResult bindingResult,
+	public String QuestionCreate(@Validated ExamQuestionForm questionForm, BindingResult bindingResult,
 			Model model, HttpSession session, HttpServletRequest request) {
 		
 		if(bindingResult.hasErrors()) {
@@ -253,7 +253,7 @@ public class ExamController {
 	
 	/** 試験概要更新ページ　*/
 	@GetMapping("/Upd/{examId}")
-	public String UpdExamView(@PathVariable Integer examId, ExamCreateForm eForm, Model model) {
+	public String UpdExamView(@PathVariable Integer examId, ExamForm eForm, Model model) {
 		Exam exam;
 		try {
 			exam = findCreateExamById(examId, model);
@@ -269,7 +269,7 @@ public class ExamController {
 	
 	/** 試験概要更新ページセッションタイムを延長　*/
 	@PostMapping(value="/Upd/{examId}", params="save")
-	public String ExamUpdateUpdSession(@PathVariable Integer examId, ExamCreateForm eForm, Model model) {
+	public String ExamUpdateUpdSession(@PathVariable Integer examId, ExamForm eForm, Model model) {
 		// UpdExamViewを呼び足した場合フォームがリセットされるためこちらで処理を行う
 		try {
 			findCreateExamById(examId, model);
@@ -283,7 +283,7 @@ public class ExamController {
 	
 	/** 試験概要更新ページタグ入力欄を追加　*/
 	@PostMapping(value="/Upd/{examId}", params="addTag")
-	public String ExamUpdateAddTag(@PathVariable Integer examId, ExamCreateForm examform, Model model) {
+	public String ExamUpdateAddTag(@PathVariable Integer examId, ExamForm examform, Model model) {
 		addTag(examform);
 		return ExamUpdateUpdSession(examId, examform, model);
 	}
@@ -291,14 +291,14 @@ public class ExamController {
 	/** 試験概要更新ページタグ入力欄を削除　*/
 	@PostMapping(value="/Upd/{examId}", params="removeTag")
 	public String ExamUpdateRemoveTag(@PathVariable Integer examId, @RequestParam Integer removeTag,
-			ExamCreateForm examform, Model model) {
+			ExamForm examform, Model model) {
 		removeTag(examform, removeTag);
 		return ExamUpdateUpdSession(examId, examform, model);
 	}
 	
 	/** 試験概要更新処理 */
 	@PostMapping("/Upd/{examId}")
-	public String ExamUpdate(@Validated ExamCreateForm examform, BindingResult bindingResult, 
+	public String ExamUpdate(@Validated ExamForm examform, BindingResult bindingResult, 
 			@PathVariable Integer examId,  Model model) {
 		if(bindingResult.hasErrors()) {
 			return ExamUpdateUpdSession(examId, examform, model);
@@ -323,7 +323,7 @@ public class ExamController {
 	
 	/** 試験問題更新ページ　*/
 	@GetMapping("/Upd/Q/{examId}")
-	public String QuestionUpdateView(@PathVariable Integer examId, ExamQuestionCreateForm eqForm, Model model) {
+	public String QuestionUpdateView(@PathVariable Integer examId, ExamQuestionForm eqForm, Model model) {
 		Exam exam;
 		try {
 			exam = findCreateExamById(examId, model);
@@ -340,7 +340,7 @@ public class ExamController {
 	
 	/** 試験問題更新ページセッションタイムを延長　*/
 	@PostMapping(value="/Upd/Q/{examId}", params="save")
-	public String QuestionUpdateUpdSession(@PathVariable Integer examId, ExamQuestionCreateForm eqForm, Model model) {
+	public String QuestionUpdateUpdSession(@PathVariable Integer examId, ExamQuestionForm eqForm, Model model) {
 		// QuestionUpdateViewを呼び足した場合フォームがリセットされるためこちらで処理を行う
 		Exam exam;
 		try {
@@ -355,7 +355,7 @@ public class ExamController {
 	
 	/** 試験問題更新ページ大問入力欄を追加　*/
 	@PostMapping(value="/Upd/Q/{examId}", params="addBQ")
-	public String QuestionUpdateAddBQ(@PathVariable Integer examId, ExamQuestionCreateForm questionForm, Model model) {
+	public String QuestionUpdateAddBQ(@PathVariable Integer examId, ExamQuestionForm questionForm, Model model) {
 		addBQ(questionForm);
 		return QuestionUpdateUpdSession(examId, questionForm, model);
 	}
@@ -363,7 +363,7 @@ public class ExamController {
 	/** 試験問題更新ページ大問入力欄を削除　*/
 	@PostMapping(value="/Upd/Q/{examId}", params="removeBQ")
 	public String QuestionUpdateRemoveBQ(@PathVariable Integer examId, @RequestParam Integer removeBQ, 
-			ExamQuestionCreateForm questionForm, Model model) {
+			ExamQuestionForm questionForm, Model model) {
 		removeBQ(questionForm, removeBQ);
 		return QuestionUpdateUpdSession(examId, questionForm, model);
 	}
@@ -371,7 +371,7 @@ public class ExamController {
 	/** 試験問題更新ページ小問入力欄を追加　*/
 	@PostMapping(value="/Upd/Q/{examId}", params="addQ")
 	public String QuestionUpdateAddQ(@PathVariable Integer examId, @RequestParam Integer addQ,
-			ExamQuestionCreateForm questionForm, Model model) {
+			ExamQuestionForm questionForm, Model model) {
 		addQ(questionForm, addQ);
 		return QuestionUpdateUpdSession(examId, questionForm, model);
 	}
@@ -379,7 +379,7 @@ public class ExamController {
 	/** 試験問題更新ページ小問入力欄を削除　*/
 	@PostMapping(value="/Upd/Q/{examId}", params="removeQ")
 	public String QuestionUpdateRemoveQ(@PathVariable Integer examId, @RequestParam String removeQ,
-			ExamQuestionCreateForm questionForm, Model model) {
+			ExamQuestionForm questionForm, Model model) {
 		try {
 			removeQ(questionForm, removeQ);
 		}catch(NumberFormatException e) {
@@ -390,7 +390,7 @@ public class ExamController {
 	/** 試験問題更新ページ選択肢入力欄を追加　*/
 	@PostMapping(value="/Upd/Q/{examId}", params="addChoices")
 	public String QuestionUpdateAddChoices(@PathVariable Integer examId, @RequestParam String addChoices,
-			ExamQuestionCreateForm questionForm, Model model) {
+			ExamQuestionForm questionForm, Model model) {
 		try {
 			addC(questionForm, addChoices);
 		}catch(NumberFormatException e) {
@@ -401,7 +401,7 @@ public class ExamController {
 	/** 試験問題更新ページ選択肢入力欄を削除　*/
 	@PostMapping(value="/Upd/Q/{examId}", params="removeChoices")
 	public String QuestionUpdateRemoveChoices(@PathVariable Integer examId, @RequestParam String removeChoices,
-			ExamQuestionCreateForm questionForm, Model model) {
+			ExamQuestionForm questionForm, Model model) {
 		try {
 			removeC(questionForm, removeChoices);
 		}catch(NumberFormatException e) {
@@ -411,7 +411,7 @@ public class ExamController {
 	
 	/** 試験問題更新処理 */
 	@PostMapping("/Upd/{examId}")
-	public String ExamQuestionUpdate(@Validated ExamQuestionCreateForm questionForm, BindingResult bindingResult, 
+	public String ExamQuestionUpdate(@Validated ExamQuestionForm questionForm, BindingResult bindingResult, 
 			@PathVariable Integer examId,  Model model) {
 		if(bindingResult.hasErrors()) {
 			return QuestionUpdateUpdSession(examId, questionForm, model);
@@ -506,32 +506,32 @@ public class ExamController {
 	}
 	
 	/** フォームに新規タグを追加 */
-	private void addTag(ExamCreateForm examform) {
+	private void addTag(ExamForm examform) {
 		examform.addTag();
 	}
 	
 	/** フォームの指定されたタグを削除 */
-	private void removeTag(ExamCreateForm examform, Integer index) {
+	private void removeTag(ExamForm examform, Integer index) {
 		examform.removeTag(index);
 	}
 	
 	/** フォームに新規大問を追加 */
-	private void addBQ(ExamQuestionCreateForm questionForm) {
+	private void addBQ(ExamQuestionForm questionForm) {
 		questionForm.addBQ();
 	}
 	
 	/** フォームの指定された大門を削除 */
-	private void removeBQ(ExamQuestionCreateForm questionForm, Integer index) {
+	private void removeBQ(ExamQuestionForm questionForm, Integer index) {
 		questionForm.removeBQ(index);
 	}
 	
 	/** フォームに新規小問を追加 */
-	private void addQ(ExamQuestionCreateForm questionForm, Integer index) {
+	private void addQ(ExamQuestionForm questionForm, Integer index) {
 		questionForm.addQ(index);
 	}
 	
 	/** フォームの指定された小問を削除 */
-	private void removeQ(ExamQuestionCreateForm questionForm, String removeQ) throws NumberFormatException{
+	private void removeQ(ExamQuestionForm questionForm, String removeQ) throws NumberFormatException{
 		Integer[] tmp = makeIntegerArray(removeQ);
 		if(tmp.length == 2) {
 			Integer bqidx = tmp[0];
@@ -541,7 +541,7 @@ public class ExamController {
 	}
 	
 	/** フォームの指定された小問に選択肢を追加 */
-	private void addC(ExamQuestionCreateForm questionForm, String addC) throws NumberFormatException{
+	private void addC(ExamQuestionForm questionForm, String addC) throws NumberFormatException{
 		Integer[] tmp = makeIntegerArray(addC);
 		if(tmp.length == 2) {
 			Integer bqidx = tmp[0];
@@ -551,7 +551,7 @@ public class ExamController {
 	}
 	
 	/** フォームの指定された選択肢を削除 */
-	private void removeC(ExamQuestionCreateForm questionForm, String removeC) throws NumberFormatException{
+	private void removeC(ExamQuestionForm questionForm, String removeC) throws NumberFormatException{
 		Integer[] tmp = makeIntegerArray(removeC);
 		if(tmp.length == 3) {
 			Integer bqidx = tmp[0];
@@ -570,12 +570,12 @@ public class ExamController {
 	}
 	
 	/** Examエンティティをformに変換 */
-	private ExamCreateForm makeExamCreateForm(Exam exam) {
+	private ExamForm makeExamCreateForm(Exam exam) {
 		List<String> tagList = examService.selectTagByExamId(exam.getExamId());
-		List<TagCreateForm> tagFormList = new ArrayList<>();
-		tagList.forEach(s -> tagFormList.add(new TagCreateForm(s)));
+		List<TagForm> tagFormList = new ArrayList<>();
+		tagList.forEach(s -> tagFormList.add(new TagForm(s)));
 		
-		ExamCreateForm eForm = new ExamCreateForm();
+		ExamForm eForm = new ExamForm();
 		eForm.setGenreId(exam.getGenreId());
 		eForm.setExamName(exam.getExamName());
 		eForm.setPassingScore(exam.getPassingScore());
@@ -589,11 +589,11 @@ public class ExamController {
 		return eForm;
 	}
 	
-	/** ExamQuestonをExamQuestionCreateFormに変換 */
-	private ExamQuestionCreateForm makeExamQuestionForm(ExamQuestion eq) {
+	/** ExamQuestonをExamQuestionFormに変換 */
+	private ExamQuestionForm makeExamQuestionForm(ExamQuestion eq) {
 		List<BigQuestionData> bqdList = eq.getBigQuestionList();
-		List<BigQuestionCreateForm> bqfList = makeBigQuestionForm(bqdList);
-		return new ExamQuestionCreateForm(bqfList);
+		List<BigQuestionForm> bqfList = makeBigQuestionForm(bqdList);
+		return new ExamQuestionForm(bqfList);
 	}
 	
 	/** 文字列をスペースで分割し分割した文字列をInteger型配列に変換する */
@@ -607,7 +607,7 @@ public class ExamController {
 	}
 	
 	/** formをExamData形式に変換 */
-	private ExamData makeExamData(ExamCreateForm eForm, Integer userId) {
+	private ExamData makeExamData(ExamForm eForm, Integer userId) {
 		Exam exam = makeExam(eForm, userId);
 		List<String> tagList = new ArrayList<>();
 		eForm.getTagList().forEach(t -> tagList.add(t.getTag()));
@@ -618,7 +618,7 @@ public class ExamController {
 	}
 	
 	/** formをExam形式に変換 */
-	private Exam makeExam(ExamCreateForm eForm, Integer userId) {
+	private Exam makeExam(ExamForm eForm, Integer userId) {
 		
 		Exam exam = new Exam();
 		
@@ -636,18 +636,18 @@ public class ExamController {
 	}
 	
 	/** ExamQuestionに変換 */
-	private ExamQuestion makeExamQuestion(ExamQuestionCreateForm form){
-		List<BigQuestionCreateForm> bqFormList = form.getBigQuestionCreateForm();
+	private ExamQuestion makeExamQuestion(ExamQuestionForm form){
+		List<BigQuestionForm> bqFormList = form.getBigQuestionCreateForm();
 		List<BigQuestionData> bqDataList = new ArrayList<BigQuestionData>();
 		
-		for(BigQuestionCreateForm bqForm : bqFormList) {
+		for(BigQuestionForm bqForm : bqFormList) {
 			bqDataList.add(makeBigQuestionData(bqForm));
 		}
 		return new ExamQuestion(bqDataList);
 	}
 	
 	/** BigQuestionDataに変換 */
-	private BigQuestionData makeBigQuestionData(BigQuestionCreateForm form){
+	private BigQuestionData makeBigQuestionData(BigQuestionForm form){
 		BigQuestion bqEntity = makeBigQuestionEntity(form);
 		
 		List<QuestionCreateForm> qFormList = form.getQuestionCreateForm();
@@ -664,10 +664,10 @@ public class ExamController {
 	private QuestionData makeQuestionData(QuestionCreateForm form){
 		Question qEntity = makeQuestionEntity(form);
 		
-		List<ChoicesCreateForm> cFormList = form.getChoicesFormList();
+		List<ChoicesForm> cFormList = form.getChoicesFormList();
 		List<Choices> cList = new ArrayList<Choices>();
 		
-		for(ChoicesCreateForm cForm : cFormList) {
+		for(ChoicesForm cForm : cFormList) {
 			cList.add(makeChoicesEntity(cForm));
 		}
 		
@@ -675,7 +675,7 @@ public class ExamController {
 	}
 	
 	/** 選択肢エンティティに変換 */
- 	private Choices makeChoicesEntity(ChoicesCreateForm cForm) {
+ 	private Choices makeChoicesEntity(ChoicesForm cForm) {
 		Choices c = new Choices();
 		c.setChoicesNum(cForm.getChoicesNum());
 		c.setChoices(cForm.getChoices());
@@ -694,44 +694,44 @@ public class ExamController {
 	}
 	
 	/** 大問エンティティに変換 */
-	private BigQuestion makeBigQuestionEntity(BigQuestionCreateForm bqForm) {
+	private BigQuestion makeBigQuestionEntity(BigQuestionForm bqForm) {
 		BigQuestion bq = new BigQuestion();
 		bq.setBigQuestionNum(bqForm.getBigQuestionNum());
 		bq.setBigQuestionSentence(bqForm.getBigQuestionSentence());
 		return bq;
 	}
 
-	/** BigQuestionDataListをBigQuestionCreateFormListに変換 */
-	private List<BigQuestionCreateForm> makeBigQuestionForm(List<BigQuestionData> bqdList) {
-		List<BigQuestionCreateForm> bqfList = new ArrayList<>();
+	/** BigQuestionDataListをBigQuestionFormListに変換 */
+	private List<BigQuestionForm> makeBigQuestionForm(List<BigQuestionData> bqdList) {
+		List<BigQuestionForm> bqfList = new ArrayList<>();
 		for(BigQuestionData bqd : bqdList) {
 			List<QuestionData> qdList = bqd.getQuestionList();
 			BigQuestion bq =bqd.getBigQuestion();
 			
 			List<QuestionCreateForm> qfList = makeQuestionForm(qdList);
-			bqfList.add(new BigQuestionCreateForm(bq, qfList));
+			bqfList.add(new BigQuestionForm(bq, qfList));
 		}
 		return bqfList;
 	}
 	
-	/** QuestionDataListをQuestionCreateFormListに変換 */
+	/** QuestionDataListをQuestionFormListに変換 */
 	private List<QuestionCreateForm> makeQuestionForm(List<QuestionData> qdList) {
 		List<QuestionCreateForm> qfList = new ArrayList<>();
 		for(QuestionData qd : qdList) {
 			List<Choices> cList = qd.getChoicesList();
 			Question q =qd.getQuestion();
 			
-			List<ChoicesCreateForm> cfList = makeChoicesForm(cList);
+			List<ChoicesForm> cfList = makeChoicesForm(cList);
 			qfList.add(new QuestionCreateForm(q, cfList));
 		}
 		return qfList;
 	}
 	
-	/** ChoicesListをChoicesCreateFormListに変換 */
-	private List<ChoicesCreateForm> makeChoicesForm(List<Choices> cList) {
-		List<ChoicesCreateForm> cfList = new ArrayList<>();
+	/** ChoicesListをChoicesFormListに変換 */
+	private List<ChoicesForm> makeChoicesForm(List<Choices> cList) {
+		List<ChoicesForm> cfList = new ArrayList<>();
 		for(Choices c : cList) {
-			cfList.add(new ChoicesCreateForm(c));
+			cfList.add(new ChoicesForm(c));
 		}
 		return cfList;
 	}

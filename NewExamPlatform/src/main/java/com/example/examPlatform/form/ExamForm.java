@@ -11,7 +11,7 @@ import lombok.Data;
 
 /** 試験概要登録Form */
 @Data
-public class ExamCreateForm {
+public class ExamForm {
 	/** ジャンルID*/
 	@NotNull
 	private Integer genreId;
@@ -47,15 +47,15 @@ public class ExamCreateForm {
 	
 	/** タグリスト */
 	@Valid
-	private List<TagCreateForm> tagList;
+	private List<TagForm> tagList;
 	
-	public ExamCreateForm() {
+	public ExamForm() {
 		tagList = new ArrayList<>();
-		tagList.add(new TagCreateForm());
+		tagList.add(new TagForm());
 	}
 	
 	public void addTag() {
-		tagList.add(new TagCreateForm());
+		tagList.add(new TagForm());
 	}
 	
 	public void removeTag(Integer index) {

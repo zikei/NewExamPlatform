@@ -5,19 +5,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.example.examPlatform.data.constant.DisclosureRange;
-import com.example.examPlatform.form.ExamCreateForm;
+import com.example.examPlatform.form.ExamForm;
 
 @Component
 public class ExamCreateValidator implements Validator {
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return ExamCreateForm.class.isAssignableFrom(clazz);
+		return ExamForm.class.isAssignableFrom(clazz);
 	}
 	
 	/** 限定公開の場合パスワードが入力されているかチェック */
 	@Override
 	public void validate(Object target, Errors errors) {
-		ExamCreateForm form = (ExamCreateForm) target;
+		ExamForm form = (ExamForm) target;
 		DisclosureRange dr = new DisclosureRange();
 		if(!dr.isLimited(form.getDisclosureRange())) return;
 		

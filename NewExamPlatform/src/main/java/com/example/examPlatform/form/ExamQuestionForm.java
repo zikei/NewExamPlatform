@@ -6,25 +6,25 @@ import java.util.List;
 import jakarta.validation.Valid;
 import lombok.Data;
 
-/** 試験問題作成フォーム */
+/** 試験問題フォーム */
 @Data
-public class ExamQuestionCreateForm {
+public class ExamQuestionForm {
 	/** 大問フォームリスト */
 	@Valid
-	private List<BigQuestionCreateForm> bigQuestionCreateForm;
+	private List<BigQuestionForm> bigQuestionCreateForm;
 	
 	
-	public ExamQuestionCreateForm() {
+	public ExamQuestionForm() {
 		bigQuestionCreateForm = new ArrayList<>();
-		bigQuestionCreateForm.add(new BigQuestionCreateForm());
+		bigQuestionCreateForm.add(new BigQuestionForm());
 	}
 	
-	public ExamQuestionCreateForm(List<BigQuestionCreateForm> bigQuestionCreateForm) {
+	public ExamQuestionForm(List<BigQuestionForm> bigQuestionCreateForm) {
 		this.bigQuestionCreateForm = bigQuestionCreateForm;
 	}
 	
 	public void addBQ() {
-		bigQuestionCreateForm.add(new BigQuestionCreateForm());
+		bigQuestionCreateForm.add(new BigQuestionForm());
 	}
 	
 	public void removeBQ(Integer index) {

@@ -13,7 +13,7 @@ import lombok.Data;
 
 /** 大問作成フォーム */
 @Data
-public class BigQuestionCreateForm {
+public class BigQuestionForm {
 	/** 大問番号 */
 	@NotNull
 	private Integer BigQuestionNum;
@@ -28,12 +28,12 @@ public class BigQuestionCreateForm {
 	private List<QuestionCreateForm> questionCreateForm;
 	
 	
-	public BigQuestionCreateForm() {
+	public BigQuestionForm() {
 		questionCreateForm = new ArrayList<>();
 		questionCreateForm.add(new QuestionCreateForm());
 	}
 	
-	public BigQuestionCreateForm(BigQuestion bq, List<QuestionCreateForm> questionCreateForm) {
+	public BigQuestionForm(BigQuestion bq, List<QuestionCreateForm> questionCreateForm) {
 		this.BigQuestionNum      = bq.getBigQuestionNum();
 		this.BigQuestionSentence = bq.getBigQuestionSentence();
 		this.questionCreateForm  = questionCreateForm;

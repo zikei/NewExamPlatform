@@ -37,15 +37,15 @@ public class QuestionCreateForm {
 	
 	/** 選択肢フォームリスト */
 	@Valid
-	private List<ChoicesCreateForm> choicesFormList;
+	private List<ChoicesForm> choicesFormList;
 	
 	
 	public QuestionCreateForm() {
 		choicesFormList = new ArrayList<>();
-		choicesFormList.add(new ChoicesCreateForm());
+		choicesFormList.add(new ChoicesForm());
 	}
 	
-	public QuestionCreateForm(Question q, List<ChoicesCreateForm> choicesFormList) {
+	public QuestionCreateForm(Question q, List<ChoicesForm> choicesFormList) {
 		this.questionNum         = q.getQuestionNum();
 		this.questionSentence    = q.getQuestionSentence();
 		this.questionAns         = q.getQuestionAns();
@@ -55,7 +55,7 @@ public class QuestionCreateForm {
 	}
 	
 	public void addChoices() {
-		choicesFormList.add(new ChoicesCreateForm());
+		choicesFormList.add(new ChoicesForm());
 	}
 	
 	public void removeChoices(Integer index) {

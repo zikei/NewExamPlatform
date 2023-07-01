@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagCreateForm {
+public class TagForm {
 	/** タグ */
 	@Pattern(regexp="^[!-~]+$", message="半角英数字記号で入力してください")
 	private String tag;
