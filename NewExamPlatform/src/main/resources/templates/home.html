@@ -1,75 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th = "http://www.thymeleaf.org/"
+      xmlns:sec= "http://www.thymeleaf.org/extras/spring-security%22%3E">
 <head>
-<title>ExamPlatform - ホーム</title>
-<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/home.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>ExamPlatform - ホーム</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 </head>
+
 <body>
-	<header>
-		<div class = "header_box container-fluid ">
-			<div class = "col-12 row align-items-center ">
-				<div class = "col-8">
-						<h1 class = "title ml-5">ExamPlatform</h1>
-				</div>
-				<div class = "col-4 text-right ">
-				<a class="btn btn-primary mr-5" href="#" role="button">ログイン</a>
-				</div>
-			</div>
-			<div class = "container col-12 mt-3">
-				<nav>
-					<ul class = "nav main_nav justify-content-center text-nowrap">
-        					<li><a href="#">　ホーム　</a></li>
-        					<li><a href="#">　検索　</a></li>
-        					<li><a href="#">マイページ</a></li>
-        			</ul>
-        		</nav>
-			</div>
-		</div>
-	</header>
-	<main>
-		
-<h2 class = "text-center mt-5 mb-5 border-bottom border-dark">掲示板</h2>
+    <header>
+        <div class="header_box container-fluid">
+            <div class="col-12 row align-items-center">
+                <div class="col-8">
+                    <h1 class="title ml-5">ExamPlatform</h1>
+                </div>
+                <div class="col-4 text-right">
+                    <!--ユーザ認証済みなのであれば -->
+                    <th:block sec:authorize="isAuthenticated()">
+                        <form method="post" th:action="@{/ExamPlatform/Logout}">
+                            <button class="btn btn-primary mr-5" role="logout" type="submit">ログアウト</button>
+                        </form>
+                    </th:block>
+                    <!--ユーザ認証済みではないのであれば -->
+                    <th:block sec:authorize="isAnonymous()">
+                        <a class="btn btn-primary mr-5" th:href="@{/ExamPlatform/Login}" role="login">ログイン</a>
+                    </th:block>
+                </div>
+            </div>
+            <div class="container col-12 mt-3">
+                <nav>
+                    <ul class="nav main_nav justify-content-center text-nowrap">
+                        <li><a href="/ExamPlatform/Home">　ホーム　</a></li>
+                        <li><a href="#">　検索　</a></li>
+                        <li><a href="/ExamPlatform/Mypage">マイページ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main>
 
-<div id ="main_box"class ="container">
-<div class = "sort d-flex justify-content-around mt-5">
+        <h2 class="text-center mt-5 mb-5 border-bottom border-dark">掲示板</h2>
 
-<div><input type = "radio" name = "root" id = "sin" value = "select_1"  onclick="formSwitch()" checked><label id = "sin">新着順</label></div>
-<div><input type = "radio" name = "root" id = "book" value = "select_2" onclick="formSwitch()" ><label id = "book">ブクマ順</label></div>
-<div><input type = "radio" name = "root" id = "acs" value = "select_3"  onclick="formSwitch()" ><label id = "acs">月間実行回数順</label></div>
-</div>
-<br>
+        <div id="main_box" class="container">
+            <div class="sort d-flex justify-content-around mt-5">
 
-<div  id = "root" class = "container-fluid">
-<!--新着順-->
-<div id = "box1">
-<div  class = "col-12 d-flex row" th:each="exam : ${newExamList}">
-<p class = "Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}" th:text="${exam.examName}">Exam[[${i}]]</a></p><!--試験名-->
-<span class = "col-12 border-bottom border-primary"></span>
-</div>
-</div>
-<!--ブクマ順-->
-<div id = "box2">
-<div  class = "col-12 d-flex row" th:each="exam : ${bookmarkTopExamList}">
-<p class = "Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}"  th:text="${exam.examName}">b_Exam[[${i}]]</a></p><!--試験名-->
-<span class = "col-12 border-bottom border-primary"></span>
-</div>
-</div>
-<!--月間実行回数順-->
-<div id = "box3">
-<div class = "col-12 d-flex row" th:each="exam : ${exeTopExamList}">
-<p class = "Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}"  th:text="${exam.examName}">z_Exam[[${i}]]</a></p><!--試験名-->
-<span class = "col-12 border-bottom border-primary"></span>
-</div>
-</div>
-</div>
+                <div><input type="radio" name="root" id="sin" value="select_1" onclick="formSwitch()" checked><label
+                        id="sin">新着順</label></div>
+                <div><input type="radio" name="root" id="book" value="select_2" onclick="formSwitch()"><label
+                        id="book">ブクマ順</label></div>
+                <div><input type="radio" name="root" id="acs" value="select_3" onclick="formSwitch()"><label
+                        id="acs">月間実行回数順</label></div>
+            </div>
+            <br>
 
-</div>
+            <div id="root" class="container-fluid">
+                <!--新着順-->
+                <div id="box1">
+                    <div class="col-12 d-flex row" th:each="exam : ${newExamList}">
+                        <p class="Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}"
+                                th:text="${exam.examName}">Exam[[${i}]]</a></p><!--試験名-->
+                        <span class="col-12 border-bottom border-primary"></span>
+                    </div>
+                </div>
+                <!--ブクマ順-->
+                <div id="box2">
+                    <div class="col-12 d-flex row" th:each="exam : ${bookmarkTopExamList}">
+                        <p class="Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}"
+                                th:text="${exam.examName}">b_Exam[[${i}]]</a></p><!--試験名-->
+                        <span class="col-12 border-bottom border-primary"></span>
+                    </div>
+                </div>
+                <!--月間実行回数順-->
+                <div id="box3">
+                    <div class="col-12 d-flex row" th:each="exam : ${exeTopExamList}">
+                        <p class="Record col-12 mt-2"><a th:href="@{/ExamPlatform/Exam/{examId}(examId=${exam.examId})}"
+                                th:text="${exam.examName}">z_Exam[[${i}]]</a></p><!--試験名-->
+                        <span class="col-12 border-bottom border-primary"></span>
+                    </div>
+                </div>
+            </div>
 
-<script src="/js/Category.js">formSwitch();</script>
-</main>
+        </div>
+
+        <script src="/js/Category.js">formSwitch();</script>
+    </main>
 </body>
+
 </html>

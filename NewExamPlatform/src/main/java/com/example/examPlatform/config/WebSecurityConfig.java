@@ -35,7 +35,10 @@ public class WebSecurityConfig {
 				.defaultSuccessUrl("/ExamPlatform/Mypage")
 				.permitAll()
 			)
-			.logout((logout) -> logout.permitAll());
+			.logout((logout) -> logout
+				.logoutUrl("/ExamPlatform/Logout")
+				.logoutSuccessUrl("/ExamPlatform/Home")
+				.permitAll());
 
 		return http.build();
 	}

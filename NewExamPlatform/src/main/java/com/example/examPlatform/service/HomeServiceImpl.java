@@ -38,9 +38,7 @@ public class HomeServiceImpl implements HomeService{
 		List<Exam> examList = examService.selectAllExam();
 		examList.sort(Comparator.comparing(Exam::getCreateDate).reversed());
 		
-		if(examList.size() > displayCnt) { 
-			examList = examList.subList(0, displayCnt);
-		}
+		if(examList.size() > displayCnt) examList = examList.subList(0, displayCnt);
 		
 		return examService.makeExamLinkList(examList);
 	}
@@ -52,9 +50,7 @@ public class HomeServiceImpl implements HomeService{
 		reportRepo.findCountAll().forEach(reportCntList::add);
 		reportCntList.sort(Comparator.comparing(ReportCount::getReportCnt).reversed());
 		
-		if(reportCntList.size() > displayCnt) { 
-			reportCntList = reportCntList.subList(0, displayCnt);
-		}
+		if(reportCntList.size() > displayCnt) reportCntList = reportCntList.subList(0, displayCnt);
 		
 		List<Exam> examList = new ArrayList<Exam>();
 		for(ReportCount reportCount : reportCntList) {
@@ -72,9 +68,7 @@ public class HomeServiceImpl implements HomeService{
 		bookmarkRepo.findCountAll().forEach(bookmarkCntList::add);
 		bookmarkCntList.sort(Comparator.comparing(BookmarkCount::getBookmarkCnt).reversed());
 		
-		if(bookmarkCntList.size() > displayCnt) { 
-			bookmarkCntList = bookmarkCntList.subList(0, displayCnt);
-		}
+		if(bookmarkCntList.size() > displayCnt) bookmarkCntList = bookmarkCntList.subList(0, displayCnt);
 		
 		List<Exam> examList = new ArrayList<Exam>();
 		for(BookmarkCount bookmarkCount : bookmarkCntList) {

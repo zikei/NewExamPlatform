@@ -14,6 +14,9 @@ public interface ExamService {
 	/** 試験取得 */
 	Optional<Exam> selectExamByExamId(Integer examId);
 	
+	/** ユーザIDで試験取得 */
+	List<Exam> selectExamByUserID(Integer userId);
+	
 	/** 試験リストを試験リンクリスト形式に変換*/
 	List<ExamLinkView> makeExamLinkList(List<Exam> examList);
 }

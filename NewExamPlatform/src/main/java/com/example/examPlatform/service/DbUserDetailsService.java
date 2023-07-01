@@ -1,7 +1,5 @@
 package com.example.examPlatform.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,28 +10,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.examPlatform.data.Login;
 import com.example.examPlatform.entity.Account;
-import com.example.examPlatform.repository.AccountRepository;
+import com.example.examPlatform.exception.NotFoundException;
 
 @Service
 public class DbUserDetailsService implements UserDetailsService {
-	private Integer userId;
-	
-	/** Repository：Account */
 	@Autowired
-	AccountRepository accountRepo;
+	AccountService accountService;
 	
 	@Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		Optional<Account> userOpt = Optional.ofNullable(accountRepo.findByUserName(userName));
-        Account user = userOpt.orElseThrow(() -> new UsernameNotFoundException("NotFound UserName: " + userName));
-        
-        this.userId = user.getUserId();
+        Account user = new Account();
+        try {
+			user = accountService.selectAccountByUserName(userName);
+		} catch (NotFoundException e) {
+			new UsernameNotFoundException("NotFound UserName: " + userName);
+		}
 
         return new Login(user, AuthorityUtils.createAuthorityList("ROLE_USER"));
     }
-
-	public Integer getUserId() {
-		return userId;
-	}
 }
