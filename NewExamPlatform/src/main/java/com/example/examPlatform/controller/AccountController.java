@@ -116,19 +116,7 @@ public class AccountController {
 		Account entryUser = new Account(null, entryForm.getUserName(), entryForm.getPassword(), "", true);
 		accountService.userRegister(entryUser);
 		
-		//自動ログイン
-		SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-		
-        if (authentication instanceof AnonymousAuthenticationToken == false) {
-            SecurityContextHolder.clearContext();
-        }
-        
-		try {
-			request.login(entryForm.getUserName(), entryForm.getPassword());
-		} catch (ServletException e) {
-			e.printStackTrace();
-		}
+		login(entryForm.getUserName(), entryForm.getPassword(), request);
 		
 		return "redirect:/ExamPlatform/Mypage";
 	}
@@ -151,12 +139,13 @@ public class AccountController {
 	
 	/** アカウント更新処理 */
 	@PostMapping("/UpdAccount")
-	public String AccountUpd(@Validated AccountUpdForm updForm, BindingResult bindingResult, Model model) {
+	public String AccountUpd(@Validated AccountUpdForm updForm, BindingResult bindingResult, Model model,
+			HttpServletRequest request) {
 		if(bindingResult.hasErrors()) return AccountUpdPassView();
 		String userName = accountService.selectLoginUserName();
-		
+		Account user;
 		try {
-			Account user = makeAccountByUpdFrom(userName, updForm);
+			user = makeAccountByUpdFrom(userName, updForm);
 			accountService.userInfoUpd(user);
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
@@ -164,8 +153,26 @@ public class AccountController {
 			return "error";
 		}
 		
+		login(updForm.getUserName(), user.getPassword(), request);
+		
 		model.addAttribute("msg", "アカウントを更新しました");
 		return AccountUpdView(updForm , model);
+	}
+	
+	/** 自動ログイン */
+	private void login(String userName, String pass, HttpServletRequest request) {
+		SecurityContext context = SecurityContextHolder.getContext();
+		Authentication authentication = context.getAuthentication();
+		
+		if (authentication instanceof AnonymousAuthenticationToken == false) {
+			SecurityContextHolder.clearContext();
+		}
+		        
+		try {
+			request.login(userName, pass);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private Account makeAccountByUpdFrom(String userName, AccountUpdForm updForm) throws NotFoundException {
