@@ -20,7 +20,7 @@ public class DisclosureRange {
 	}
 	
 	/** 非公開判定：非公開ならtrue */
-	public boolean isNotClose(int disclosureRange) {
+	public boolean isClose(int disclosureRange) {
 		return this.close != disclosureRange;
 	}
 

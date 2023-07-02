@@ -24,6 +24,7 @@ public class AccountServiceImpl implements AccountService{
 	
 	@Override
 	public boolean isLoginUser(String userName) {
+		if(userName == null) return false; 
 		return userName.equals(selectLoginUserName());
 	}
 
