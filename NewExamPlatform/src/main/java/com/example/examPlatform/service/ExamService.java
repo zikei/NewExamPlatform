@@ -23,11 +23,11 @@ public interface ExamService {
 	/** ユーザIDで試験取得 */
 	List<Exam> selectExamByUserID(Integer userId);
 	
-	/** タグ重複なし全件取得 */
-	List<String> selectTag();
-	
 	/** 指定された試験のタグを取得 */
 	List<String> selectTagByExamId(Integer examId);
+	
+	/** タグ重複なし全件取得 */
+	List<String> selectTag();
 	
 	/** ジャンル全件取得 */
 	List<Ganre> selectAllGanre();
