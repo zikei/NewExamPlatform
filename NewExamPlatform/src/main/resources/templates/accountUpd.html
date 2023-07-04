@@ -40,7 +40,7 @@
         <h2 class="text-center">アカウント更新</h2>
         <div id="main_box" class="container mb-5">
             <div class="col-12">
-				<form th:aciton="@{/ExamPlatform/Account/UpdAccount}" method="post" th:object="${AccountUpdForm}">
+				<form th:aciton="@{/ExamPlatform/Account/UpdAccount}" method="post" th:object="${accountUpdForm}">
 				<!--UserName upd -->
 				<ul th:if="${#fields.hasErrors('userName')}">
 					<li th:each="err:${#fields.errors('userName')}" th:text="${err}" class="text-center text-nowrap bd-highlight" style="width: 8rem;">エラーメッセージ</li>
