@@ -27,7 +27,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/img/**").permitAll()
 				)
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/ExamPlatform/Home","/ExamPlatform/Account/Entry").permitAll()
+				.requestMatchers("/ExamPlatform/","/ExamPlatform/Home","/ExamPlatform/Account/Entry").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) -> form
