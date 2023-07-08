@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,8 +51,7 @@ public class MypageServiceImpl implements MypageService{
 		List<ExamLinkView> createExamLinkList = new ArrayList<ExamLinkView>();
 		DisclosureRange dr = new DisclosureRange();
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    String loginUserName = auth.getName();
+	    String loginUserName = accountService.selectLoginUserName();
 		Account user;
 		try {
 			user = selectUser(userName);

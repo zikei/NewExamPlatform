@@ -29,6 +29,7 @@ import com.example.examPlatform.validator.AccountUpdValidator;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 /** アカウントコントローラ */
 @Controller
@@ -76,22 +77,14 @@ public class AccountController {
 		return new AccountUpdPassForm();
 	}
 	
-	/** アカウント更新フォームの初期化 
-	 * @throws NotFoundException */
+	/** アカウント更新フォームの初期化 */
 	@ModelAttribute
-	public AccountUpdForm setUpAccountUpdForm() throws NotFoundException {
-		AccountUpdForm updForm = new AccountUpdForm();
-		
-		String userName = accountService.selectLoginUserName();
-		Account user = accountService.selectAccountByUserName(userName);
-		updForm.setUserName(user.getUserName());
-		updForm.setProfile(user.getProfile());
-		updForm.setUseInfoDefault(user.getUseInfoDefault());
-		
-		return updForm;
+	public AccountUpdForm setUpAccountUpdForm() {
+		return new AccountUpdForm();
 	}
 	
 	/** ユーザ退会フォームの初期化 */
+	@ModelAttribute
 	public AccountWithdrawForm setUpAccountWithdrawForm() {
 		return new AccountWithdrawForm();
 	}
@@ -124,10 +117,8 @@ public class AccountController {
 	/** アカウント更新画面表示 */
 	@GetMapping("/UpdAccount")
 	public String AccountUpdView(AccountUpdForm updForm, Model model) {
-		String userName = accountService.selectLoginUserName();
-		
 		try {
-			updForm = makeUpdFromByAccount(userName, updForm);
+			updForm = makeUpdFrom(updForm);
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
 			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
@@ -140,8 +131,8 @@ public class AccountController {
 	/** アカウント更新処理 */
 	@PostMapping("/UpdAccount")
 	public String AccountUpd(@Validated AccountUpdForm updForm, BindingResult bindingResult, Model model,
-			HttpServletRequest request) {
-		if(bindingResult.hasErrors()) return AccountUpdPassView();
+			HttpSession session, HttpServletRequest request) {
+		if(bindingResult.hasErrors()) return "accountUpd";
 		String userName = accountService.selectLoginUserName();
 		Account user;
 		try {
@@ -153,42 +144,13 @@ public class AccountController {
 			return "error";
 		}
 		
-		login(updForm.getUserName(), user.getPassword(), request);
-		
-		model.addAttribute("msg", "アカウントを更新しました");
-		return AccountUpdView(updForm , model);
-	}
-	
-	/** 自動ログイン */
-	private void login(String userName, String pass, HttpServletRequest request) {
-		SecurityContext context = SecurityContextHolder.getContext();
-		Authentication authentication = context.getAuthentication();
-		
-		if (authentication instanceof AnonymousAuthenticationToken == false) {
-			SecurityContextHolder.clearContext();
-		}
-		        
 		try {
-			request.login(userName, pass);
+			request.logout();
 		} catch (ServletException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private Account makeAccountByUpdFrom(String userName, AccountUpdForm updForm) throws NotFoundException {
-		Account user = accountService.selectAccountByUserName(userName);
-		user.setUserName(updForm.getUserName());
-		user.setProfile(updForm.getProfile());
-		user.setUseInfoDefault(updForm.getUseInfoDefault());
-		return user;
-	}
-	
-	private AccountUpdForm makeUpdFromByAccount(String userName, AccountUpdForm updForm) throws NotFoundException {
-		Account user = accountService.selectAccountByUserName(userName);
-		updForm.setUserName(user.getUserName());
-		updForm.setProfile(user.getProfile());
-		updForm.setUseInfoDefault(user.getUseInfoDefault());
-		return updForm;
+		session.setAttribute("updMsg", "アカウントを更新しました。\n再度ログインしてください。");
+		return "accountUpdSuccess";
 	}
 	
 	/** パスワード更新画面表示 */
@@ -244,5 +206,41 @@ public class AccountController {
 		}
 		
 		return "accountWithdrawConfirm";
+	}
+	
+	
+	/** 自動ログイン */
+	private void login(String userName, String pass, HttpServletRequest request) {
+		SecurityContext context = SecurityContextHolder.getContext();
+		Authentication authentication = context.getAuthentication();
+		
+		if (authentication instanceof AnonymousAuthenticationToken == false) {
+			SecurityContextHolder.clearContext();
+		}
+		        
+		try {
+			request.login(userName, pass);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** フォームをアカウントに変換 */
+	private Account makeAccountByUpdFrom(String userName, AccountUpdForm updForm) throws NotFoundException {
+		Account user = accountService.selectAccountByUserName(userName);
+		user.setUserName(updForm.getUserName());
+		user.setProfile(updForm.getProfile());
+		user.setUseInfoDefault(updForm.getUseInfoDefault());
+		return user;
+	}
+	
+	/** ログイン者情報からフォームを初期化 */
+	private AccountUpdForm makeUpdFrom(AccountUpdForm updForm) throws NotFoundException {
+		String userName = accountService.selectLoginUserName();
+		Account user = accountService.selectAccountByUserName(userName);
+		updForm.setUserName(user.getUserName());
+		updForm.setProfile(user.getProfile());
+		updForm.setUseInfoDefault(user.getUseInfoDefault());
+		return updForm;
 	}
 }
