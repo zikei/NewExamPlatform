@@ -29,7 +29,6 @@ import com.example.examPlatform.validator.AccountUpdValidator;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 /** アカウントコントローラ */
 @Controller
@@ -131,7 +130,7 @@ public class AccountController {
 	/** アカウント更新処理 */
 	@PostMapping("/UpdAccount")
 	public String AccountUpd(@Validated AccountUpdForm updForm, BindingResult bindingResult, Model model,
-			HttpSession session, HttpServletRequest request) {
+			HttpServletRequest request) {
 		if(bindingResult.hasErrors()) return "accountUpd";
 		String userName = accountService.selectLoginUserName();
 		Account user;
@@ -149,7 +148,6 @@ public class AccountController {
 		} catch (ServletException e) {
 			e.printStackTrace();
 		}
-		session.setAttribute("updMsg", "アカウントを更新しました。\n再度ログインしてください。");
 		return "accountUpdSuccess";
 	}
 	
