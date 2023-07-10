@@ -26,6 +26,7 @@ header{
 
 body{
 	font-family: 'Zen Antique', serif;
+	font-size: 20px;
 }
 
 h1{
@@ -50,7 +51,7 @@ h1{
 	font-size: 24px;
 }
 
-.btn {
+.logbtn {
     padding: 1rem 2rem;
     border:skyblue;
     border-radius: 1rem;
@@ -68,7 +69,7 @@ h1{
     animation: fadeIn 7.5s cubic-bezier(0.33, 1, 0.68, 1) 1 forwards;
 }
 
-.btn:hover {
+.logbtn:hover {
     background-position: 50% 100%;
 }
 
@@ -131,71 +132,4 @@ h2{
 .r1_item_2{
 	font-family: 'Zen Antique', serif;
 	font-size: 24px;
-}
-
-.btn {
-    padding: 1rem 2rem;
-    border:skyblue;
-    border-radius: 1rem;
-    cursor: pointer;
-    background-image: radial-gradient(circle at 40% 0, gray 0%, gray 70%, #00c6ff 90%, #00c6ff 100%);
-    background-size: 100% 400%;
-    background-repeat: no-repeat;
-    background-position: 50% 0%;
-    color: #fff;
-    font-size: 32px;
-    font-weight: bold;
-    font-family: 'Noto Serif JP', serif;
-    margin-top: 4%;
-    transition: all 1.5s;
-    animation: fadeIn 7.5s cubic-bezier(0.33, 1, 0.68, 1) 1 forwards;
-}
-
-.btn:hover {
-    background-position: 50% 100%;
-}
-
-.header_box{
-	background-image:url(/img/header.png);
-    background-attachment: fixed;
-    background-size: cover;
-    max-width: 100%;
-    width: 100%;
-    height: 100%;
-}
-
-.main_nav{
-    display: flex;
-    font-family: 'Zen Antique', serif;
-    font-weight: bold;
-    font-size: 46px;
-    cursor: pointer;
-    text-transform: uppercase;
-    list-style: none;
-    transition: 0.3s;
-    transform: scale(1);
-    animation: fadeIn 6s cubic-bezier(0.33, 1, 0.68, 1) 1 forwards ease-in;
-    margin-top: 3%;
-}
-
-.main_nav:hover{
-    transition: 0.3s;
-    transform: scale(1.1);
-}
-
-.main_nav li{
-    margin-left: 60px;
-    list-style: none;
-    display: inline-block;
-}
-
-.main_nav a {
-    color: white;
-    opacity: 1;
-    transition: color 0.2s ease-out;
-}
-
-.main_nav a:hover{
-    color:#00ffff;
-    border-bottom: #00ffff solid 15px;
 }

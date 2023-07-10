@@ -23,12 +23,12 @@
                     <!--ユーザ認証済みなのであれば -->
                     <th:block sec:authorize="isAuthenticated()">
                         <form method="post" th:action="@{/ExamPlatform/Logout}">
-                            <button class="btn btn-primary mr-5" role="logout" type="submit">ログアウト</button>
+                            <button class="btn logbtn btn-primary mr-5" role="logout" type="submit">ログアウト</button>
                         </form>
                     </th:block>
                     <!--ユーザ認証済みではないのであれば -->
                     <th:block sec:authorize="isAnonymous()">
-                        <a class="btn btn-primary mr-5" th:href="@{/ExamPlatform/Login}" role="login">ログイン</a>
+                        <a class="btn logbtn btn-primary mr-5" th:href="@{/ExamPlatform/Login}" role="login">ログイン</a>
                     </th:block>
                 </div>
             </div>
