@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/accountUpd.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="canonical" href="http://localhost:8080/ExamPlatform/Account/UpdAccount"><!--url 正規化 -->
 </head>
 
 <body>
@@ -40,7 +41,7 @@
         <h2 class="text-center">アカウント更新</h2>
         <div id="main_box" class="container mb-5">
             <div class="col-12">
-				<form th:aciton="@{/ExamPlatform/Account/UpdAccount}" method="post" th:object="${accountUpdForm}">
+				<form th:action="@{/ExamPlatform/Account/UpdAccount}" method="post" th:object="${accountUpdForm}">
 				<!--UserName upd -->
 				<ul th:if="${#fields.hasErrors('userName')}">
 					<li th:each="err:${#fields.errors('userName')}" th:text="${err}" class="text-center text-nowrap bd-highlight" style="width: 8rem;">エラーメッセージ</li>
@@ -52,7 +53,7 @@
                 <!-- Password upd -->
                 <div class="form-group" style="display: flex; align-items: baseline;">
                     <p class="mb-5">パスワード: ＊＊＊＊<span>　　　　</span></p>
-                    <button type="button" id="updbutton" class="mt-2"
+                    <a href="/ExamPlatform/Account/UpdAccount/Password" id="updbutton" class="btn mt-2"
                         onclick="location.href='/ExamPlatform/UpdAccountServlet/UpdPass'"
                         style="vertical-align: middle;">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
@@ -62,7 +63,7 @@
                             </path>
                         </svg>
                         パスワードを変更する
-                    </button>
+                    </a>
                 </div>
                 <!--Profile upd -->
                 <div class="form-group profile d-flex col-12 row">
@@ -76,10 +77,10 @@
                 <div id="botton_area" class="d-flex justify-content-center row mt-5">
                     <div class="row justify-content-center">
                         <div class="col-auto">
-                            <a href="#"  id="btn-back" class="area_btn btn-outline-primary btn-block">戻る</a>
+                            <a href="#"  id="btn-back" class="area_btn btn-outline-primary btn-block text-center">戻る</a>
                         </div>
                         <div class="col-auto">
-                            <input type="submit" value="更新する" class="area_btn btn-outline-primary btn-block"></input>
+                            <input type="submit" value="更新する" class="area_btn btn-outline-primary btn-block text-center"></input>
                         </div>
                     </div>
                 </div>

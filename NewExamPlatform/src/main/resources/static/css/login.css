@@ -33,9 +33,9 @@
  #login{
 	 font-size: 24px;
 	 cursor: pointer;
-	background-color: white;
+	background-color: rgb(255, 255, 255);
     border-radius: 5px;
-    border: 2.5px solid navy;
+    border: 0px solid navy;
     color: navy;
     text-decoration: none;
     transition: .5s;
