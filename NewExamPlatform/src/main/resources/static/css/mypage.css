@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+h2{
+	font-family: 'Zen Antique', serif;
+	font-size: 42px;
+	border-bottom: #000 solid 3px;
+}
+
 #main_box{
 	position: relative;
 	margin: 5%;
