@@ -32,7 +32,7 @@ public class PageView<T> {
 		this.totalPages = (int) Math.ceil(list.size() / (double)PAGE_SIZE);
 		this.totalElements = list.size();
 		
-		if(pageNum > totalPages) throw new NotFoundException("Page NotFound");
+		if(pageNum > totalPages && pageNum != 1) throw new NotFoundException("Page NotFound");
 		this.pageNum = pageNum;
 	}
 	

@@ -1,6 +1,5 @@
 package com.example.examPlatform.form;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -14,7 +13,7 @@ public class AccountUpdForm {
 	private String userName;
 	
 	/** プロフィール */
-	@Max(500)
+	@Size(max=500)
 	private String profile;
 	
 	/** デフォルト試験結果情報使用可否 */
