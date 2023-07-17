@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org" >
+<head>
+<title>ExamPlatform - マイページ</title>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/mypage.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+	<header>
+		<div class = "header_box container-fluid ">
+			<div class = "col-12 row align-items-center ">
+				<div class = "col-8">
+						<h1 class = "title ml-5">ExamPlatform</h1>
+				</div>
+				<div class = "col-4 text-right ">
+					<form th:action="@{/ExamPlatform/Logout}" method="post">
+						<input type ="submit"  class="btn logbtn btn-primary mr-5" value="ログアウト">
+					</form>
+				</div>
+			</div>
+			<div class = "container col-12 mt-3">
+				<nav>
+					<ul class = "nav main_nav justify-content-center text-nowrap">
+        					<li><a href="/ExamPlatform/Home">　ホーム　</a></li>
+        					<li><a href="#">　検索　</a></li>
+        					<li><a th:href="@{'/ExamPlatform/' + ${user.userName}}">マイページ</a></li> 
+        			</ul>
+        		</nav>
+			</div>
+		</div>
+	</header>
+	<main>
+	<div class= "container col-12 d-flex row">
+		<div class="col-4"></div>
+		<div class="col-4 text-center"><h2 class=" mt-5 mx-5">マイページ</h2></div>
+		<div class="col-4"></div>
+	</div>
+	
+	<div id = "main_box"class="container-field">
+	<div class = "root_1  container d-flex w-auto h-auto">
+			<div class="r1_item_1 col-4 mt-5">
+			<span>
+				<img src="/img/icon.png"height="220" width="220" alt="User Icon">
+			</span>
+			</div>
+			<div class="r1_item_2 col-4 mt-5">
+				<p>ユーザID : <span class="user" th:text="${user.userName}"></span></p>
+			</div>
+			<div class="r1_item_3 col-4 mt-5">
+				<p><span class="user" th:text="${user.profile}"></span></p>
+			</div>
+	</div>
+	</div>
+	</main>
+
+</body>
+</html>
