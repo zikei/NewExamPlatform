@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>ExamPlatform - アカウント設定</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/accountUpd.css">
+    <link rel="stylesheet" href="/css/accountUpdPass.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="canonical" href="http://localhost:8080/ExamPlatform/Account/UpdAccount/Password"><!--url 正規化 -->
 </head>
@@ -35,6 +36,54 @@
             </div>
         </div>
     </header>
+    <main>
+        <div class="container col-12">
+            <div class="row justify-content">
+                <div class="col-3"></div>
+                <div id="main_box" class="col-6">
+                    <form th:action="@{/ExamPlatform/Account/UpdAccount/Password}" method="post"
+                        th:object="${accountUpdPassForm}" class="">
+
+                        <!-- newPassword -->
+                        <div class="col-12 mt-4 mb-4">
+                            <label for="newPassword" class="col-4">新しいパスワード</label>
+                            <input type="password" id="newPassword" class="col-auto" name="newPassword" required>
+                            <ul th:if="${#fields.hasErrors('newPassword')}">
+                                <li th:each="err:${#fields.errors('newPassword')}" th:text="${err}"
+                                    class="text-center text-nowrap bd-highlight" style="width: 8rem;">エラーメッセージ</li>
+                            </ul>
+                        </div>
+
+                        <!-- checkPassword -->
+                        <div class="col-12 mb-4">
+                            <label for="checkPassword" class="col-4">新しいパスワード（確認）</label>
+                            <input type="password" id="checkPassword" class="col-auto" name="checkPassword" required>
+                            <ul th:if="${#fields.hasErrors('checkPassword')}">
+                                <li th:each="err:${#fields.errors('checkPassword')}" th:text="${err}"
+                                    class="text-center text-nowrap bd-highlight" style="width: 8rem;">エラーメッセージ</li>
+                            </ul>
+                        </div>
+                        <!--Button area (Back or Upd) -->
+                        <div id="botton_area" class="d-flex justify-content-center row mt-5">
+                            <div class="row justify-content-center">
+                                <div class="col-auto">
+                                    <a href="/ExamPlatform/Account/UpdAccount" id="btn-back"
+                                        class="area_btn btn-outline-primary btn-block text-center">戻る</a>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="submit" value="更新する"
+                                        class="area_btn btn-outline-primary btn-block text-center"></input>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="col-3"></div>
+            </div>
+        </div>
+    </main>
 
 </body>
+
 </html>

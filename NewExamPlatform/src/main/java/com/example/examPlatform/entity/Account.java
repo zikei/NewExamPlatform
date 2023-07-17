@@ -30,8 +30,4 @@ public class Account {
 	/** プロフィール */
 	@Column(value="profile")
 	private String profile;
-	
-	/** デフォルト試験結果情報使用可否 */
-	@Column(value="useinfodefault")
-	private Boolean useInfoDefault;
 }
