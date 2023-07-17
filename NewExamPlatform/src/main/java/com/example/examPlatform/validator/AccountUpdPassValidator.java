@@ -17,8 +17,8 @@ public class AccountUpdPassValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		AccountUpdPassForm form = (AccountUpdPassForm) target;
-		if(form.getNewPassword() != form.getCheckPassword()) {
-			errors.rejectValue("checkPassword", "com.example.examPlatform.validator.AccountWithdrawValidator.message");
+		if(!form.getNewPassword().equals(form.getCheckPassword())) {
+			errors.rejectValue("checkPassword", "com.example.examPlatform.validator.AccountUpdPassValidator.message");
 		}
 	}
 }

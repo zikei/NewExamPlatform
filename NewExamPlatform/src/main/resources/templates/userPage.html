@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org" >
+<head>
+<title>ExamPlatform - マイページ</title>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/mypage.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+	<header>
+		<div class = "header_box container-fluid ">
+			<div class = "col-12 row align-items-center ">
+				<div class = "col-8">
+						<h1 class = "title ml-5">ExamPlatform</h1>
+				</div>
+				<div class = "col-4 text-right ">
+					<form th:action="@{/ExamPlatform/Logout}" method="post">
+						<input type ="submit"  class="btn logbtn btn-primary mr-5" value="ログアウト">
+					</form>
+				</div>
+			</div>
+			<div class = "container col-12 mt-3">
+				<nav>
+					<ul class = "nav main_nav justify-content-center text-nowrap">
+        					<li><a href="/ExamPlatform/Home">　ホーム　</a></li>
+        					<li><a href="#">　検索　</a></li>
+        					<li><a th:href="@{'/ExamPlatform/' + ${user.userName}}">マイページ</a></li> 
+        			</ul>
+        		</nav>
+			</div>
+		</div>
+	</header>
+	<main>
+	<div class= "container col-12 d-flex row">
+		<div class="col-4"></div>
+		<div class="col-4 text-center"><h2 class=" mt-5 mx-5">ユーザページ</h2></div>
+		<div class="col-4"></div>
+	</div>
+	
+	<div id = "main_box"class="container-field">
+	<div class = "root_1  container d-flex w-auto h-auto">
+			<div class="r1_item_1 col-4 mt-5">
+			<span>
+				<img src="/img/icon.png"height="220" width="220" alt="User Icon">
+			</span>
+			</div>
+			<div class="r1_item_2 col-4 mt-5">
+				<p>ユーザID : <span class="user" th:text="${user.userName}"></span></p>
+			</div>
+			<div class="r1_item_3 col-4 mt-5">
+				<p><span class="user" th:text="${user.profile}"></span></p>
+			</div>
+	</div>
+	
+	<div class ="bookmark_box d-flex row col-12 w-auto mt-5">
+		<div class="col-4"></div>
+		<div class="col-4"><h2 class="text-center">ブックマーク一覧</h2></div>
+		<div class="col-4"></div>
+	</div>
+	
+	<div class="exam_box design_box col-12 d-flex mt-4"> 
+		<div class = "exam col-12">
+			<div class="col-12 row mt-4" th:each="exam : ${bookmarkExamList}">
+			<img src="/img/exam.png" height="30" width="30" alt="bookmark exam file">
+			<div class="createexamName"><a th:href="@{'/ExamPlatform/'+ 'Exam/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{ '/ExamPlatform/' + ${userName} + '/Bookmark?page=' + 1}" class="text-end">もっとみる</a></div>
+	
+	<div class ="report_box d-flex row col-12 w-auto mt-5">
+		<div class="col-4"></div>
+		<div class="col-4"><h2 class="text-center">レポート一覧</h2></div>
+		<div class="col-4"></div>
+	</div>
+	
+	<div class="exam_box design_box col-12 d-flex mt-4"> 
+		<div class = "exam col-12">
+			<div class="col-12 row mt-4" th:each="report : ${reportList}">
+			<div class="col-2"><span  th:text="${#dates.format(report.examDate, 'yyyy/MM/dd')}"></span></div>
+			<div class="col-auto row">
+			<img src="/img/exam.png" height="30" width="30" alt="report exam file">
+			<div class="createexamName"><a th:href="@{'/ExamPlatform/Exam/Report/' + ${report.reportId}}"><span th:text="${report.examName}"></span></a></div>
+			</div>
+			</div>
+	　　</div>
+	</div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{'/ExamPlatform/' + ${userName} + '/Report?page=' + 1}" class="text-end">もっとみる</a></div>
+	
+	</div>
+</main>
+</body>
+</html>
