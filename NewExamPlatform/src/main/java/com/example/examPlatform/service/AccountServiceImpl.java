@@ -2,12 +2,11 @@ package com.example.examPlatform.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.examPlatform.data.LoginInfo;
 import com.example.examPlatform.entity.Account;
 import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.repository.AccountRepository;
@@ -16,6 +15,9 @@ import com.example.examPlatform.repository.AccountRepository;
 @Service
 @Transactional
 public class AccountServiceImpl implements AccountService{
+	@Autowired
+	LoginInfo loginInfo;
+	
 	@Autowired
 	AccountRepository accountRepo;
 	
@@ -43,6 +45,7 @@ public class AccountServiceImpl implements AccountService{
 	public void userRegister(Account registUser) {
 		registUser.setPassword(passwordEncoder.encode(registUser.getPassword()));
 		accountRepo.save(registUser);
+		loginInfo.makeLoginInfo(registUser);
 	}
 	
 	@Override
@@ -58,6 +61,7 @@ public class AccountServiceImpl implements AccountService{
 		String pass = selectAccountByUserId(user.getUserId()).getPassword();
 		user.setPassword(pass);
 		accountRepo.save(user);
+		loginInfo.makeLoginInfo(user);
 	}
 
 	@Override
@@ -79,8 +83,7 @@ public class AccountServiceImpl implements AccountService{
 	
 	@Override
 	public String selectLoginUserName() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return auth.getName();
+		return loginInfo.getUserName();
 	}
 
 	@Override

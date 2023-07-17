@@ -76,22 +76,14 @@ public class AccountController {
 		return new AccountUpdPassForm();
 	}
 	
-	/** アカウント更新フォームの初期化 
-	 * @throws NotFoundException */
+	/** アカウント更新フォームの初期化 */
 	@ModelAttribute
-	public AccountUpdForm setUpAccountUpdForm() throws NotFoundException {
-		AccountUpdForm updForm = new AccountUpdForm();
-		
-		String userName = accountService.selectLoginUserName();
-		Account user = accountService.selectAccountByUserName(userName);
-		updForm.setUserName(user.getUserName());
-		updForm.setProfile(user.getProfile());
-		updForm.setUseInfoDefault(user.getUseInfoDefault());
-		
-		return updForm;
+	public AccountUpdForm setUpAccountUpdForm() {
+		return new AccountUpdForm();
 	}
 	
 	/** ユーザ退会フォームの初期化 */
+	@ModelAttribute
 	public AccountWithdrawForm setUpAccountWithdrawForm() {
 		return new AccountWithdrawForm();
 	}
@@ -116,54 +108,41 @@ public class AccountController {
 		Account entryUser = new Account(null, entryForm.getUserName(), entryForm.getPassword(), "", true);
 		accountService.userRegister(entryUser);
 		
-		//自動ログイン
-		SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-		
-        if (authentication instanceof AnonymousAuthenticationToken == false) {
-            SecurityContextHolder.clearContext();
-        }
-        
-		try {
-			request.login(entryForm.getUserName(), entryForm.getPassword());
-		} catch (ServletException e) {
-			e.printStackTrace();
-		}
+		login(entryForm.getUserName(), entryForm.getPassword(), request);
 		
 		return "redirect:/ExamPlatform/Mypage";
 	}
 	
 	/** アカウント更新画面表示 */
 	@GetMapping("/UpdAccount")
-	public String AccountUpdView() {
-		return "accountUpd";
-	}
-	
-	/** アカウント更新処理 */
-	@PostMapping("/UpdAccount")
-	public String AccountUpd(@Validated AccountUpdForm updForm, BindingResult bindingResult, Model model) {
-		if(bindingResult.hasErrors()) return AccountUpdPassView();
-		String userName = accountService.selectLoginUserName();
-		
+	public String AccountUpdView(AccountUpdForm updForm, Model model) {
 		try {
-			Account user = makeAccountByUpdFrom(userName, updForm);
-			accountService.userInfoUpd(user);
+			updForm = makeUpdFrom(updForm);
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
 			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
 			return "error";
 		}
 		
-		model.addAttribute("msg", "アカウントを更新しました");
-		return AccountUpdView();
+		return "accountUpd";
 	}
 	
-	private Account makeAccountByUpdFrom(String userName, AccountUpdForm updForm) throws NotFoundException {
-		Account user = accountService.selectAccountByUserName(userName);
-		user.setUserName(updForm.getUserName());
-		user.setProfile(updForm.getProfile());
-		user.setUseInfoDefault(updForm.getUseInfoDefault());
-		return user;
+	/** アカウント更新処理 */
+	@PostMapping("/UpdAccount")
+	public String AccountUpd(@Validated AccountUpdForm updForm, BindingResult bindingResult, Model model,
+			HttpServletRequest request) {
+		if(bindingResult.hasErrors()) return "accountUpd";
+		String userName = accountService.selectLoginUserName();
+		Account user;
+		try {
+			user = makeAccountByUpdFrom(userName, updForm);
+			accountService.userInfoUpd(user);
+		} catch (NotFoundException e) {
+			// ユーザ情報が見つからない場合エラーページに遷移
+			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
+			return "error";
+		}
+		return AccountUpdView(updForm,model);
 	}
 	
 	/** パスワード更新画面表示 */
@@ -199,13 +178,15 @@ public class AccountController {
 	
 	/** ユーザ退会処理 */
 	@PostMapping("/Withdraw")
-	public String AccountWithdraw(@Validated AccountWithdrawForm withdrawForm, BindingResult bindingResult, Model model) {
+	public String AccountWithdraw(@Validated AccountWithdrawForm withdrawForm, BindingResult bindingResult, Model model,
+			HttpServletRequest request) {
 		if(bindingResult.hasErrors()) return AccountWithdrawView();
 		String userName = accountService.selectLoginUserName();
 		
 		boolean isWithdraw = false;
+		Integer userId;
 		try {
-			Integer userId = accountService.selectAccountByUserName(userName).getUserId();
+			userId = accountService.selectAccountByUserName(userName).getUserId();
 			isWithdraw = accountService.userWithdrow(userId, withdrawForm.getPassword());
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
@@ -216,8 +197,50 @@ public class AccountController {
 		if(!isWithdraw) {
 			model.addAttribute("errorMsg", "パスワードが正しくありません");
 			return AccountWithdrawView();
+		}else {
+			try {
+				request.logout();
+			} catch (ServletException e) {
+				System.out.println("退会時のログアウトにおいてエラーが発生しました userId:"+userId);
+			}
 		}
 		
 		return "accountWithdrawConfirm";
+	}
+	
+	
+	/** 自動ログイン */
+	private void login(String userName, String pass, HttpServletRequest request) {
+		SecurityContext context = SecurityContextHolder.getContext();
+		Authentication authentication = context.getAuthentication();
+		
+		if (authentication instanceof AnonymousAuthenticationToken == false) {
+			SecurityContextHolder.clearContext();
+		}
+		        
+		try {
+			request.login(userName, pass);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** フォームをアカウントに変換 */
+	private Account makeAccountByUpdFrom(String userName, AccountUpdForm updForm) throws NotFoundException {
+		Account user = accountService.selectAccountByUserName(userName);
+		user.setUserName(updForm.getUserName());
+		user.setProfile(updForm.getProfile());
+		user.setUseInfoDefault(updForm.getUseInfoDefault());
+		return user;
+	}
+	
+	/** ログイン者情報からフォームを初期化 */
+	private AccountUpdForm makeUpdFrom(AccountUpdForm updForm) throws NotFoundException {
+		String userName = accountService.selectLoginUserName();
+		Account user = accountService.selectAccountByUserName(userName);
+		updForm.setUserName(user.getUserName());
+		updForm.setProfile(user.getProfile());
+		updForm.setUseInfoDefault(user.getUseInfoDefault());
+		return updForm;
 	}
 }

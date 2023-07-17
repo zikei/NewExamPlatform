@@ -1,0 +1,70 @@
+@charset "UTF-8";
+        @keyframes flipping {
+            0% {
+                transform: rotate3d(1, 1, 0, 0deg);
+            }
+            to {
+                transform: rotate3d(1, 1, 0, 360deg);
+            }
+        }
+        h2 {
+            font-family: 'Zen Antique', serif;
+            font-size: 48px;
+            border-bottom: #000 solid 3px;
+            margin: 0 35%;
+            margin-top: 3%;
+        }
+        #main_box {
+            position: relative;
+            margin-top: 4%;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 3px solid rgb(192, 192, 192);
+            box-shadow: 5px 5px 0 rgb(192, 192, 192);
+            color: rgb(0, 0, 0);
+             font-size: 16px;
+        }
+        #updbutton {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem; /* パディングを調整 */
+            border: 2px solid #00c6ff;
+            border-radius: 5%;
+            cursor: pointer;
+            color: #00ffff;
+            fill: #00c6ff;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        #updbutton svg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+        #updbutton:hover svg,
+        #updbutton svg:hover {
+            animation: flipping 1s cubic-bezier(.96, -.2, 0, 1.29) both;
+        }
+        
+ .area_btn {
+    --color: rgb(0, 255, 255);
+    cursor: pointer;
+    margin: 0.5rem;
+    padding: 0.5rem 3rem;
+    border: 1px solid var(--color);
+    border-radius: 5%;
+    background-image: linear-gradient(135deg, var(--color) 20%, transparent 50%);
+    background-position: 100%;
+    background-size: 300%;
+    color: white;
+    text-decoration: none;
+    transition: all 1s;
+    font-size: 24px;
+    font-weight: bold;
+    background-color:midnightblue;
+}
+
+.area_btn:hover {
+    background-position: 0;
+    color: #fff;
+}
