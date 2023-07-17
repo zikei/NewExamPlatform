@@ -5,9 +5,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import com.example.examPlatform.entity.Account;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * ユーザId・ユーザ名格納クラス
@@ -15,8 +13,6 @@ import lombok.NoArgsConstructor;
 @Component
 @SessionScope
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class LoginInfo {
 	/** ユーザID */
 	private Integer userId;

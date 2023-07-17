@@ -21,6 +21,7 @@ import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Ganre;
 import com.example.examPlatform.entity.Question;
 import com.example.examPlatform.entity.Tag;
+import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.repository.BigQuestionRepository;
 import com.example.examPlatform.repository.ChoicesRepository;
 import com.example.examPlatform.repository.ExamRepository;
@@ -99,6 +100,11 @@ public class ExamServiceImpl implements ExamService{
 		List<Ganre> ganreList = new ArrayList<>();
 		ganreRepo.findAll().forEach(ganreList::add);
 		return ganreList;
+	}
+	
+	@Override
+	public Ganre selectGanreByGanreId(Integer ganreId) throws NotFoundException {
+		return ganreRepo.findById(ganreId).orElseThrow(() -> new NotFoundException("NotFound GanreId:" + ganreId));
 	}
 	
 	@Override

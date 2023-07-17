@@ -8,6 +8,7 @@ import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.data.question.ExamQuestion;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Ganre;
+import com.example.examPlatform.exception.NotFoundException;
 
 /** 試験関連処理 */
 public interface ExamService {
@@ -31,6 +32,9 @@ public interface ExamService {
 	
 	/** ジャンル全件取得 */
 	List<Ganre> selectAllGanre();
+	
+	/** 指定された試験のジャンルを取得 */
+	Ganre selectGanreByGanreId(Integer ganreId) throws NotFoundException;
 	
 	/** 試験登録 */
 	void examRegister(ExamData examData, ExamQuestion examQuestion);

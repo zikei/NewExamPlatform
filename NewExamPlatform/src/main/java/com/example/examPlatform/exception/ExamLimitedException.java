@@ -1,6 +1,6 @@
 package com.example.examPlatform.exception;
 
-/** 限定公開試験にアクセスした場合の例外 */
+/** ログインユーザ以外が認可されていない限定公開試験にアクセスした場合の例外 */
 public class ExamLimitedException extends Exception{
 	public ExamLimitedException() {
 		super();
