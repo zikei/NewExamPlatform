@@ -105,7 +105,7 @@ public class AccountController {
 			return AccountRegisterView();
 		}
 		
-		Account entryUser = new Account(null, entryForm.getUserName(), entryForm.getPassword(), "", true);
+		Account entryUser = new Account(null, entryForm.getUserName(), entryForm.getPassword(), "");
 		accountService.userRegister(entryUser);
 		
 		login(entryForm.getUserName(), entryForm.getPassword(), request);
@@ -230,7 +230,6 @@ public class AccountController {
 		Account user = accountService.selectAccountByUserName(userName);
 		user.setUserName(updForm.getUserName());
 		user.setProfile(updForm.getProfile());
-		user.setUseInfoDefault(updForm.getUseInfoDefault());
 		return user;
 	}
 	
@@ -240,7 +239,6 @@ public class AccountController {
 		Account user = accountService.selectAccountByUserName(userName);
 		updForm.setUserName(user.getUserName());
 		updForm.setProfile(user.getProfile());
-		updForm.setUseInfoDefault(user.getUseInfoDefault());
 		return updForm;
 	}
 }

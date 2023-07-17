@@ -15,7 +15,4 @@ public class AccountUpdForm {
 	/** プロフィール */
 	@Size(max=500)
 	private String profile;
-	
-	/** デフォルト試験結果情報使用可否 */
-	private Boolean useInfoDefault;
 }
