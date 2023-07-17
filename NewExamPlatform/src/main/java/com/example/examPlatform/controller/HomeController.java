@@ -3,14 +3,13 @@ package com.example.examPlatform.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.examPlatform.data.ExamLinkView;
+import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.HomeService;
 
 /** ホームコントローラ */
@@ -19,6 +18,9 @@ import com.example.examPlatform.service.HomeService;
 public class HomeController {
 	@Autowired
 	HomeService homeService;
+	
+	@Autowired
+	AccountService accountService;
 	
 	/** ホーム画面 */
 	@GetMapping(value= { "/","Home"})
@@ -45,8 +47,7 @@ public class HomeController {
 	 */
 	@GetMapping("Mypage")
 	public String MypageRedirect() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    String userName = auth.getName();
+	    String userName = accountService.selectLoginUserName();
 	    
 		return "redirect:/ExamPlatform/" + userName;
 	}

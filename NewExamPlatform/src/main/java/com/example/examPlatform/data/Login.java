@@ -9,13 +9,7 @@ import com.example.examPlatform.entity.Account;
 
 /** ログイン用ユーザ情報 */
 public class Login extends User{
-	private Integer userId;
 	public Login(Account user, Collection<? extends GrantedAuthority> authorities) {
-		super(user.getUserName(), user.getPassword(), authorities);
-		userId = user.getUserId();
-	}
-	
-	public Integer getUserId() {
-		return userId;
+		super(user.getUserId().toString(), user.getPassword(), authorities);
 	}
 }
