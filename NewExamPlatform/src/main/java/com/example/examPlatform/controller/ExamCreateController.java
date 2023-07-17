@@ -48,6 +48,9 @@ public class ExamCreateController {
 	@Autowired
 	ExamValidator examValidator;
 	
+	@Autowired
+	private HttpSession session;
+	
 	/** チェック登録 */
 	@InitBinder("examForm")
 	public void initExamFormBinder(WebDataBinder webDataBinder) {
@@ -98,7 +101,7 @@ public class ExamCreateController {
 	/** 試験概要処理　*/
 	@PostMapping
 	public String ExamCreate(@Validated ExamForm examform, BindingResult bindingResult, Model model,
-			HttpSession session, HttpServletRequest request) {
+			HttpServletRequest request) {
 		
 		if(bindingResult.hasErrors()) {
 			return ExamCreateView(model);
@@ -114,12 +117,12 @@ public class ExamCreateController {
 		
 		ExamData exam = formCtr.makeExamData(examform, loginUser.getUserId());
 		session.setAttribute("exam", exam);
-		return QuestionCreateView(session, model);
+		return QuestionCreateView(model);
 	}
 	
 	/** 試験問題登録ページ　*/
 	@GetMapping("/Question")
-	public String QuestionCreateView(HttpSession session, Model model) {
+	public String QuestionCreateView(Model model) {
 		ExamData examData = (ExamData) session.getAttribute("exam");
 		Exam exam = examData.getExam();
 		
@@ -132,90 +135,85 @@ public class ExamCreateController {
 	
 	/** 試験問題登録ページセッションタイムを延長　*/
 	@PostMapping(value="/Question", params="save")
-	public String QuestionCreateUpdSession(ExamQuestionForm questionForm, HttpSession session, Model model) {
-		return QuestionCreateView(session, model);
+	public String QuestionCreateUpdSession(ExamQuestionForm questionForm, Model model) {
+		return QuestionCreateView(model);
 	}
 	
 	/** 試験問題登録ページ大問入力欄を追加　*/
 	@PostMapping(value="/Question", params="addBQ")
-	public String ExamCreateAddBQ(ExamQuestionForm questionForm, HttpSession session, Model model) {
+	public String ExamCreateAddBQ(ExamQuestionForm questionForm, Model model) {
 		formCtr.addBQ(questionForm);
-		return QuestionCreateView(session, model);
+		return QuestionCreateView(model);
 	}
 	
 	/** 試験問題登録ページ大問入力欄を削除　*/
 	@PostMapping(value="/Question", params="removeBQ")
-	public String ExamCreateRemoveBQ(@RequestParam Integer removeBQ, ExamQuestionForm questionForm,
-			HttpSession session, Model model) {
+	public String ExamCreateRemoveBQ(@RequestParam Integer removeBQ, ExamQuestionForm questionForm,  Model model) {
 		formCtr.removeBQ(questionForm, removeBQ);
-		return QuestionCreateView(session, model);
+		return QuestionCreateView(model);
 	}
 	
 	/** 試験問題登録ページ小問入力欄を追加　*/
 	@PostMapping(value="/Question", params="addQ")
-	public String ExamCreateAddQ(@RequestParam Integer addQ, ExamQuestionForm questionForm, HttpSession session,
-			Model model) {
+	public String ExamCreateAddQ(@RequestParam Integer addQ, ExamQuestionForm questionForm, Model model) {
 		formCtr.addQ(questionForm, addQ);
-		return QuestionCreateView(session, model);
+		return QuestionCreateView(model);
 	}
 	
 	/** 試験問題登録ページ小問入力欄を削除　*/
 	@PostMapping(value="/Question", params="removeQ")
-	public String ExamCreateRemoveQ(@RequestParam String removeQ, ExamQuestionForm questionForm,
-			HttpSession session, Model model) {
+	public String ExamCreateRemoveQ(@RequestParam String removeQ, ExamQuestionForm questionForm, Model model) {
 		try {
 			formCtr.removeQ(questionForm, removeQ);
 		}catch(NumberFormatException e) {
 		}
-		return QuestionCreateView(session, model);
+		return QuestionCreateView(model);
 	}
 	
 	/** 試験問題登録ページ選択肢入力欄を追加　*/
 	@PostMapping(value="/Question", params="addChoices")
-	public String ExamCreateAddChoices(@RequestParam String addChoices, ExamQuestionForm questionForm,
-			HttpSession session, Model model) {
+	public String ExamCreateAddChoices(@RequestParam String addChoices, ExamQuestionForm questionForm, Model model) {
 		try {
 			formCtr.addC(questionForm, addChoices);
 		}catch(NumberFormatException e) {
 		}
-		return QuestionCreateView(session, model);
+		return QuestionCreateView(model);
 	}
 	
 	/** 試験問題登録ページ選択肢入力欄を削除　*/
 	@PostMapping(value="/Question", params="removeChoices")
-	public String ExamCreateRemoveChoices(@RequestParam String removeChoices, ExamQuestionForm questionForm,
-			HttpSession session, Model model) {
+	public String ExamCreateRemoveChoices(@RequestParam String removeChoices, ExamQuestionForm questionForm, Model model) {
 		try {
 			formCtr.removeC(questionForm, removeChoices);
 		}catch(NumberFormatException e) {
 		}
-		return QuestionCreateView(session, model);
+		return QuestionCreateView(model);
 	}
 	
 	/** 試験問題処理　*/
 	@PostMapping("/Question")
 	public String QuestionCreate(@Validated ExamQuestionForm questionForm, BindingResult bindingResult,
-			Model model, HttpSession session, HttpServletRequest request) {
+			Model model, HttpServletRequest request) {
 		
 		if(bindingResult.hasErrors()) {
-			return QuestionCreateView(session, model);
+			return QuestionCreateView(model);
 		}
 		
 		ExamQuestion examQuestion = formCtr.makeExamQuestion(questionForm);
 		session.setAttribute("examQuestion", examQuestion);
-		return CreateConfirmView(session, model);
+		return CreateConfirmView(model);
 	}
 	
 	/** 試験登録確認ページ　*/
 	@GetMapping("/Confirm")
-	public String CreateConfirmView(HttpSession session, Model model) {
+	public String CreateConfirmView(Model model) {
 		ExamData examData = (ExamData) session.getAttribute("exam");
 		ExamQuestion examQuestion = (ExamQuestion) session.getAttribute("examQuestion");
 		
 		//試験概要情報が見つからない場合試験概要登録ページに遷移
 		if(examData == null) return ExamCreateView(model);
 		//試験問題情報が見つからない場合試験問題登録ページに遷移
-		if(examQuestion == null) return QuestionCreateView(session, model);
+		if(examQuestion == null) return QuestionCreateView(model);
 		
 		int fullScore = examQuestion.fullScore();
 		model.addAttribute("fullScore", fullScore);
@@ -224,19 +222,19 @@ public class ExamCreateController {
 
 	/** 試験登録処理　*/
 	@PostMapping("/Confirm")
-	public String CreateConfirm(HttpSession session, Model model) {
+	public String CreateConfirm(Model model) {
 		ExamData examData = (ExamData) session.getAttribute("exam");
 		ExamQuestion examQuestion = (ExamQuestion) session.getAttribute("examQuestion");
 		
 		//試験概要情報が見つからない場合試験概要登録ページに遷移
 		if(examData == null) return ExamCreateView(model);
 		//試験問題情報が見つからない場合試験問題登録ページに遷移
-		if(examQuestion == null) return QuestionCreateView(session, model);
+		if(examQuestion == null) return QuestionCreateView(model);
 		
 		//合格点が満点より大きい場合確認ページに戻る
 		if(examQuestion.fullScore() < examData.getExam().getPassingScore()) {
 			model.addAttribute("errorMsg", "合格点が満点より大きく設定されています");
-			return CreateConfirmView(session, model);
+			return CreateConfirmView(model);
 		}
 		
 		examService.examRegister(examData, examQuestion);

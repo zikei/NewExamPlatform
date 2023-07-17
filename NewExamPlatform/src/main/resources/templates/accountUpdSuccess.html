@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ExamPlatform - アカウント設定</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/accountUpdSuccess.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="canonical" href="http://localhost:8080/ExamPlatform/Account/UpdAccount"><!--url 正規化 -->
+</head>
+
+<body>
+    <header>
+        <div class="header_box container-fluid ">
+            <div class="col-12 row align-items-center ">
+                <div class="col-8">
+                    <h1 class="title ml-5">ExamPlatform</h1>
+                </div>
+                <div class="col-4 text-right">
+                    <form th:action="@{/ExamPlatform/Logout}" method="post">
+                        <input type="submit" class="btn logbtn btn-primary mr-5" value="ログアウト">
+                    </form>
+                </div>
+            </div>
+            <div class="container col-12 mt-3">
+                <nav>
+                    <ul class="nav main_nav justify-content-center text-nowrap">
+                        <li><a href="/ExamPlatform/Home">　ホーム　</a></li>
+                        <li><a href="#">　検索　</a></li>
+                        <li><a th:href="@{'/ExamPlatform/' + ${userName}}">マイページ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main>
+		<div class="container col-12">
+			<div class="row">
+			<div class="col-3"></div>
+			     <div id ="main_box" class="col-6 text-center">
+					 <h2 class="upd_msg">正常に情報が更新されました。</h2>
+					 <br>
+					 <a href="/ExamPlatform/Login">お手数をおかけしますがこちらから再ログインをお願いいたします。</a>
+			     </div>
+			<div class="col-3"></div>
+			</div>
+		</div>
+	</main>
+
+</body>
+</html>

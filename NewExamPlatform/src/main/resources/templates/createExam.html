@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ExamPlatform - 作成試験一覧</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/createExam.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+
+<body>
+    <header>
+        <div class="header_box container-fluid ">
+            <div class="col-12 row align-items-center ">
+                <div class="col-8">
+                    <h1 class="title ml-5">ExamPlatform</h1>
+                </div>
+                <div class="col-4 text-right ">
+                    <form th:action="@{/ExamPlatform/Logout}" method="post">
+                        <input type="submit" class="btn logbtn btn-primary mr-5" value="ログアウト">
+                    </form>
+                </div>
+            </div>
+            <div class="container col-12 mt-3">
+                <nav>
+                    <ul class="nav main_nav justify-content-center text-nowrap">
+                        <li><a href="/ExamPlatform/Home">　ホーム　</a></li>
+                        <li><a href="#">　検索　</a></li>
+                        <li><a th:href="@{'/ExamPlatform/' + 'Mypage'}">マイページ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h2 class="text-center">試験作成一覧</h2>
+        <div id="main_box" class="container mb-5">
+            <div class="d-flex col-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-info text-white">
+                            <th scope="col" class="col-4 pagenation_title">試験ID</th>
+                            <th scope="col" class="col-8 pagenation_title">試験名</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="exam : ${createExamList}">
+                            <td th:text="${exam.examId}" class="col-4"></td>
+                            <td class="col-8"><a
+                                    th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam/' + ${exam.examId}}"><span
+                                        th:text="${exam.examName}"></span></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-12 d-flex justify-content-center mt-5">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <!--最前のページへのリンク -->
+                        <li class="page-item">
+                            <a class="page-link" th:if="${page.pageNum > 1}"
+                                th:href="@{'/ExamPlatform/' + ${userName} + '/Exam?page=1'}" aria-label="First">
+                                <span aria-hidden="true" class="pagenation_link">&laquo;&laquo;</span>
+                                <span class="sr-only">最前のページへ</span>
+                            </a>
+                        </li>
+
+                        <!-- 前のページへのリンク -->
+                        <li class="page-item">
+                            <a class="page-link" th:if="${page.pageNum > 1}"
+                                th:href="@{'/ExamPlatform/' + ${userName} + '/Exam?page=1'}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">前へ</span>
+                            </a>
+                        </li>
+                        <!-- 中間のページリンク -->
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages-1)}">
+                            <a th:if="${i}==${page.pageNum-1}"
+                                th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' + ${i+1}}"
+                                class="page-link active">
+                                <span th:text="${i+1}"></span>
+                            </a>
+                            <a th:if="${i}!=${page.pageNum-1}"
+                                th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' + ${i+1}}" class="page-link">
+                                <span th:text="${i+1}"></span>
+                            </a>
+                        </li>
+                        <!-- 次のページへのリンク -->
+                        <li class="page-item" th:if="${page.pageNum < page.totalPages}">
+                            <a class="page-link"
+                                th:href="@{'/ExamPlatform/'+ ${userName} + '/Exam?page=' + ${page.pageNum+1}}"
+                                aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">次へ</span>
+                            </a>
+                        </li>
+                        <li class="page-item disabled" th:if="${page.pageNum >= page.totalPages}">
+                            <span class="page-link" aria-label="Next" style="visibility: hidden;">
+                                <span class="sr-only">次へ</span>
+                            </span>
+                        </li>
+                        <!--最後のページへのリンク -->
+                        <li class="page-item" th:classappend="${page.pageNum == page.totalPages} ? 'disabled'">
+                            <a class="page-link" th:if="${page.pageNum != page.totalPages}"
+                                th:href="@{'/ExamPlatform/' + ${userName} + '/Exam?page=' + ${page.totalPages}}"
+                                aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                                <span class="sr-only">最大のページへ</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
