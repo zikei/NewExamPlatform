@@ -44,8 +44,4 @@ public class Report {
 	/** 試験経過時間(分) */
 	@Column(value="usetimeminutes")
 	private Integer useTimeMinutes;
-	
-	/** 試験結果情報使用可否 */
-	@Column(value="useinfo")
-	private Boolean useInfo;
 }
