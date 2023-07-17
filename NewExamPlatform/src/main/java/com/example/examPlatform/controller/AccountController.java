@@ -142,13 +142,7 @@ public class AccountController {
 			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
 			return "error";
 		}
-		
-		try {
-			request.logout();
-		} catch (ServletException e) {
-			e.printStackTrace();
-		}
-		return "accountUpdSuccess";
+		return AccountUpdView(updForm,model);
 	}
 	
 	/** パスワード更新画面表示 */
@@ -184,13 +178,15 @@ public class AccountController {
 	
 	/** ユーザ退会処理 */
 	@PostMapping("/Withdraw")
-	public String AccountWithdraw(@Validated AccountWithdrawForm withdrawForm, BindingResult bindingResult, Model model) {
+	public String AccountWithdraw(@Validated AccountWithdrawForm withdrawForm, BindingResult bindingResult, Model model,
+			HttpServletRequest request) {
 		if(bindingResult.hasErrors()) return AccountWithdrawView();
 		String userName = accountService.selectLoginUserName();
 		
 		boolean isWithdraw = false;
+		Integer userId;
 		try {
-			Integer userId = accountService.selectAccountByUserName(userName).getUserId();
+			userId = accountService.selectAccountByUserName(userName).getUserId();
 			isWithdraw = accountService.userWithdrow(userId, withdrawForm.getPassword());
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
@@ -201,6 +197,12 @@ public class AccountController {
 		if(!isWithdraw) {
 			model.addAttribute("errorMsg", "パスワードが正しくありません");
 			return AccountWithdrawView();
+		}else {
+			try {
+				request.logout();
+			} catch (ServletException e) {
+				System.out.println("退会時のログアウトにおいてエラーが発生しました userId:"+userId);
+			}
 		}
 		
 		return "accountWithdrawConfirm";

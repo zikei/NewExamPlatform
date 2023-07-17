@@ -17,6 +17,9 @@ public class WebSecurityConfig {
 	@Autowired
     UserDetailsService userDetailsService;
 	
+	@Autowired
+    CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -31,8 +34,8 @@ public class WebSecurityConfig {
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) -> form
+				.successHandler(customAuthenticationSuccessHandler)
 				.loginPage("/ExamPlatform/Login")
-				.defaultSuccessUrl("/ExamPlatform/Mypage")
 				.permitAll()
 			)
 			.logout((logout) -> logout

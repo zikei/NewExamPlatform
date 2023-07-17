@@ -1,19 +1,21 @@
 package com.example.examPlatform.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.example.examPlatform.form.AccountUpdForm;
 import com.example.examPlatform.repository.AccountRepository;
+import com.example.examPlatform.service.AccountService;
 
 @Component
 public class AccountUpdValidator implements Validator {
 	@Autowired
 	AccountRepository accountRepo;
+	
+	@Autowired
+	AccountService accountService;
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -25,8 +27,7 @@ public class AccountUpdValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		AccountUpdForm form = (AccountUpdForm) target;
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String loginUserName = auth.getName();
+		String loginUserName = accountService.selectLoginUserName();
 		
 		String userName = form.getUserName();
 		
