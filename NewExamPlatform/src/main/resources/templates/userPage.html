@@ -36,7 +36,7 @@
 	<main>
 	<div class= "container col-12 d-flex row">
 		<div class="col-4"></div>
-		<div class="col-4 text-center"><h2 class=" mt-5 mx-5">マイページ</h2></div>
+		<div class="col-4 text-center"><h2 class=" mt-5 mx-5">ユーザページ</h2></div>
 		<div class="col-4"></div>
 	</div>
 	
@@ -54,8 +54,43 @@
 				<p><span class="user" th:text="${user.profile}"></span></p>
 			</div>
 	</div>
+	
+	<div class ="bookmark_box d-flex row col-12 w-auto mt-5">
+		<div class="col-4"></div>
+		<div class="col-4"><h2 class="text-center">ブックマーク一覧</h2></div>
+		<div class="col-4"></div>
 	</div>
-	</main>
-
+	
+	<div class="exam_box design_box col-12 d-flex mt-4"> 
+		<div class = "exam col-12">
+			<div class="col-12 row mt-4" th:each="exam : ${bookmarkExamList}">
+			<img src="/img/exam.png" height="30" width="30" alt="bookmark exam file">
+			<div class="createexamName"><a th:href="@{'/ExamPlatform/'+ 'Exam/' + ${exam.examId}}"><span th:text="${exam.examName}"></span></a></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{ '/ExamPlatform/' + ${userName} + '/Bookmark?page=' + 1}" class="text-end">もっとみる</a></div>
+	
+	<div class ="report_box d-flex row col-12 w-auto mt-5">
+		<div class="col-4"></div>
+		<div class="col-4"><h2 class="text-center">レポート一覧</h2></div>
+		<div class="col-4"></div>
+	</div>
+	
+	<div class="exam_box design_box col-12 d-flex mt-4"> 
+		<div class = "exam col-12">
+			<div class="col-12 row mt-4" th:each="report : ${reportList}">
+			<div class="col-2"><span  th:text="${#dates.format(report.examDate, 'yyyy/MM/dd')}"></span></div>
+			<div class="col-auto row">
+			<img src="/img/exam.png" height="30" width="30" alt="report exam file">
+			<div class="createexamName"><a th:href="@{'/ExamPlatform/Exam/Report/' + ${report.reportId}}"><span th:text="${report.examName}"></span></a></div>
+			</div>
+			</div>
+	　　</div>
+	</div>
+	<div class="col-12 d-flex justify-content-end mt-3 link"><a th:href="@{'/ExamPlatform/' + ${userName} + '/Report?page=' + 1}" class="text-end">もっとみる</a></div>
+	
+	</div>
+</main>
 </body>
 </html>
