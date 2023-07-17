@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.example.examPlatform.data.ExamData;
 import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.data.question.ExamQuestion;
+import com.example.examPlatform.data.question.ExamQuestionView;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Ganre;
 import com.example.examPlatform.exception.NotFoundException;
@@ -47,6 +48,9 @@ public interface ExamService {
 	
 	/** 試験削除 */
 	void examDelete(Integer examId);
+	
+	/** ExamQuestionViewを作成 */
+	ExamQuestionView makeExamQuestionView(Exam exam);
 	
 	/** 試験リストを試験リンクリスト形式に変換*/
 	List<ExamLinkView> makeExamLinkList(List<Exam> examList);

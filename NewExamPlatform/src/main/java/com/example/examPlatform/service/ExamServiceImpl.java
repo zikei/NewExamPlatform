@@ -13,8 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.examPlatform.data.ExamData;
 import com.example.examPlatform.data.link.ExamLinkView;
 import com.example.examPlatform.data.question.BigQuestionData;
+import com.example.examPlatform.data.question.BigQuestionView;
+import com.example.examPlatform.data.question.ChoicesView;
 import com.example.examPlatform.data.question.ExamQuestion;
+import com.example.examPlatform.data.question.ExamQuestionView;
 import com.example.examPlatform.data.question.QuestionData;
+import com.example.examPlatform.data.question.QuestionView;
 import com.example.examPlatform.entity.BigQuestion;
 import com.example.examPlatform.entity.Choices;
 import com.example.examPlatform.entity.Exam;
@@ -150,6 +154,12 @@ public class ExamServiceImpl implements ExamService{
 	}
 	
 	@Override
+	public ExamQuestionView makeExamQuestionView(Exam exam){
+		List<BigQuestionView> bqViewList = makeBigQuestionViewList(exam.getExamId());
+		return new ExamQuestionView(exam, bqViewList);
+	}
+	
+	@Override
 	public List<ExamLinkView> makeExamLinkList(List<Exam> examList) {
 		List<ExamLinkView> examLinkList = new ArrayList<>();
 		for(Exam exam : examList) {
@@ -266,5 +276,39 @@ public class ExamServiceImpl implements ExamService{
 			qdList.add(new QuestionData(q, cList));
 		}
 		return qdList;
+	}
+	
+	/** BigQuestionViewListを取得 */
+	private List<BigQuestionView> makeBigQuestionViewList(Integer examId){
+		List<BigQuestion> bqList = selectBQList(examId);
+		List<BigQuestionView> bqViewList = new ArrayList<>();
+		for(BigQuestion bq : bqList) {
+			Integer bqId = bq.getBigQuestionId();
+			List<Question> qList = selectQList(bqId);
+			List<QuestionView> qViewList = makeQuestionViewList(qList);
+			bqViewList.add(new BigQuestionView(bq, qViewList));
+		}
+		return bqViewList;
+	}
+	
+	/** QuestionViewListを取得 */
+	private List<QuestionView> makeQuestionViewList(List<Question> qList){
+		List<QuestionView> qViewList = new ArrayList<>();
+		for(Question q : qList) {
+			Integer qId = q.getQuestionId();
+			List<Choices> cList = selectCList(qId);
+			List<ChoicesView> cViewList = makeChoicesViewList(cList);
+			qViewList.add(new QuestionView(q, cViewList));
+		}
+		return qViewList;
+	}
+	
+	/** ChoicesViewListを取得 */
+	private List<ChoicesView> makeChoicesViewList(List<Choices> cList){
+		List<ChoicesView> cViewList = new ArrayList<>();
+		for(Choices c : cList) {
+			cViewList.add(new ChoicesView(c));
+		}
+		return cViewList;
 	}
 }

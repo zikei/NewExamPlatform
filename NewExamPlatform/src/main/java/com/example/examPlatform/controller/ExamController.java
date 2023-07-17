@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.examPlatform.data.AuthorizedExam;
 import com.example.examPlatform.data.ExamView;
 import com.example.examPlatform.data.constant.DisclosureRange;
+import com.example.examPlatform.data.constant.QuestionFormat;
+import com.example.examPlatform.data.question.ExamQuestionView;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.exception.ExamLimitedException;
 import com.example.examPlatform.exception.NotFoundException;
@@ -21,6 +23,8 @@ import com.example.examPlatform.exception.ResourceAccessException;
 import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.ExamFormCtrService;
 import com.example.examPlatform.service.ExamService;
+
+import jakarta.servlet.http.HttpSession;
 
 /** 試験コントローラ */
 @Controller
@@ -37,6 +41,9 @@ public class ExamController {
 	
 	@Autowired
 	AuthorizedExam authorizedExam;
+	
+	@Autowired
+	private HttpSession session;
 
 /* ================================================================================================================== */
 	
@@ -115,6 +122,30 @@ public class ExamController {
 			return "examLimited";
 		}
 		return "redirect:/ExamPlatform/"+examId;
+	}
+	
+	/** 試験受験画面表示 */
+	@GetMapping("/{examId}/Act")
+	public String ExamAct(@PathVariable Integer examId, Model model) {
+		Exam exam;
+		try {
+			exam = findExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたはログインユーザ以外が非公開試験にアクセスした場合エラーページに遷移
+			return "error";
+		} catch (ExamLimitedException e) {
+			// ログインユーザ以外が認可されていない限定公開試験にアクセスした場合認証画面に遷移
+			return "examLimited";
+		}
+		
+		ExamQuestionView examQuestion = examService.makeExamQuestionView(exam);
+		model.addAttribute("examQuestion", examQuestion);
+		
+		// セッションタイムを試験時間＋10分に設定する この設定は試験終了時に戻す
+		int sessionTime = (exam.getExamTimeMinutes()*60)+(10*60);
+		session.setMaxInactiveInterval(sessionTime);
+		
+		return ExamActViewName(exam);
 	}
 	
 /* ================================================================================================================== */
@@ -199,5 +230,16 @@ public class ExamController {
 		List<String> tagList = examService.selectTagByExamId(exam.getExamId());
 		
 		return new ExamView(exam, userName, ganreName, tagList);
+	}
+	
+	/** 試験受験ページのビュー名を返す */
+	private String ExamActViewName(Exam exam) {
+		QuestionFormat qf = new QuestionFormat();
+		//小問形式なら小問試験画面、大問形式なら大問試験画面へ遷移
+		if(qf.isBigQuestionFormat(exam.getDisclosureRange())) {
+			return "examActB";
+		}else {
+			return "examActS";
+		}
 	}
 }
