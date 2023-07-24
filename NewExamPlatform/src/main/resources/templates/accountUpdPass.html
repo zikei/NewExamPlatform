@@ -43,6 +43,15 @@
                 <div id="main_box" class="col-6">
                     <form th:action="@{/ExamPlatform/Account/UpdAccount/Password}" method="post"
                         th:object="${accountUpdPassForm}" class="">
+                        <!-- oldPassword-->
+                        <div class="col-12 mt-4 mb-4">
+                            <label for="oldPassword" class="col-4">現在のパスワード</label>
+                            <input type="password" id="oldPassword" class="col-auto" name="oldPassword" required>
+                            <ul th:if="${#fields.hasErrors('oldPassword')}">
+                                <li th:each="err:${#fields.errors('oldPassword')}" th:text="${err}"
+                                    class="text-center text-nowrap bd-highlight" style="width: 8rem;">エラーメッセージ</li>
+                            </ul>
+                        </div>
 
                         <!-- newPassword -->
                         <div class="col-12 mt-4 mb-4">

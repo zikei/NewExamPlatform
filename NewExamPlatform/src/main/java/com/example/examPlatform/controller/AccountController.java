@@ -156,17 +156,22 @@ public class AccountController {
 	public String AccountUpdPass(@Validated AccountUpdPassForm updPassForm, BindingResult bindingResult, Model model) {
 		if(bindingResult.hasErrors()) return AccountUpdPassView();
 		String userName = accountService.selectLoginUserName();
+		boolean isUpd=false;
 		
 		try {
 			Integer userId = accountService.selectAccountByUserName(userName).getUserId();
-			accountService.userPassUpd(userId, updPassForm.getNewPassword(), updPassForm.getOldPassword());
+			isUpd = accountService.userPassUpd(userId, updPassForm.getNewPassword(), updPassForm.getOldPassword());
 		} catch (NotFoundException e) {
 			// ユーザ情報が見つからない場合エラーページに遷移
 			model.addAttribute("errorMsg", "ユーザが見つかりませんでした");
 			return "error";
 		}
 		
-		model.addAttribute("msg", "パスワードを更新しました");
+		if(isUpd) {
+			model.addAttribute("msg", "パスワードを更新しました");
+		}else {
+			model.addAttribute("errorMsg", "現在のパスワードが一致しません");
+		}
 		return AccountUpdPassView();
 	}
 	
