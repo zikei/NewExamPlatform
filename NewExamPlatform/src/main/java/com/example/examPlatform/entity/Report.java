@@ -37,11 +37,15 @@ public class Report {
 	@Column(value="score")
 	private Integer score;
 	
-	/** 正答率 */
-	@Column(value="correctanswerrate")
-	private Double correctAnswerRate;
-	
 	/** 試験経過時間(分) */
 	@Column(value="usetimeminutes")
 	private Integer useTimeMinutes;
+	
+	/** やり直し試験 */
+	@Column(value="isredo")
+	private boolean isRedo;
+	
+	/** 合否 */
+	@Column(value="issuccess")
+	private boolean isSuccess;
 }
