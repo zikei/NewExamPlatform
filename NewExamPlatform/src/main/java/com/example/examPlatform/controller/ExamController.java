@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +16,14 @@ import com.example.examPlatform.data.AuthorizedExam;
 import com.example.examPlatform.data.ExamView;
 import com.example.examPlatform.data.constant.DisclosureRange;
 import com.example.examPlatform.data.constant.QuestionFormat;
+import com.example.examPlatform.data.question.BigQuestionView;
 import com.example.examPlatform.data.question.ExamQuestionView;
+import com.example.examPlatform.data.question.QuestionView;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.exception.ExamLimitedException;
 import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.exception.ResourceAccessException;
+import com.example.examPlatform.form.ExamActForm;
 import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.ExamFormCtrService;
 import com.example.examPlatform.service.ExamService;
@@ -41,6 +45,12 @@ public class ExamController {
 	
 	@Autowired
 	AuthorizedExam authorizedExam;
+	
+	/** 試験解答フォームの初期化 */
+	@ModelAttribute
+	public ExamActForm setUpExamActForm() {
+		return new ExamActForm();
+	}
 	
 	@Autowired
 	private HttpSession session;
@@ -126,7 +136,7 @@ public class ExamController {
 	
 	/** 試験受験画面表示 */
 	@GetMapping("/{examId}/Act")
-	public String ExamAct(@PathVariable Integer examId, Model model) {
+	public String ExamAct(@PathVariable Integer examId, Model model, ExamActForm actForm) {
 		Exam exam;
 		try {
 			exam = findExamById(examId, model);
@@ -144,6 +154,9 @@ public class ExamController {
 		// セッションタイムを試験時間＋10分に設定する この設定は試験終了時に戻す
 		int sessionTime = (exam.getExamTimeMinutes()*60)+(10*60);
 		session.setMaxInactiveInterval(sessionTime);
+		
+		//解答用フォームセットアップ
+		actForm = makeExamActForm(actForm, examQuestion);
 		
 		return ExamActViewName(exam);
 	}
@@ -230,6 +243,16 @@ public class ExamController {
 		List<String> tagList = examService.selectTagByExamId(exam.getExamId());
 		
 		return new ExamView(exam, userName, ganreName, tagList);
+	}
+	
+	/** ExamActFormを作成する */
+	private ExamActForm makeExamActForm(ExamActForm actForm, ExamQuestionView questionView) {
+		for(BigQuestionView bqView : questionView.getBigQuestionList()) {
+			for(QuestionView qView : bqView.getQuesitonViewList()) {
+				actForm.addAnsForm(qView.getQuestionId());
+			}
+		}
+		return actForm;
 	}
 	
 	/** 試験受験ページのビュー名を返す */
