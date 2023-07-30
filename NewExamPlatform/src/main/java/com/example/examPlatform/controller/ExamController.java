@@ -1,10 +1,12 @@
 package com.example.examPlatform.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.examPlatform.data.ActInfo;
 import com.example.examPlatform.data.AuthorizedExam;
 import com.example.examPlatform.data.ExamView;
 import com.example.examPlatform.data.constant.DisclosureRange;
@@ -20,13 +23,17 @@ import com.example.examPlatform.data.question.BigQuestionView;
 import com.example.examPlatform.data.question.ExamQuestionView;
 import com.example.examPlatform.data.question.QuestionView;
 import com.example.examPlatform.entity.Exam;
+import com.example.examPlatform.entity.Question;
+import com.example.examPlatform.entity.Report;
 import com.example.examPlatform.exception.ExamLimitedException;
 import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.exception.ResourceAccessException;
+import com.example.examPlatform.exception.ScoringException;
 import com.example.examPlatform.form.ExamActForm;
 import com.example.examPlatform.service.AccountService;
 import com.example.examPlatform.service.ExamFormCtrService;
 import com.example.examPlatform.service.ExamService;
+import com.example.examPlatform.service.ReportService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -42,6 +49,9 @@ public class ExamController {
 	
 	@Autowired
 	AccountService accountService;
+	
+	@Autowired
+	ReportService reportService;
 	
 	@Autowired
 	AuthorizedExam authorizedExam;
@@ -136,7 +146,7 @@ public class ExamController {
 	
 	/** 試験受験画面表示 */
 	@GetMapping("/{examId}/Act")
-	public String ExamAct(@PathVariable Integer examId, Model model, ExamActForm actForm) {
+	public String ExamActView(@PathVariable Integer examId, Model model, ExamActForm actForm) {
 		Exam exam;
 		try {
 			exam = findExamById(examId, model);
@@ -151,6 +161,14 @@ public class ExamController {
 		ExamQuestionView examQuestion = examService.makeExamQuestionView(exam);
 		model.addAttribute("examQuestion", examQuestion);
 		
+		//受験情報セットアップ
+		List<Question> qList = examService.makeAllQuestionByExamId(examId);
+		Integer userId = accountService.selectLoginUserId();
+		ActInfo actInfo = new ActInfo(userId, examId, new Date(), qList);
+		session.removeAttribute("actInfo");
+		session.setAttribute("actInfo", actInfo);
+		
+		
 		// セッションタイムを試験時間＋10分に設定する この設定は試験終了時に戻す
 		int sessionTime = (exam.getExamTimeMinutes()*60)+(10*60);
 		session.setMaxInactiveInterval(sessionTime);
@@ -159,6 +177,43 @@ public class ExamController {
 		actForm = makeExamActForm(actForm, examQuestion);
 		
 		return ExamActViewName(exam);
+	}
+	
+	/** 試験終了 */
+	@PostMapping("/{examId}/Act")
+	public String ExamAct(BindingResult bindingResult, @PathVariable ExamActForm actForm, @PathVariable Integer examId,
+			Model model) {
+		// セッションタイムを戻す
+		session.setMaxInactiveInterval(3600);
+		
+		ActInfo actInfo = (ActInfo) session.getAttribute("actInfo");
+		session.removeAttribute("actInfo");
+		
+		if(bindingResult.hasErrors() || actInfo == null) {
+			model.addAttribute("errorMsg", "試験受験情報に問題が発生しました");
+			return "error";
+		}
+		
+		Exam exam;
+		try {
+			exam = findExamById(examId, model);
+		} catch (ResourceAccessException e) {
+			// 試験が見つからないまたはログインユーザ以外が非公開試験にアクセスした場合エラーページに遷移
+			return "error";
+		} catch (ExamLimitedException e) {
+			// ログインユーザ以外が認可されていない限定公開試験にアクセスした場合認証画面に遷移
+			return "examLimited";
+		}
+		
+		Report report;
+		try {
+			report = reportService.makeReport(actForm, actInfo, new Date(), exam);
+		} catch (ScoringException e) {
+			model.addAttribute("errorMsg", "採点処理中に問題が発生しました");
+			return "error";
+		}
+		
+		return "redirect:/ExamPlatform/Report/" + report.getReportId();
 	}
 	
 /* ================================================================================================================== */

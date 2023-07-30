@@ -29,6 +29,9 @@ public interface AccountService {
 	/** ログインユーザ名取得 */
 	String selectLoginUserName();
 	
+	/** ログインユーザId取得 */
+	Integer selectLoginUserId();
+	
 	/** ユーザ名によるアカウント取得 */
 	Account selectAccountByUserName(String userName) throws NotFoundException ;
 }

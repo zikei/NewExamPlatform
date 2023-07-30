@@ -160,6 +160,16 @@ public class ExamServiceImpl implements ExamService{
 	}
 	
 	@Override
+	public List<Question> makeAllQuestionByExamId(Integer examId){
+		List<Question> qList = new ArrayList<>();
+		List<BigQuestion> bqList = selectBQList(examId);
+		for(BigQuestion bq : bqList) {
+			qList.addAll(selectQList(bq.getBigQuestionId()));
+		}
+		return qList;
+	}
+	
+	@Override
 	public List<ExamLinkView> makeExamLinkList(List<Exam> examList) {
 		List<ExamLinkView> examLinkList = new ArrayList<>();
 		for(Exam exam : examList) {

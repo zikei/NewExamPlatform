@@ -9,6 +9,7 @@ import com.example.examPlatform.data.question.ExamQuestion;
 import com.example.examPlatform.data.question.ExamQuestionView;
 import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Ganre;
+import com.example.examPlatform.entity.Question;
 import com.example.examPlatform.exception.NotFoundException;
 
 /** 試験関連処理 */
@@ -51,6 +52,9 @@ public interface ExamService {
 	
 	/** ExamQuestionViewを作成 */
 	ExamQuestionView makeExamQuestionView(Exam exam);
+	
+	/** 指定した試験の小問を全取得 */
+	public List<Question> makeAllQuestionByExamId(Integer examId);
 	
 	/** 試験リストを試験リンクリスト形式に変換*/
 	List<ExamLinkView> makeExamLinkList(List<Exam> examList);

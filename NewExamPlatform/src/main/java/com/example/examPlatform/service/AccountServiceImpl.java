@@ -86,6 +86,11 @@ public class AccountServiceImpl implements AccountService{
 	public String selectLoginUserName() {
 		return loginInfo.getUserName();
 	}
+	
+	@Override
+	public Integer selectLoginUserId() {
+		return loginInfo.getUserId();
+	}
 
 	@Override
 	public Account selectAccountByUserName(String userName) throws NotFoundException {
