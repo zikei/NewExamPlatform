@@ -3,6 +3,7 @@ package com.example.examPlatform.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.example.examPlatform.entity.Exam;
 import com.example.examPlatform.entity.Question;
 import com.example.examPlatform.entity.Report;
 import com.example.examPlatform.entity.UserAnswer;
+import com.example.examPlatform.exception.NotFoundException;
 import com.example.examPlatform.exception.ScoringException;
 import com.example.examPlatform.form.AnsForm;
 import com.example.examPlatform.form.ExamActForm;
@@ -59,6 +61,13 @@ public class ReportServiceImpl implements ReportService{
 		userAnsList.stream().forEach(ua -> ua.setReportId(repo.getReportId()));
 		userAnsList.stream().forEach(ua -> userAnsRepo.save(ua));
 		
+		return repo;
+	}
+
+	@Override
+	public Report selectReport(Integer repoId) throws NotFoundException {
+		Optional<Report> repoOpt = reportRepo.findById(repoId);
+		Report repo = repoOpt.orElseThrow(() -> new NotFoundException("Report NotFound Id: " + repoId));
 		return repo;
 	}
 }
